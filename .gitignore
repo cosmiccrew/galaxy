@@ -1,6 +1,9 @@
 /target
+Cargo.lock
+crates/*/target
+
 /tools
 
 #vscode
 *.code-workspace
-.vscode
+/.vscode
