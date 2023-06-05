@@ -37,8 +37,9 @@ Before submitting a PR or issue, please run the following commands and follow th
 
 The development build by default has some **runtime performance** improvements enabled - however, to **speed up compile times** (namely using bevy's internal dynamic linking feature), a simple feature flag can be enabled:
 ```bash
-cargo run --profile dynamic_linking
+cargo run --features dynamic_linking
 ```
+You may want to create a `Makefile`, shell alias, or other similar script runner (e.g. [Just](https://just.systems/)) for this.
 please note: this will decrease some runtime performance.
 
 -------
