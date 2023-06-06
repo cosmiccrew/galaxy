@@ -43,7 +43,7 @@ jobs:
           shared-key: clippy-${{ matrix.os }}
           prefix-key: v0 #increment this to bust the cache if needed
       - name: Run cargo clippy
-        run: cargo clippy --all-targets --features=dynamic_linking -- -D warnings
+        run: cargo clippy --profile actions --all-targets --features=dynamic_linking -- -D warnings
 
   #checks rust fmt - helps ensure all commits are in sync
   fmt:
@@ -69,14 +69,17 @@ jobs:
             deps: |
               sudo apt-get update &&
               sudo apt-get install -y g++ pkg-config libx11-dev libasound2-dev libudev-dev
+            profile: actions
           - os: macos-latest
             deps: |
               brew install llvm
+            profile: actions
           - os: windows-latest
             deps: |
               curl -L https://github.com/rust-embedded/cargo-binutils/releases/download/v0.3.6/x86_64-pc-windows-msvc.zip -o temp.zip
               7z e temp.zip -aos -oC:\Users\runneradmin\.cargo\bin
               del temp.zip
+            profile: actions-windows
     name: test (${{ matrix.os }})
     runs-on: ${{ matrix.os }}
     env:
@@ -94,4 +97,4 @@ jobs:
           shared-key: test-${{ matrix.os }}
           prefix-key: v0 #increment this to bust the cache if needed
       - name: Run cargo test
-        run: cargo test --all --features=dynamic_linking
+        run: cargo test --profile ${{ matrix.profile }} --all --features=dynamic_linking
