@@ -17,29 +17,30 @@ bevy = "0.10.1"
 [features]
 dynamic_linking = ["bevy/dynamic_linking"]
 
-#large compile-time improvements on macos
 [profile.dev]
 opt-level = 1
+#Large compile-time improvements on macos
+# debug = 1
 
-# Enable high optimizations for dependencies (incl. Bevy), but not for our code:
+#Enable high optimizations for dependencies (incl. Bevy), but not for our code:
 [profile.dev.package."*"]
 opt-level = 3
 
-#profiles for github actions
+#Profiles for github actions
 [profile.actions]
 inherits = "dev"
 debug = 1
 debug-assertions = false
 incremental = false
+[profile.actions.package."*"]
+opt-level = 0
 
 [profile.actions-windows]
 inherits = "actions"
 opt-level = 1
-
 #windows will otherwise result in a "too many symbols" error
-[profile.actions.package."*"]
+[profile.actions-windows.package."*"]
 opt-level = 2
-
 
 #Release optimisations
 [profile.release]
