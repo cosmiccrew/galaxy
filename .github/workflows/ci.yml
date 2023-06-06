@@ -40,7 +40,7 @@ jobs:
           rustup component add clippy
       - uses: Swatinem/rust-cache@v2
         with:
-          shared-key: test-${{ matrix.os }}
+          shared-key: clippy-${{ matrix.os }}
           prefix-key: v0 #increment this to bust the cache if needed
       - name: Run cargo clippy
         run: cargo clippy --all-targets --features=dynamic_linking -- -D warnings
