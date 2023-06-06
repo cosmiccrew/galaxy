@@ -25,6 +25,22 @@ opt-level = 1
 [profile.dev.package."*"]
 opt-level = 3
 
+#profiles for github actions
+[profile.actions]
+inherits = "dev"
+debug = 1
+debug-assertions = false
+incremental = false
+
+[profile.actions-windows]
+inherits = "actions"
+opt-level = 1
+
+#windows will otherwise result in a "too many symbols" error
+[profile.actions.package."*"]
+opt-level = 2
+
+
 #Release optimisations
 [profile.release]
 lto = true
