@@ -1,0 +1,97 @@
+name: continuous-integration
+
+on:
+  pull_request:
+  push: # Run CI on the main branch after every merge. This is important to fill the GitHub Actions cache in a way that pull requests can see it
+    branches:
+      - main
+
+jobs:
+  clippy:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        include:
+          - os: ubuntu-latest
+            deps: |
+              sudo apt-get update &&
+              sudo apt-get install -y g++ pkg-config libx11-dev libasound2-dev libudev-dev
+          - os: macos-latest
+            deps: |
+              brew install llvm
+          - os: windows-latest
+            deps: |
+              curl -L https://github.com/rust-embedded/cargo-binutils/releases/download/v0.3.6/x86_64-pc-windows-msvc.zip -o temp.zip
+              7z e temp.zip -aos -oC:\Users\runneradmin\.cargo\bin
+              del temp.zip
+
+    runs-on: ${{ matrix.os }}
+    env:
+      CARGO_TERM_COLOR: always
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install platform specific dependencies
+        run: ${{ matrix.deps }}
+      - name: Install rust
+        run: |
+          rustup toolchain install stable --profile minimal --no-self-update
+          rustup default stable
+          rustup component add clippy
+      - uses: Swatinem/rust-cache@v2
+        with:
+          shared-key: ${{ matrix.os }}
+          prefix-key: v0 #increment this to bust the cache if needed
+      - name: Run cargo clippy
+        run: cargo clippy --all-targets --features=dynamic_linking -- -D warnings
+
+  #checks rust fmt - helps ensure all commits are in sync
+  fmt:
+    name: Rustfmt
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install rust
+        run: |
+          rustup toolchain install nightly --profile minimal --no-self-update
+          rustup default nightly
+          rustup component add rustfmt
+      - name: Run rustfmt
+        run: cargo fmt --all -- --check
+
+  test:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        include:
+          - os: ubuntu-latest
+            deps: |
+              sudo apt-get update &&
+              sudo apt-get install -y g++ pkg-config libx11-dev libasound2-dev libudev-dev
+          - os: macos-latest
+            deps: |
+              brew install llvm
+          - os: windows-latest
+            deps: |
+              curl -L https://github.com/rust-embedded/cargo-binutils/releases/download/v0.3.6/x86_64-pc-windows-msvc.zip -o temp.zip
+              7z e temp.zip -aos -oC:\Users\runneradmin\.cargo\bin
+              del temp.zip
+    name: test (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    env:
+      CARGO_TERM_COLOR: always
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install platform specific dependencies
+        run: ${{ matrix.deps }}
+      - name: Install rust
+        run: |
+          rustup toolchain install stable --profile minimal --no-self-update
+          rustup default stable
+      - uses: Swatinem/rust-cache@v2
+        with:
+          shared-key: ${{ matrix.os }}
+          prefix-key: v0 #increment this to bust the cache if needed
+      - name: Run cargo test
+        run: cargo test --all --features=dynamic_linking
