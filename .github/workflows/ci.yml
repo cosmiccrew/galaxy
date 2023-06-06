@@ -84,15 +84,14 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Install platform specific dependencies
-        run: test-${{ matrix.deps }}
+        run: ${{ matrix.deps }}
       - name: Install rust
         run: |
           rustup toolchain install stable --profile minimal --no-self-update
           rustup default stable
       - uses: Swatinem/rust-cache@v2
         with:
-          shared-key: ${{ matrix.os }}
+          shared-key: test-${{ matrix.os }}
           prefix-key: v0 #increment this to bust the cache if needed
       - name: Run cargo test
         run: cargo test --all --features=dynamic_linking
- 
