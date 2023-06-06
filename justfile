@@ -4,13 +4,15 @@ run: fmt
 build: fmt
   cargo build --features=dynamic_linking
 
+#correctness/testing
+
 fmt:
   cargo +nightly fmt
 
-check:
-  cargo check
+clippy:
+  cargo clippy --all-targets --features=dynamic_linking -- -D warnings
 
 test:
-  cargo test --features=dynamic_linking
+  cargo test --all --features=dynamic_linking
 
-actions: fmt check test
+actions: fmt clippy test
