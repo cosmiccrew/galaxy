@@ -40,7 +40,7 @@ jobs:
           rustup component add clippy
       - uses: Swatinem/rust-cache@v2
         with:
-          shared-key: ${{ matrix.os }}
+          shared-key: test-${{ matrix.os }}
           prefix-key: v0 #increment this to bust the cache if needed
       - name: Run cargo clippy
         run: cargo clippy --all-targets --features=dynamic_linking -- -D warnings
@@ -84,7 +84,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Install platform specific dependencies
-        run: ${{ matrix.deps }}
+        run: test-${{ matrix.deps }}
       - name: Install rust
         run: |
           rustup toolchain install stable --profile minimal --no-self-update
