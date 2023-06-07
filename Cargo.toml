@@ -12,7 +12,17 @@ resolver = "2"
 #See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-bevy = { version = "0.10.1", features = ["serialize", "debug_asset_server"] }
+bevy = { version = "0.10.1", features = ["serialize"] }
+bevy-inspector-egui = "0.18.3"
+
+serde = "1.0.163"
+bevy_rapier2d = { version = "0.21.0", features = ["serde-serialize","parallel", "debug-render-2d"]}
+
+anyhow = "1.0.71"
+rand = "0.8.5"
+
+#handling inputs in a logical way
+leafwing-input-manager = "0.9.2"
 
 [features]
 default = []
