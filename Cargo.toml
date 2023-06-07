@@ -12,10 +12,13 @@ resolver = "2"
 #See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-bevy = "0.10.1"
+bevy = { version = "0.10.1", features = ["serialize", "debug_asset_server"] }
 
 [features]
+default = []
+
 dynamic_linking = ["bevy/dynamic_linking"]
+ci_testing = ["bevy/bevy_ci_testing"]
 
 [profile.dev]
 opt-level = 1
