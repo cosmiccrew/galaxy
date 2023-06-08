@@ -1,0 +1,27 @@
+#![allow(unused)]
+
+pub mod loading;
+pub mod player;
+pub mod polar;
+pub mod state;
+pub mod utils;
+pub mod world;
+
+pub mod prelude {
+
+    pub use std::f32::consts::*;
+
+    pub use anyhow::{anyhow, bail, ensure, Result};
+    pub use bevy::prelude::*;
+
+    pub use crate::loading::*;
+    pub use crate::player::*;
+    pub use crate::polar::*;
+    pub use crate::state::*;
+    pub use crate::utils::*;
+    pub use crate::world::*;
+    pub use crate::{PLANETS, PLANET_PARTS};
+}
+
+pub const PLANETS: &str = "planets/planets";
+pub const PLANET_PARTS: &str = "planets/parts";
