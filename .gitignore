@@ -1,5 +1,6 @@
 /target
 crates/*/target
+.cargo/config.toml
 
 #vscode
 *.code-workspace
