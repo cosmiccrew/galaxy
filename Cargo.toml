@@ -3,7 +3,8 @@ name = "galaxy"
 version = "0.1.0"
 edition = "2021"
 license = "MIT OR Apache-2.0"
-repository = "https://github.com/cosmiccrew/dusk"
+repository = "https://github.com/cosmiccrew/galaxy"
+description = "Cosmic Crew: Galaxy is a 2d, class based gravity oriented fighting game."
 
 [workspace]
 resolver = "2"
