@@ -1,3 +1,4 @@
+#cargo
 /target
 crates/*/target
 .cargo/config.toml
@@ -8,3 +9,6 @@ crates/*/target
 
 #macos
 *.DS_Store
+
+#just
+justfile
