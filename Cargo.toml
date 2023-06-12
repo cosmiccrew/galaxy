@@ -16,7 +16,7 @@ resolver = "2"
 bevy = { version = "0.10.1", features = ["serialize"] }
 bevy-inspector-egui = "0.18.3"
 
-serde = "1.0.163"
+serde = "1.0.164"
 bevy_rapier2d = { version = "0.21.0", features = ["serde-serialize","parallel", "debug-render-2d"]}
 
 anyhow = "1.0.71"
