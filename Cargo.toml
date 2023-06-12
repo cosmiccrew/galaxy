@@ -47,7 +47,7 @@ opt-level = 3
 [profile.actions]
 inherits = "dev"
 debug = 1
-debug-assertions = false
+# debug-assertions = false
 incremental = false
 [profile.actions.package."*"]
 opt-level = 0
