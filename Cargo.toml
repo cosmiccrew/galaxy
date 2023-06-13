@@ -10,6 +10,12 @@ description = "Cosmic Crew: Galaxy is a 2d, class based gravity oriented fightin
 resolver = "2"
 # members = ["crates/*"]
 
+[package.metadata.bundle]
+name = "Cosmic Crew: Galaxy"
+identifier = "dev.sycro.comsiccrew.galaxy"
+# icon = ["build/icons"]
+resources = ["assets"]
+
 #See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
@@ -25,17 +31,17 @@ rand = "0.8.5"
 #handling inputs in a logical way
 leafwing-input-manager = "0.9.2"
 
+
+[target.'cfg(target_arch = "wasm32")'.dependencies]
+bevy_rapier2d = { version = "0.21.0", features = ["serde-serialize", "parallel", "debug-render-2d", "wasm-bindgen"]}
+
+
 [features]
 default = []
 
 dynamic_linking = ["bevy/dynamic_linking"]
 ci_testing = ["bevy/bevy_ci_testing"]
 
-[package.metadata.bundle]
-name = "Cosmic Crew: Galaxy"
-identifier = "dev.sycro.comsiccrew.galaxy"
-# icon = ["build/icons"]
-resources = ["assets"]
 
 # long_description
 
