@@ -1,5 +1,7 @@
 #![allow(unused)]
+#![allow(clippy::type_complexity)]
 
+pub mod debug;
 pub mod loading;
 pub mod player;
 pub mod polar;
@@ -14,6 +16,7 @@ pub mod prelude {
     pub use anyhow::{anyhow, bail, ensure, Result};
     pub use bevy::prelude::*;
 
+    pub use crate::debug::*;
     pub use crate::loading::*;
     pub use crate::player::*;
     pub use crate::polar::*;

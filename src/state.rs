@@ -4,7 +4,7 @@ use crate::prelude::*;
 pub enum EngineState {
     #[default]
     LoadingAssets,
-    // MainMenu,
+    MainMenu,
     InGame,
 }
 
