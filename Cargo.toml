@@ -31,6 +31,14 @@ default = []
 dynamic_linking = ["bevy/dynamic_linking"]
 ci_testing = ["bevy/bevy_ci_testing"]
 
+[package.metadata.bundle]
+name = "Cosmic Crew: Galaxy"
+identifier = "dev.sycro.comsiccrew.galaxy"
+# icon = ["build/icons"]
+resources = ["assets"]
+
+# long_description
+
 [profile.dev]
 opt-level = 1
 #Large compile-time improvements on macos
