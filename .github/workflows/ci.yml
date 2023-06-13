@@ -35,8 +35,9 @@ jobs:
         run: ${{ matrix.deps }}
       - uses: Swatinem/rust-cache@v2
         with:
-          shared-key: clippy-${{ matrix.os }}
+          shared-key: clippy
           prefix-key: v1 #increment this to bust the cache if needed
+          save-if: ${{ github.event_name == 'main' }}
       - name: Install rust
         run: |
           rustup toolchain install stable --profile minimal --no-self-update
@@ -90,8 +91,9 @@ jobs:
         run: ${{ matrix.deps }}
       - uses: Swatinem/rust-cache@v2
         with:
-          shared-key: test-${{ matrix.os }}
+          shared-key: test
           prefix-key: v1 #increment this to bust the cache if needed
+          save-if: ${{ github.event_name == 'main' }}
       - name: Install rust
         run: |
           rustup toolchain install stable --profile minimal --no-self-update
