@@ -6,11 +6,16 @@ pub struct GalaxyLoadingPlugin;
 
 impl Plugin for GalaxyLoadingPlugin {
     fn build(&self, app: &mut App) {
-        app.add_system(
+        app.add_systems((
+            setup.on_startup(),
             load_assets
                 .in_schedule(OnEnter(EngineState::LoadingAssets))
                 .run_if(run_once()),
-        );
+            to_next
+                .in_set(OnUpdate(EngineState::LoadingAssets))
+                .run_if(check_if_loaded),
+        ));
+
         // // While in this state, run the `countdown` system
         // .add_system(splash_screen.
         // in_set(OnUpdate(EngineState::LoadingAssets))) // When exiting
@@ -21,19 +26,30 @@ impl Plugin for GalaxyLoadingPlugin {
     }
 }
 
-// #[derive(Component)]
-// struct SplashScreen;
+fn setup(mut commands: Commands, query: Query<Entity>) {
+    info!("Setting up the world...");
 
-fn load_assets(
-    mut commands: Commands,
-    asset_server: Res<AssetServer>,
-    mut game_state: ResMut<NextState<EngineState>>,
-) {
+    commands.spawn((Camera2dBundle::default(), Persist));
+
+    //Add the Persist entity to all current items, as these should never be removed
+    // by a teardown.
+    for entity in &query {
+        commands.entity(entity).insert(Persist);
+    }
+
+    info!("World has been set up!");
+}
+
+fn load_assets(asset_server: Res<AssetServer>) {
     // asset_server.load("planets/planets/planet09.png");
+}
 
-    commands.spawn(Camera2dBundle::default());
-
+fn to_next(mut game_state: ResMut<NextState<EngineState>>) {
     game_state.set(EngineState::InGame);
+}
+
+fn check_if_loaded() -> bool {
+    true
 }
 
 // fn splash_screen(mut commands: Commands, asset_server: Res<AssetServer>) {
