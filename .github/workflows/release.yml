@@ -1,0 +1,173 @@
+name: release
+
+on:
+  push:
+    tags:
+      - "v*"
+  schedule:
+    # Run every night
+    - cron: "0 4 * * *"
+
+defaults:
+  run:
+    shell: bash
+    
+jobs:
+  generate_changelog:
+    name: 📜 Generate Changelog
+    runs-on: ubuntu-latest
+    outputs:
+      release_body: ${{ steps.git-cliff.outputs.content }}
+    steps:
+      - name: ⬇️ Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: 📠 Calculate Git Cliff Args
+        id: cliff-args
+        run: |
+          if [ "${{ github.event_name }}" = "push" ]; then
+            echo "args=--latest" >> $GITHUB_OUTPUT
+          else
+            echo "args=--unreleased" >> $GITHUB_OUTPUT
+          fi
+
+      - name: 📜 Generate Changelog
+        uses: orhun/git-cliff-action@v2
+        id: git-cliff
+        with:
+          args: -vv --strip all ${{ steps.cliff-args.outputs.args }}
+
+      - name: 📝 Set Job Summary
+        run: |
+          echo "${{ steps.git-cliff.outputs.content }}" >> $GITHUB_STEP_SUMMARY
+
+
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        config:
+          - { os: ubuntu-latest, target: "x86_64-unknown-linux-gnu", name: "linux-x64" }
+          - { os: ubuntu-latest, target: "aarch64-unknown-linux-gnu", name: "linux-arm64" }
+          - { os: macos-latest, target: "x86_64-apple-darwin", name: "macos-x64" }
+          - { os: macos-latest, target: "aarch64-apple-darwin", name: "macos-arm64" }
+          - { os: windows-latest, target: "x86_64-pc-windows-msvc", name: "windows-x64" }
+
+    runs-on: ${{ matrix.config.os }}
+    env:
+      CARGO_TERM_COLOR: always
+    steps:
+
+      - name: Calculate release version
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" -o "${{ github.event_name }}" = "schedule" ]; then
+            echo "RELEASE_VERSION=nightly-$(date '+%Y-%m-%d')" >> $GITHUB_ENV
+          else
+            echo "RELEASE_VERSION=${{ github.ref_name }}" >> $GITHUB_ENV
+          fi
+
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      # - name: Setup config
+      #   run: mv .github/config/config.toml .cargo/config.toml
+
+      # - name: Install platform specific dependencies [Windows]
+      #   if: matrix.config.os == 'windows-latest'
+      #   run: |
+      #     curl -L https://github.com/rust-embedded/cargo-binutils/releacses/download/v0.3.6/x86_64-pc-windows-msvc.zip -o temp.zip
+      #     7z e temp.zip -aos -oC:\Users\runneradmin\.cargo\bin
+      #     del temp.zip
+      #     rustup component add llvm-tools-preview
+
+      # - name: Install platform specific dependencies [Macos]
+      #   if: matrix.config.os == 'macos-latest'
+      #   run: brew install llvm
+      # - name: Install platform specific dependencies [Linux]
+      #   if: matrix.config.os == 'ubuntu-latest'
+      #   run: |
+      #     sudo apt-get update &&
+      #     sudo apt-get install -y g++ pkg-config libx11-dev libasound2-dev libudev-dev lld
+
+      - name: Cache rust dependencies
+        uses: Swatinem/rust-cache@v2
+        with:
+          shared-key: build
+          prefix-key: v0 #increment this to bust the cache if needed
+          save-if: ${{ github.event_name != 'schedule' }}
+
+      - name: Install cargo-bundle [Unix]
+        if: matrix.config.os != 'windows-latest'
+        run: cargo install cargo-bundle --git https://github.com/cosmiccrew/cargo-bundle
+        # run: cargo install cargo-bundle
+
+      - name: Install ${{ matrix.config.target }} target
+        run: rustup target add ${{ matrix.config.target }}
+
+      - name: Build [windows]
+        if: matrix.config.os == 'windows-latest'
+        run: cargo build --release --locked --target ${{ matrix.config.target }}
+
+      - name: Build [Unix]
+        if: matrix.config.os != 'windows-latest'
+        run: cargo bundle --release --locked --target ${{ matrix.config.target }}
+
+      - name: Prepare artifacts [Windows]
+        shell: bash
+        if: matrix.config.os == 'windows-latest'
+        run: |
+          release_dir="galaxy-${{ env.RELEASE_VERSION }}"
+          artifact_path="galaxy-${{ env.RELEASE_VERSION }}-${{ matrix.config.name }}.zip"
+          echo "ARTIFACT_PATH=$artifact_path" >> $GITHUB_ENV
+          mkdir $release_dir
+          cp target/${{ matrix.config.target }}/release/galaxy.exe $release_dir/
+          cp -R assets/ $release_dir/
+          cp LICENSE $release_dir/
+          7z a -tzip $artifact_path $release_dir/
+
+      - name: Prepare artifacts [Macos]
+        shell: bash
+        if: matrix.config.os == 'macos-latest'
+        run: |
+          release_dir="galaxy-${{ env.RELEASE_VERSION }}"
+          artifact_path="galaxy-${{ env.RELEASE_VERSION }}-${{ matrix.config.target }}.tar.gz"
+          echo "ARTIFACT_PATH=$artifact_path" >> $GITHUB_ENV
+          mkdir $release_dir
+          cp -r 'target/${{ matrix.config.target }}/release/bundle/osx/galaxy.app/' $release_dir/
+          tar -czvf $artifact_path $release_dir/
+
+      - name: Prepare artifacts [Linux (.deb)]
+        shell: bash
+        if: matrix.config.os == 'ubuntu-latest'
+        run: |
+          artifact_path="jumpy-${{ env.RELEASE_VERSION }}-${{ matrix.config.target }}.tar.gz"
+          echo "ARTIFACT_PATH=$artifact_path" >> $GITHUB_ENV
+          cp target/${{ matrix.config.target }}/release/bundle/deb/galaxy.deb $artifact_path
+
+  publish_release:
+    name: 🚀 Publish
+    needs:
+      - generate_changelog
+      - build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: ⬇️ Download Artifacts
+        uses: actions/download-artifact@v2
+
+      - name: 🔒 Generate Checksums
+        run: for file in galaxy-*/galaxy-*; do openssl dgst -sha256 -r "$file" | awk '{print $1}' > "${file}.sha256"; done
+
+      - name: 🚀 Publish Release
+        uses: svenstaro/upload-release-action@v2
+        with:
+          release_name: ${{ needs.build_release.outputs.release_version }}
+          file: galaxy-*/galaxy-*
+          file_glob: true
+          overwrite: true
+          prerelease: ${{ github.event_name != 'push' }}
+          body: ${{ needs.generate_changelog.outputs.release_body }}
+          tag: ${{ needs.build_release.outputs.release_version }}
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
