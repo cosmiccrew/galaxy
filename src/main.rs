@@ -24,16 +24,20 @@ fn main() {
                 })
                 .set(AssetPlugin {
                     watch_for_changes: true,
-                    ..default()
+                    asset_folder: {
+                        if cfg!(target_os = "macos") {
+                            "../Resources/assets".to_string()
+                        } else {
+                            "assets".to_string()
+                        }
+                    },
                 })
                 .set({
                     use bevy::log::LogPlugin;
                     if cfg!(debug_assertions) {
                         LogPlugin {
                             level: bevy::log::Level::DEBUG,
-                            filter: "debug,wgpu_core=warn,wgpu_hal=warn,naga=info,bevy=info,\
-                                     bevy_diagnostic=debug"
-                                .into(),
+                            filter: "debug,wgpu_core=warn,wgpu_hal=warn,naga=info,bevy=info".into(),
                         }
                     } else {
                         // this code is compiled only if debug assertions are disabled (release
