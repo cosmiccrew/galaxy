@@ -85,11 +85,11 @@ jobs:
       # - name: Install platform specific dependencies [Macos]
       #   if: matrix.config.os == 'macos-latest'
       #   run: brew install llvm
-      # - name: Install platform specific dependencies [Linux]
-      #   if: matrix.config.os == 'ubuntu-latest'
-      #   run: |
-      #     sudo apt-get update &&
-      #     sudo apt-get install -y g++ pkg-config libx11-dev libasound2-dev libudev-dev lld
+      - name: Install platform specific dependencies [Linux]
+        if: matrix.config.os == 'ubuntu-latest'
+        run: |
+          sudo apt-get update &&
+          sudo apt-get install -y g++ pkg-config libx11-dev libasound2-dev libudev-dev lld
 
       - name: Cache rust dependencies
         uses: Swatinem/rust-cache@v2
@@ -124,7 +124,6 @@ jobs:
           mkdir $release_dir
           cp target/${{ matrix.config.target }}/release/galaxy.exe $release_dir/
           cp -R assets/ $release_dir/
-          cp LICENSE $release_dir/
           7z a -tzip $artifact_path $release_dir/
 
       - name: Prepare artifacts [Macos]
