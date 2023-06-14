@@ -11,7 +11,7 @@ resolver = "2"
 # members = ["crates/*"]
 
 [package.metadata.bundle]
-name = "Cosmic Crew: Galaxy"
+# name = "Cosmic Crew: Galaxy"
 identifier = "dev.sycro.comsiccrew.galaxy"
 # icon = ["build/icons"]
 resources = ["assets"]
