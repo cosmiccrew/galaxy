@@ -111,8 +111,15 @@ jobs:
         run: cargo build --release --locked --target ${{ matrix.config.target }}
 
       - name: Build [Unix]
-        if: matrix.config.os != 'windows-latest'
-        run: cargo bundle --release --target ${{ matrix.config.target }}
+        uses: actions-rs/cargo@v1
+        with:
+          command: bundle
+          args: --release --target ${{ matrix.config.target }}
+          use-cross: true
+
+      # - name: Build [Unix]
+      #   if: matrix.config.os != 'windows-latest'
+      #   run: cargo bundle --release --target ${{ matrix.config.target }}
 
       - name: Prepare artifacts [Windows]
         shell: bash
