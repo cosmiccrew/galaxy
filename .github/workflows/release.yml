@@ -112,7 +112,7 @@ jobs:
 
       - name: Build [Unix]
         if: matrix.config.os != 'windows-latest'
-        run: cargo bundle --release --locked --target ${{ matrix.config.target }}
+        run: cargo bundle --release --target ${{ matrix.config.target }}
 
       - name: Prepare artifacts [Windows]
         shell: bash
