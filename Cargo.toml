@@ -77,4 +77,4 @@ opt-level = 2
 
 #Release optimisations
 [profile.release]
-lto = true
+lto = "thin"

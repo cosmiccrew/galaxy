@@ -89,37 +89,60 @@ jobs:
         if: matrix.config.os == 'ubuntu-latest'
         run: |
           sudo apt-get update &&
-          sudo apt-get install -y g++ pkg-config libx11-dev libasound2-dev libudev-dev lld
+          sudo apt-get install -y g++ pkg-config libx11-dev libasound2-dev libudev-dev
 
       - name: Cache rust dependencies
         uses: Swatinem/rust-cache@v2
         with:
-          shared-key: build
+          shared-key: build-${{ matrix.config.name }}
           prefix-key: v0 #increment this to bust the cache if needed
           save-if: ${{ github.event_name != 'schedule' }}
 
+      # - name: Install cargo-bundle [Unix]
+      #   if: matrix.config.os != 'windows-latest'
+      #   run: cargo install cargo-bundle --git https://github.com/cosmiccrew/cargo-bundle
+
       - name: Install cargo-bundle [Unix]
         if: matrix.config.os != 'windows-latest'
-        run: cargo install cargo-bundle --git https://github.com/cosmiccrew/cargo-bundle
-        # run: cargo install cargo-bundle
+        run: |
+          curl -L https://github.com/cosmiccrew/cargo-bundle/releases/download/binaries/cargo-bundle-${{ matrix.config.os }} -o cargo-bundle
+          mv cargo-bundle $HOME/.cargo/bin/cargo-bundle
+      
 
-      - name: Install ${{ matrix.config.target }} target
+      - name: Install ${{ matrix.config.target }} target [Linux]
+        if: matrix.config.os == 'ubuntu-latest'
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          override: true
+          profile: minimal
+          target: aarch64-unknown-linux-gnu
+          default: false
+
+      - name: Install ${{ matrix.config.target }} target [Macos/Windows]
+        if: matrix.config.os != 'ubuntu-latest'
         run: rustup target add ${{ matrix.config.target }}
 
       - name: Build [windows]
         if: matrix.config.os == 'windows-latest'
         run: cargo build --release --locked --target ${{ matrix.config.target }}
 
-      - name: Build [Unix]
+      - name: Build [Linux]
+        if: matrix.config.os == 'ubuntu-latest'
         uses: actions-rs/cargo@v1
         with:
-          command: bundle
+          command: build
           args: --release --target ${{ matrix.config.target }}
           use-cross: true
 
-      # - name: Build [Unix]
-      #   if: matrix.config.os != 'windows-latest'
-      #   run: cargo bundle --release --target ${{ matrix.config.target }}
+      - name: Bundle [Linux]
+        if: matrix.config.os == 'ubuntu-latest'
+        run: cargo bundle --release --target ${{ matrix.config.target }}
+
+      - name: Build [Macos]
+        if: matrix.config.os == 'macos-latest'
+        run: cargo bundle --release --target ${{ matrix.config.target }}
+
 
       - name: Prepare artifacts [Windows]
         shell: bash
