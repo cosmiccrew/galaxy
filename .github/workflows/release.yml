@@ -144,7 +144,7 @@ jobs:
         shell: bash
         if: matrix.config.os == 'ubuntu-latest'
         run: |
-          artifact_path="jumpy-${{ env.RELEASE_VERSION }}-${{ matrix.config.name }}.deb"
+          artifact_path="galaxy-${{ env.RELEASE_VERSION }}-${{ matrix.config.name }}.deb"
           echo "ARTIFACT_PATH=$artifact_path" >> $GITHUB_ENV
           cp target/${{ matrix.config.target }}/release/bundle/deb/galaxy.deb $artifact_path
 
@@ -165,6 +165,9 @@ jobs:
     steps:
       - name: ⬇️ Download Artifacts
         uses: actions/download-artifact@v3
+
+      - name: Display structure of downloaded files
+        run: ls -R
 
       - name: 🔒 Generate Checksums
         run: for file in galaxy-*/galaxy-*; do openssl dgst -sha256 -r "$file" | awk '{print $1}' > "${file}.sha256"; done
