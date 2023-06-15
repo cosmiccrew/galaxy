@@ -18,6 +18,7 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       release_body: ${{ steps.git-cliff.outputs.content }}
+
     steps:
       - name: ⬇️ Checkout
         uses: actions/checkout@v3
@@ -45,24 +46,26 @@ jobs:
 
 
   build:
-    strategy:
-      fail-fast: false
-      matrix:
-        config:
-          - { os: ubuntu-latest, target: "x86_64-unknown-linux-gnu", name: "linux-x64" }
-          - { os: ubuntu-latest, target: "aarch64-unknown-linux-gnu", name: "linux-arm64" }
-          - { os: macos-latest, target: "x86_64-apple-darwin", name: "macos-x64" }
-          - { os: macos-latest, target: "aarch64-apple-darwin", name: "macos-arm64" }
-          - { os: windows-latest, target: "x86_64-pc-windows-msvc", name: "windows-x64" }
-
+    name: 🛠 Build and bundle (${{ matrix.config.name }})
     runs-on: ${{ matrix.config.os }}
     continue-on-error: true
     outputs:
       release_version: ${{ env.RELEASE_VERSION }}
     env:
       CARGO_TERM_COLOR: always
+
+    strategy:
+      fail-fast: false
+      matrix:
+        config:
+          - { os: ubuntu-latest, target: "x86_64-unknown-linux-gnu", name: "linux-x86_64" }
+          - { os: ubuntu-latest, target: "aarch64-unknown-linux-gnu", name: "linux-arm64" }
+          - { os: macos-latest, target: "x86_64-apple-darwin", name: "macos-x86_64" }
+          - { os: macos-latest, target: "aarch64-apple-darwin", name: "macos-arm64" }
+          - { os: windows-latest, target: "x86_64-pc-windows-msvc", name: "windows-x86_64" }
+
     steps:
-      - name: Calculate release version name
+      - name: 🧮 Calculate release version name
         run: |
           if [ "${{ github.event_name }}" = "workflow_dispatch" -o "${{ github.event_name }}" = "schedule" ]; then
             echo "RELEASE_VERSION=nightly-$(date '+%Y-%m-%d')" >> $GITHUB_ENV
@@ -71,7 +74,7 @@ jobs:
           fi
 
           
-      - name: Checkout
+      - name: ⬇️ Checkout
         uses: actions/checkout@v3
 
 
@@ -101,18 +104,18 @@ jobs:
         run: rustup target add ${{ matrix.config.target }}
 
 
-      - name: Build [windows]
+      - name: 🛠 Build [windows]
         if: matrix.config.os == 'windows-latest'
         run: cargo build --release --locked --target ${{ matrix.config.target }}
 
-      - name: Build + Bundle [Linux]
+      - name: 🛠 Build + Bundle [Linux]
         if: matrix.config.os == 'ubuntu-latest'
         run: |
           cargo install cross --locked
           cross build --release --target ${{ matrix.config.target }}
           CARGO_BUNDLE_SKIP_BUILD=1 cargo bundle --release --target ${{ matrix.config.target }}
 
-      - name: Build + Bundle [Macos]
+      - name: 🛠 Build + Bundle [Macos]
         if: matrix.config.os == 'macos-latest'
         run: cargo bundle --release --target ${{ matrix.config.target }}
 
@@ -133,7 +136,7 @@ jobs:
         shell: bash
         if: matrix.config.os == 'macos-latest'
         run: |
-          release_dir="galaxy-${{ env.RELEASE_VERSION }}"
+          release_dir="galaxy-${{ env.RELEASE_VERSION }}.app"
           artifact_path="galaxy-${{ env.RELEASE_VERSION }}-${{ matrix.config.name }}.tar.gz"
           echo "ARTIFACT_PATH=$artifact_path" >> $GITHUB_ENV
           mkdir $release_dir
@@ -155,7 +158,7 @@ jobs:
           path: ${{ env.ARTIFACT_PATH }}
           if-no-files-found: error
 
-  publish_release:
+  publish:
     name: 🚀 Publish
     needs:
       - generate_changelog
@@ -165,9 +168,6 @@ jobs:
     steps:
       - name: ⬇️ Download Artifacts
         uses: actions/download-artifact@v3
-
-      - name: Display structure of downloaded files
-        run: ls -R
 
       - name: 🔒 Generate Checksums
         run: for file in galaxy-*/galaxy-*; do openssl dgst -sha256 -r "$file" | awk '{print $1}' > "${file}.sha256"; done
