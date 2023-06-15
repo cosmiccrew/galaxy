@@ -20,7 +20,7 @@ jobs:
       release_body: ${{ steps.git-cliff.outputs.content }}
     steps:
       - name: ⬇️ Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           fetch-depth: 0
 
@@ -60,7 +60,7 @@ jobs:
       CARGO_TERM_COLOR: always
     steps:
 
-      - name: Calculate release version
+      - name: Calculate release version name
         run: |
           if [ "${{ github.event_name }}" = "workflow_dispatch" -o "${{ github.event_name }}" = "schedule" ]; then
             echo "RELEASE_VERSION=nightly-$(date '+%Y-%m-%d')" >> $GITHUB_ENV
@@ -73,20 +73,6 @@ jobs:
         uses: actions/checkout@v3
 
 
-      # - name: Setup config
-      #   run: mv .github/config/config.toml .cargo/config.toml
-
-      # - name: Install platform specific dependencies [Windows]
-      #   if: matrix.config.os == 'windows-latest'
-      #   run: |
-      #     curl -L https://github.com/rust-embedded/cargo-binutils/releacses/download/v0.3.6/x86_64-pc-windows-msvc.zip -o temp.zip
-      #     7z e temp.zip -aos -oC:\Users\runneradmin\.cargo\bin
-      #     del temp.zip
-      #     rustup component add llvm-tools-preview
-
-      # - name: Install platform specific dependencies [Macos]
-      #   if: matrix.config.os == 'macos-latest'
-      #   run: brew install llvm
       - name: Install platform specific dependencies [Linux]
         if: matrix.config.os == 'ubuntu-latest'
         run: |
@@ -102,10 +88,6 @@ jobs:
           save-if: ${{ github.event_name != 'schedule' }}
 
 
-      # - name: Install cargo-bundle [Unix]
-      #   if: matrix.config.os != 'windows-latest'
-      #   run: cargo install cargo-bundle --git https://github.com/cosmiccrew/cargo-bundle
-
       - name: Install cargo-bundle [Unix]
         if: matrix.config.os != 'windows-latest'
         run: |
@@ -114,18 +96,7 @@ jobs:
           mv cargo-bundle $HOME/.cargo/bin/cargo-bundle      
 
 
-      - name: Install ${{ matrix.config.target }} target [Linux]
-        if: matrix.config.os == 'ubuntu-latest'
-        uses: actions-rs/toolchain@v1
-        with:
-          toolchain: stable
-          override: true
-          profile: minimal
-          target: aarch64-unknown-linux-gnu
-          default: false
-
-      - name: Install ${{ matrix.config.target }} target [Macos/Windows]
-        if: matrix.config.os != 'ubuntu-latest'
+      - name: Install ${{ matrix.config.target }} target
         run: rustup target add ${{ matrix.config.target }}
 
 
@@ -133,18 +104,16 @@ jobs:
         if: matrix.config.os == 'windows-latest'
         run: cargo build --release --locked --target ${{ matrix.config.target }}
 
-
-      - name: Build [Unix]
-        if: matrix.config.os != 'windows-latest'
-        uses: actions-rs/cargo@v1
-        with:
-          command: build
-          args: --release --target ${{ matrix.config.target }}
-          use-cross: true
-
-      - name: Bundle [Unix]
+      - name: Build + Bundle [Linux]
         if: matrix.config.os == 'ubuntu-latest'
-        run: CARGO_BUNDLE_SKIP_BUILD=1 cargo bundle --release --target ${{ matrix.config.target }}
+        run: |
+          cargo install cross --locked
+          cross build --release --target ${{ matrix.config.target }}
+          CARGO_BUNDLE_SKIP_BUILD=1 cargo bundle --release --target ${{ matrix.config.target }}
+
+      - name: Build + Bundle [Macos]
+        if: matrix.config.os == 'macos-latest'
+        run: cargo bundle --release --target ${{ matrix.config.target }}
 
 
       - name: Prepare artifacts [Windows]
