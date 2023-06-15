@@ -75,6 +75,6 @@ opt-level = 1
 [profile.actions-windows.package."*"]
 opt-level = 2
 
-#Release optimisations
-[profile.release]
-lto = "thin"
+# #Release optimisations
+# [profile.release]
+# lto = "thin"
