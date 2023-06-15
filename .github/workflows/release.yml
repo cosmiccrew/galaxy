@@ -106,8 +106,8 @@ jobs:
         if: matrix.config.os != 'windows-latest'
         run: |
           curl -L https://github.com/cosmiccrew/cargo-bundle/releases/download/binaries/cargo-bundle-${{ matrix.config.os }} -o cargo-bundle
-          mv cargo-bundle $HOME/.cargo/bin/cargo-bundle
-      
+          chmod +x cargo-bundle
+          mv cargo-bundle $HOME/.cargo/bin/cargo-bundle      
 
       - name: Install ${{ matrix.config.target }} target [Linux]
         if: matrix.config.os == 'ubuntu-latest'
