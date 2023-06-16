@@ -1,5 +1,7 @@
 `Cosmic Crew: Galaxy`
 ==================
+![CI](https://github.com/cosmiccrew/galaxy/actions/workflows/ci.yml/badge.svg)
+![Release](https://github.com/cosmiccrew/galaxy/actions/workflows/release.yml/badge.svg)
 
 Cosmic Crew: Galaxy ~~is~~ will be a 2d, class based gravity oriented fighting game inspired by the likes of Stick Fight: The Game, Super Mario Galaxy and Brawlhalla. **NOTE: This project is in an early stage, and the gameplay or any other related content is subject to change and modification.**
 
@@ -10,10 +12,11 @@ Cosmic Crew: Galaxy ~~is~~ will be a 2d, class based gravity oriented fighting g
 To run and play Cosmic Crew: Galaxy, there are a few options:
 
 
-#### Releases (PLANNED)
+#### Releases
 
-1. ~~By downloading the game from the github release page~~
-2. ~~Extracting the archive and running the executable~~
+1. By downloading either a specifc release or 'nightly version of the game from the github [releases page](https://github.com/cosmiccrew/galaxy/releases)
+2. Extracting the archive (if necessary)
+3. Running or opening the executable
 
 
 #### From source
