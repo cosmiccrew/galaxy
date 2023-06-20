@@ -25,7 +25,11 @@ fn main() {
                 .set(AssetPlugin {
                     watch_for_changes: true,
                     asset_folder: {
-                        if cfg!(target_os = "macos") {
+                        if cfg!(all(
+                            target_os = "macos",
+                            not(debug_assertions),
+                            not(features = "dynamic_linking")
+                        )) {
                             "../Resources/assets".to_string()
                         } else {
                             "assets".to_string()
