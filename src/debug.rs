@@ -11,15 +11,13 @@ pub struct GalaxyDebugPlugin;
 impl Plugin for GalaxyDebugPlugin {
     fn build(&self, app: &mut App) {
         if cfg!(debug_assertions) {
-            app.add_plugin(
+            app.add_plugins((
                 WorldInspectorPlugin::default()
                     .run_if(input_toggle_active(true, KeyCode::Backslash)),
-            )
-            .add_plugin(
                 StateInspectorPlugin::<EngineState>::default()
                     .run_if(input_toggle_active(true, KeyCode::Backslash)),
-            );
-            app.add_system(close_on_esc);
+            ));
+            app.add_systems(Update, close_on_esc);
         }
     }
 }

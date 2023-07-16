@@ -4,12 +4,19 @@ pub struct GalaxyWorldPlugin;
 
 impl Plugin for GalaxyWorldPlugin {
     fn build(&self, app: &mut App) {
-        app.add_systems((
-            setup.in_schedule(OnEnter(EngineState::InGame)),
-            planet_rotation.in_set(OnUpdate(EngineState::InGame)),
-            add_loaded_component.in_set(OnUpdate(EngineState::InGame)),
-            teardown::<Loaded>.in_schedule(OnExit(EngineState::InGame)),
-        ));
+        // app.add_systems((
+        //     setup.in_schedule(OnEnter(EngineState::InGame)),
+        //     planet_rotation.in_set(OnUpdate(EngineState::InGame)),
+        //     add_loaded_component.in_set(OnUpdate(EngineState::InGame)),
+        //     teardown::<Loaded>.in_schedule(),
+        // ));
+
+        app.add_systems(OnEnter(EngineState::InGame), setup);
+        app.add_systems(
+            Update,
+            (planet_rotation, add_loaded_component).run_if(in_state(EngineState::InGame)),
+        );
+        app.add_systems(OnExit(EngineState::InGame), teardown::<Loaded>);
     }
 }
 
