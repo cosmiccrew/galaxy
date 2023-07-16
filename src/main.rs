@@ -1,3 +1,6 @@
+use std::time::Duration;
+
+use bevy::asset::ChangeWatcher;
 use galaxy::prelude::*;
 
 fn main() {
@@ -23,7 +26,7 @@ fn main() {
                     ..default()
                 })
                 .set(AssetPlugin {
-                    watch_for_changes: true,
+                    watch_for_changes: ChangeWatcher::with_delay(Duration::from_millis(200)),
                     asset_folder: {
                         if cfg!(all(
                             target_os = "macos",
@@ -53,11 +56,13 @@ fn main() {
                     }
                 }),
         )
-        .add_plugin(GalaxyDebugPlugin)
-        .add_plugin(GalaxyLoadingPlugin)
-        .add_plugin(GalaxyPlayerPlugin)
-        .add_plugin(GalaxyPolarPlugin)
-        .add_plugin(GalaxyWorldPlugin)
+        .add_plugins((
+            GalaxyDebugPlugin,
+            GalaxyLoadingPlugin,
+            GalaxyPlayerPlugin,
+            GalaxyPolarPlugin,
+            GalaxyWorldPlugin,
+        ))
         // .add_plugin(bevy::diagnostic::FrameTimeDiagnosticsPlugin::default())
         // .add_plugin(bevy::diagnostic::LogDiagnosticsPlugin::default())
         .run();
