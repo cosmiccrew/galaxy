@@ -1,4 +1,3 @@
-
 # NOTE: For maximum performance, build using a nightly compiler
 # If you are using rust stable, remove the "-Zshare-generics=y" below.
 
@@ -31,3 +30,8 @@ linker = "rust-lld.exe"
 rustflags = [
     # "-Zshare-generics=n"
 ]
+
+#for wasm targets, allowing the use of `cargo run --target wasm32-unknown-unknown` to run a wasm webserver
+# requires that `cargo install wasm-server-runner` is installed.
+[target.wasm32-unknown-unknown]
+runner = "wasm-server-runner"
