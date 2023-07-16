@@ -4,36 +4,35 @@ pub struct GalaxyWorldPlugin;
 
 impl Plugin for GalaxyWorldPlugin {
     fn build(&self, app: &mut App) {
-        // app.add_systems((
-        //     setup.in_schedule(OnEnter(EngineState::InGame)),
-        //     planet_rotation.in_set(OnUpdate(EngineState::InGame)),
-        //     add_loaded_component.in_set(OnUpdate(EngineState::InGame)),
-        //     teardown::<Loaded>.in_schedule(),
-        // ));
-
-        app.add_systems(OnEnter(EngineState::InGame), setup);
-        app.add_systems(
-            Update,
-            (planet_rotation, add_loaded_component).run_if(in_state(EngineState::InGame)),
-        );
-        app.add_systems(OnExit(EngineState::InGame), teardown::<Loaded>);
+        app.add_systems(OnEnter(EngineState::InGame), setup)
+            .add_systems(
+                Update,
+                (planet_rotation, add_loaded_component).run_if(in_state(EngineState::InGame)),
+            )
+            .add_systems(OnExit(EngineState::InGame), teardown::<Loaded>);
     }
 }
 
+#[derive(Component, Reflect)]
+struct TempPlanet;
+
 fn setup(mut commands: Commands, asset_server: Res<AssetServer>, time: Res<Time>) {
-    commands.spawn(SpriteBundle {
-        sprite: Sprite {
-            custom_size: Some(Vec2::new(500., 500.)),
+    commands.spawn((
+        SpriteBundle {
+            sprite: Sprite {
+                custom_size: Some(Vec2::new(500., 500.)),
+                ..default()
+            },
+            texture: asset_server.load("planets/planets/planet00.png"),
             ..default()
         },
-        texture: asset_server.load("planets/planets/planet00.png"),
-        ..default()
-    });
+        TempPlanet,
+    ));
 }
 
 fn planet_rotation(
     mut commands: Commands,
-    mut query: Query<&mut Transform, Without<Camera>>,
+    mut query: Query<&mut Transform, With<TempPlanet>>,
     keyboard_input: Res<Input<KeyCode>>,
 ) {
     let mut direction = 0f32;
