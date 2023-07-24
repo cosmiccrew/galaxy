@@ -25,7 +25,7 @@ bevy-inspector-egui = "0.19"
 serde = "1"
 bevy_rapier2d = { version = "0.22.0", features = ["serde-serialize", "debug-render-2d"]}
 
-anyhow = "1.0.71"
+anyhow = "1.0.72"
 rand = "0.8.5"
 
 #handling inputs in a logical way
