@@ -19,17 +19,23 @@ resources = ["assets"]
 #See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
+#the bevy game engine itself
 bevy = { version = "0.11.0", features = ["serialize"] }
+#a debug menu and interface for visualising component hierarchy and changing values on the fly.
 bevy-inspector-egui = "0.19"
-
-serde = "1"
+#2d physics engine in bevy
 bevy_rapier2d = { version = "0.22.0", features = ["serde-serialize", "debug-render-2d"]}
-
-anyhow = "1.0.72"
-rand = "0.8.5"
-
-#handling inputs in a logical way
+#helps with loading assets in a logical, dynamic format.
+bevy_asset_loader = { version = "0.17.0", features = ["2d", "standard_dynamic_assets"] }
+#handling inputs in a logical, extensible way with options for command combinations or aliases.
 leafwing-input-manager = "0.10.0"
+
+#(ser)ialising/(de)serialising library
+serde = "1"
+#dynamic error handler and logger
+anyhow = "1"
+#pseudo random number generation
+rand = "0.8.5"
 
 [target.'cfg(not(target_arch = "wasm32"))'.dependencies]
 bevy_rapier2d = { version = "0.22.0", features = ["parallel"]}
@@ -56,7 +62,7 @@ opt-level = 1
 [profile.dev.package."*"]
 #High optimisations, but long compile times
 opt-level = 3
-#Medium optimisations, but shorter compile times
+# #Medium optimisations, but shorter compile times
 # opt-level = 2
 
 #Profiles for github actions
@@ -71,6 +77,7 @@ opt-level = 0
 [profile.actions-windows]
 inherits = "actions"
 opt-level = 1
+
 #windows will otherwise result in a "too many symbols" error
 [profile.actions-windows.package."*"]
 opt-level = 2
