@@ -7,7 +7,6 @@ fn main() {
     App::new()
         .insert_resource(ClearColor(Color::BLACK))
         .add_state::<EngineState>()
-        .add_state::<GameState>()
         .insert_resource(bevy::winit::WinitSettings {
             focused_mode: bevy::winit::UpdateMode::Continuous,
             unfocused_mode: bevy::winit::UpdateMode::ReactiveLowPower {
@@ -61,7 +60,7 @@ fn main() {
             GalaxyLoadingPlugin,
             GalaxyPlayerPlugin,
             GalaxyPolarPlugin,
-            GalaxyWorldPlugin,
+            GalaxyGamePlugin,
         ))
         // .add_plugin(bevy::diagnostic::FrameTimeDiagnosticsPlugin::default())
         // .add_plugin(bevy::diagnostic::LogDiagnosticsPlugin::default())

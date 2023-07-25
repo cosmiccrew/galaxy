@@ -13,9 +13,9 @@ impl Plugin for GalaxyDebugPlugin {
         if cfg!(debug_assertions) {
             app.add_plugins((
                 WorldInspectorPlugin::default()
-                    .run_if(input_toggle_active(true, KeyCode::Backslash)),
+                    .run_if(input_toggle_active(false, KeyCode::Backslash)),
                 StateInspectorPlugin::<EngineState>::default()
-                    .run_if(input_toggle_active(true, KeyCode::Backslash)),
+                    .run_if(input_toggle_active(false, KeyCode::Backslash)),
             ));
             app.add_systems(Update, close_on_esc);
         }

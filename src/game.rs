@@ -1,8 +1,8 @@
 use crate::prelude::*;
 
-pub struct GalaxyWorldPlugin;
+pub struct GalaxyGamePlugin;
 
-impl Plugin for GalaxyWorldPlugin {
+impl Plugin for GalaxyGamePlugin {
     fn build(&self, app: &mut App) {
         app.add_systems(OnEnter(EngineState::InGame), setup)
             .add_systems(
@@ -34,6 +34,7 @@ fn planet_rotation(
     mut commands: Commands,
     mut query: Query<&mut Transform, With<TempPlanet>>,
     keyboard_input: Res<Input<KeyCode>>,
+    time: Res<Time>,
 ) {
     let mut direction = 0f32;
 
@@ -46,7 +47,7 @@ fn planet_rotation(
     }
 
     for mut object in &mut query {
-        object.rotate_z(direction.to_radians());
+        object.rotate_z(time.delta_seconds() * FRAC_PI_2 * direction);
     }
 }
 
