@@ -22,7 +22,7 @@ resources = ["assets"]
 #the bevy game engine itself
 bevy = { version = "0.11.0", features = ["serialize"] }
 #a debug menu and interface for visualising component hierarchy and changing values on the fly.
-bevy-inspector-egui = "0.19"
+bevy-inspector-egui = "0.19.0"
 #2d physics engine in bevy
 bevy_rapier2d = { version = "0.22.0", features = ["serde-serialize", "debug-render-2d"]}
 #helps with loading assets in a logical, dynamic format.

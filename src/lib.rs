@@ -2,12 +2,12 @@
 #![allow(clippy::type_complexity)]
 
 pub mod debug;
+pub mod game;
 pub mod loading;
 pub mod player;
 pub mod polar;
 pub mod state;
 pub mod utils;
-pub mod world;
 
 pub mod prelude {
 
@@ -17,12 +17,12 @@ pub mod prelude {
     pub use bevy::prelude::*;
 
     pub use crate::debug::*;
+    pub use crate::game::*;
     pub use crate::loading::*;
     pub use crate::player::*;
     pub use crate::polar::*;
     pub use crate::state::*;
     pub use crate::utils::*;
-    pub use crate::world::*;
     pub use crate::{PLANETS, PLANET_PARTS};
 }
 
