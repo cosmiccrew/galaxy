@@ -16,14 +16,14 @@ impl Plugin for GalaxyGamePlugin {
 #[derive(Component, Reflect)]
 struct TempPlanet;
 
-fn setup(mut commands: Commands, asset_server: Res<AssetServer>, time: Res<Time>) {
+fn setup(mut commands: Commands, assets: Res<MyAssets>, time: Res<Time>) {
     commands.spawn((
         SpriteBundle {
             sprite: Sprite {
                 custom_size: Some(Vec2::new(500., 500.)),
                 ..default()
             },
-            texture: asset_server.load("planets/planets/planet00.png"),
+            texture: assets.dummy.clone(),
             ..default()
         },
         TempPlanet,
