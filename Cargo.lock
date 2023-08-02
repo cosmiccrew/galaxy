@@ -1452,19 +1452,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "clone"
-version = "0.1.0"
-dependencies = [
- "image",
- "indexmap 2.0.0",
- "ron",
- "serde",
- "serde_json",
- "show-image",
- "text_io",
-]
-
-[[package]]
 name = "cmake"
 version = "0.1.50"
 source = "registry+https://github.com/rust-lang/crates.io-index"
