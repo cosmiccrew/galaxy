@@ -1,33 +1,75 @@
+use std::str::FromStr;
 use std::{collections::BTreeMap, fs, path::PathBuf};
 
 use show_image::create_window;
 use text_io::read;
 
+use clap::Parser;
+use clap::Subcommand;
 use serde::{Deserialize, Serialize};
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Default)]
 #[serde(rename_all = "snake_case")]
 struct SpriteSheetMeta(BTreeMap<String, Vec<(u32, u32)>>);
 
 impl SpriteSheetMeta {
     fn new() -> Self {
-        Self(BTreeMap::new())
+        Self::default()
     }
 }
 
+#[derive(Parser)]
+#[command(author, version, about, long_about = None)]
+struct Cli {
+    path: PathBuf,
+
+    #[arg(short, long, value_name = "FILE")]
+    output_file: Option<PathBuf>,
+
+    #[command(subcommand)]
+    command: Option<Commands>,
+}
+
+#[derive(Subcommand)]
+enum Commands {
+    /// does testing things
+    Indexer {
+        /// lists test values
+        #[arg(short, long)]
+        list: bool,
+    },
+    Mapper {},
+}
+
 #[show_image::main]
-fn main() -> Result<(), Box<dyn std::error::Error>> {
-    println!("WRITE IN FORMAT: [colour, symbol, type, lightness]");
+fn main() -> anyhow::Result<()> {
+    let cli = Cli::parse();
 
-    let input_file = PathBuf::from("assets/ui/icons/prompts_16x16.png");
+    let output_file = if let Some(file) = cli.output_file {
+        file
+    } else {
+        let file_stem = cli.path.file_stem().unwrap();
 
-    let input_file_name = input_file.clone();
-    let input_file_name = input_file_name.file_stem().unwrap();
+        cli.path
+            .parent()
+            .ok_or(anyhow::anyhow!("no parent of the output file found!"))?
+            .join(PathBuf::from_str(&format!(
+                "{}.spritesheet.ron",
+                file_stem
+                    .to_str()
+                    .ok_or(anyhow::anyhow!("could not convert file_name to a str."))?
+            ))?)
+    };
 
-    let ron_file = format!("{}.spritesheet.ron", input_file_name.to_str().unwrap());
+    println!("{}", output_file.display());
+
+    println!("WRITE IN FORMAT: \"colour symbol type lightness\"");
+
+    // let input_file = PathBuf::from("assets/ui/icons/prompts_16x16.png");
+    let input_file = cli.path;
 
     let existing: SpriteSheetMeta =
-        ron::de::from_bytes(fs::read(ron_file.clone()).unwrap_or(vec![]).as_slice())
+        ron::de::from_bytes(fs::read(output_file.clone()).unwrap_or(vec![]).as_slice())
             .unwrap_or(SpriteSheetMeta::new());
 
     let mut sprite_sheet_raw = image::open(input_file)?;
@@ -138,7 +180,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     let sprite_sheet_meta = SpriteSheetMeta(hashmap);
 
-    let output_file = fs::File::create(ron_file)?;
+    let output_file = fs::File::create(output_file)?;
 
     ron::ser::to_writer_pretty(&output_file, &sprite_sheet_meta, Default::default())?;
 
