@@ -1,0 +1,22 @@
+({
+    // "single_file": File (
+    //     path: "audio/background.ogg",
+    // ),
+
+    // "texture_atlas": TextureAtlas (
+    //     path: "images/female_adventurer_sheet.png",
+    //     tile_size_x: 96.,
+    //     tile_size_y: 99.,
+    //     columns: 8,
+    //     rows: 1
+    // ),
+
+    "loading_icon": File (
+        path: "planets/parts/light0.png"
+    ),
+
+    "dummy": File (
+        path: "planets/planets/planet09.png"
+    )    
+})
+
