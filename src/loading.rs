@@ -1,5 +1,4 @@
 use crate::prelude::*;
-use bevy::utils::HashMap;
 use bevy_asset_loader::prelude::*;
 
 #[derive(AssetCollection, Resource)]
@@ -39,22 +38,14 @@ impl Plugin for GalaxyLoadingPlugin {
         )
         .add_dynamic_collection_to_loading_state::<_, StandardDynamicAssetCollection>(
             EngineState::LoadingAssets,
-            "default.assets.ron",
+            "core.assets.ron",
         )
         .add_collection_to_loading_state::<_, MyAssets>(EngineState::LoadingAssets)
         .add_systems(Startup, setup)
-        .add_systems(
-            OnEnter(EngineState::LoadingAssets),
-            (/*load_assets,*/splash_setup),
-        )
+        .add_systems(OnEnter(EngineState::LoadingAssets), splash_setup)
         .add_systems(
             Update,
-            (
-                // to_next.run_if(if_loaded).run_if(if_timer_finished),
-                tick_timer,
-                rotate_loading_icon,
-            )
-                .run_if(in_state(EngineState::LoadingAssets)),
+            (tick_timer, rotate_loading_icon).run_if(in_state(EngineState::LoadingAssets)),
         )
         // When exiting the state, despawn everything that was spawned for this screen
         .add_systems(
@@ -90,7 +81,7 @@ struct LoadingIcon;
 
 fn splash_setup(mut commands: Commands, asset_server: Res<AssetServer>) {
     //can't use the dynamic asset loader, as is part of the assets being loaded!
-    let icon = asset_server.load("planets/parts/light0.png");
+    let icon = asset_server.load("sprites/planets/parts/light0.png");
 
     commands
         .spawn((
@@ -130,22 +121,4 @@ fn rotate_loading_icon(commands: Commands, mut query: Query<&mut Transform, With
 // tick the `SplashTimer` timer
 fn tick_timer(time: Res<Time>, mut timer: ResMut<SplashTimer>) {
     timer.tick(time.delta());
-}
-
-// return true if the timer is finished
-fn if_timer_finished(mut timer: Res<SplashTimer>) -> bool {
-    timer.finished()
-}
-
-fn load_assets(asset_server: Res<AssetServer>) {
-
-    // asset_server.load("planets/planets/planet09.png");
-}
-
-fn to_next(mut game_state: ResMut<NextState<EngineState>>) {
-    game_state.set(EngineState::InGame);
-}
-
-fn if_loaded() -> bool {
-    true
 }
