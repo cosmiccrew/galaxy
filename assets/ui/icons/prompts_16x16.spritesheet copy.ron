@@ -1,0 +1,2010 @@
+({
+    "0_key_dark": [
+        (26, 9),
+    ],
+    "0_key_light": [
+        (26, 1),
+    ],
+    "1_key_dark": [
+        (17, 9),
+    ],
+    "1_key_light": [
+        (17, 1),
+    ],
+    "2_key_dark": [
+        (18, 9),
+    ],
+    "2_key_light": [
+        (18, 1),
+    ],
+    "3_key_dark": [
+        (19, 9),
+    ],
+    "3_key_light": [
+        (19, 1),
+    ],
+    "4_key_dark": [
+        (20, 9),
+    ],
+    "4_key_light": [
+        (20, 1),
+    ],
+    "5_key_dark": [
+        (21, 9),
+    ],
+    "5_key_light": [
+        (21, 1),
+    ],
+    "6_key_dark": [
+        (22, 9),
+    ],
+    "6_key_light": [
+        (22, 1),
+    ],
+    "7_key_dark": [
+        (23, 9),
+    ],
+    "7_key_light": [
+        (23, 1),
+    ],
+    "8_key_dark": [
+        (24, 9),
+    ],
+    "8_key_light": [
+        (24, 1),
+    ],
+    "9_key_dark": [
+        (25, 9),
+    ],
+    "9_key_light": [
+        (25, 1),
+    ],
+    "CHECKcolonDouble_key_dark": [
+        (31, 9),
+    ],
+    "CHECKcolonDouble_key_light": [
+        (31, 1),
+    ],
+    "CHECKdot_arrow": [
+        (33, 16),
+    ],
+    "CHECKshare_button_dark": [
+        (6, 19),
+    ],
+    "CHECKtv_button_light": [
+        (11, 20),
+    ],
+    "CHECKupload_button_light": [
+        (6, 18),
+    ],
+    "XBox_menu_button_dark": [
+        (5, 19),
+    ],
+    "XBox_menu_button_light": [
+        (5, 18),
+    ],
+    "XBox_share_button_dark": [
+        (4, 19),
+    ],
+    "XBox_share_button_light": [
+        (4, 18),
+    ],
+    "a_button_dark": [
+        (8, 1),
+    ],
+    "a_button_light": [
+        (13, 0),
+    ],
+    "a_key_dark": [
+        (18, 11),
+    ],
+    "a_key_light": [
+        (18, 3),
+    ],
+    "actionPad_black": [
+        (7, 13),
+    ],
+    "actionPad_dark": [
+        (7, 15),
+    ],
+    "actionPad_light": [
+        (7, 14),
+    ],
+    "alt_full_key_dark": [
+        (17, 13),
+        (18, 13),
+    ],
+    "alt_full_key_light": [
+        (17, 5),
+        (18, 5),
+    ],
+    "angleBracketLeft_key_dark": [
+        (26, 12),
+    ],
+    "angleBracketLeft_key_light": [
+        (26, 4),
+    ],
+    "angleBracketRight_key_dark": [
+        (27, 12),
+    ],
+    "angleBracketRight_key_light": [
+        (27, 4),
+    ],
+    "apostrophe_key_dark": [
+        (27, 11),
+    ],
+    "apostrophe_key_light": [
+        (27, 3),
+    ],
+    "arrow": [
+        (26, 17),
+    ],
+    "atSign_key_dark": [
+        (31, 8),
+        (32, 8),
+    ],
+    "atSign_key_light": [
+        (31, 0),
+        (32, 0),
+    ],
+    "b_button_dark": [
+        (9, 1),
+    ],
+    "b_button_light": [
+        (14, 0),
+    ],
+    "b_key_dark": [
+        (23, 12),
+    ],
+    "b_key_light": [
+        (23, 4),
+    ],
+    "backslash_key_dark": [
+        (31, 10),
+    ],
+    "backslash_key_light": [
+        (31, 2),
+    ],
+    "backspace_full_key_dark": [
+        (32, 9),
+        (33, 9),
+    ],
+    "backspace_full_key_light": [
+        (32, 1),
+        (33, 1),
+    ],
+    "blank_key_dark": [
+        (29, 14),
+    ],
+    "blank_key_light": [
+        (29, 6),
+    ],
+    "blueX_button_dark": [
+        (15, 1),
+    ],
+    "blue_bottom_joystick": [
+        (3, 14),
+    ],
+    "blue_button": [
+        (2, 0),
+    ],
+    "blue_cross_button_dark": [
+        (23, 17),
+    ],
+    "blue_cross_button_light": [
+        (23, 16),
+    ],
+    "blue_cross_dark": [
+        (24, 17),
+    ],
+    "blue_cross_light": [
+        (24, 16),
+    ],
+    "blue_isometric_button": [
+        (5, 14),
+    ],
+    "blue_joystick": [
+        (0, 14),
+    ],
+    "blue_left_actionPad_dark": [
+        (7, 10),
+    ],
+    "blue_left_actionPad_light": [
+        (7, 9),
+    ],
+    "blue_left_joystick": [
+        (4, 14),
+    ],
+    "blue_pressed_isometric_button": [
+        (6, 14),
+    ],
+    "blue_right_joystick": [
+        (2, 14),
+    ],
+    "blue_up_joystick": [
+        (1, 14),
+    ],
+    "blue_x_button": [
+        (6, 0),
+    ],
+    "blue_x_button_dark": [
+        (10, 0),
+    ],
+    "bottomClicked_plus_DPad_dark": [
+        (3, 4),
+    ],
+    "bottomClicked_plus_DPad_light": [
+        (3, 3),
+    ],
+    "bottom_actionPad_dark": [
+        (2, 10),
+    ],
+    "bottom_circle_arrow": [
+        (29, 19),
+    ],
+    "bottom_halfCircle_arrow": [
+        (29, 17),
+    ],
+    "bottom_halfSquare_arrow": [
+        (29, 16),
+    ],
+    "bottom_isometricL_thumbstick_dark": [
+        (11, 7),
+    ],
+    "bottom_isometricL_thumbstick_light": [
+        (11, 6),
+    ],
+    "bottom_isometricR_thumbstick_dark": [
+        (11, 9),
+    ],
+    "bottom_plus_thumbstick_light": [
+        (3, 5),
+    ],
+    "bottom_quarterCircle_arrow": [
+        (32, 17),
+    ],
+    "bottom_quarterSquare_arrow": [
+        (32, 16),
+    ],
+    "bottom_seperate_DPad_light": [
+        (3, 7),
+    ],
+    "bottom_square_arrow": [
+        (29, 18),
+    ],
+    "bottom_topDownL_thumbstick_dark": [
+        (11, 13),
+    ],
+    "bottom_topDownL_thumbstick_light": [
+        (11, 12),
+    ],
+    "bottom_topDownR_thumbstick_dark": [
+        (11, 15),
+    ],
+    "bottom_topDownR_thumbstick_light": [
+        (11, 14),
+    ],
+    "bottom_topDown_thumbstick_dark": [
+        (11, 11),
+    ],
+    "bottom_topDown_thumbstick_light": [
+        (11, 10),
+    ],
+    "bracketLeft_key_dark": [
+        (32, 13),
+    ],
+    "bracketLeft_key_light": [
+        (32, 5),
+    ],
+    "bracketRight_key_dark": [
+        (33, 13),
+    ],
+    "bracketRight_key_light": [
+        (33, 5),
+    ],
+    "button_dark": [
+        (12, 1),
+    ],
+    "button_light": [
+        (12, 0),
+    ],
+    "c_key_dark": [
+        (21, 12),
+    ],
+    "c_key_light": [
+        (21, 4),
+    ],
+    "capsLock_full_key_dark": [
+        (19, 14),
+        (20, 14),
+    ],
+    "capsLock_full_key_light": [
+        (19, 6),
+        (20, 6),
+    ],
+    "caret_key_dark": [
+        (30, 13),
+    ],
+    "caret_key_light": [
+        (30, 5),
+    ],
+    "centerClicked_plus_DPad_dark": [
+        (0, 4),
+    ],
+    "centerClicked_plus_DPad_light": [
+        (0, 3),
+    ],
+    "circle_key_dark": [
+        (30, 14),
+    ],
+    "circle_key_light": [
+        (30, 6),
+    ],
+    "clicked_side_thumbstick_dark": [
+        (16, 3),
+    ],
+    "clicked_side_thumbstick_light": [
+        (16, 2),
+    ],
+    "colon_key_dark": [
+        (29, 11),
+    ],
+    "colon_key_light": [
+        (29, 3),
+    ],
+    "comma_key_dark": [
+        (27, 14),
+    ],
+    "comma_key_light": [
+        (27, 6),
+    ],
+    "control_full_key_dark": [
+        (17, 14),
+        (18, 14),
+    ],
+    "control_full_key_light": [
+        (17, 6),
+        (18, 6),
+    ],
+    "curlyBracketsLeft_key_dark": [
+        (29, 10),
+    ],
+    "curlyBracketsLeft_key_light": [
+        (29, 2),
+    ],
+    "curlyBracketsRight_key_dark": [
+        (30, 10),
+    ],
+    "curlyBracketsRight_key_light": [
+        (30, 2),
+    ],
+    "d_key_dark": [
+        (20, 11),
+    ],
+    "d_key_light": [
+        (20, 3),
+    ],
+    "delete_full_key_dark": [
+        (21, 13),
+        (22, 13),
+    ],
+    "delete_full_key_light": [
+        (21, 5),
+        (22, 5),
+    ],
+    "dollar_key_dark": [
+        (28, 13),
+    ],
+    "dollar_key_light": [
+        (28, 5),
+    ],
+    "double_pointerFinger": [
+        (2, 17),
+    ],
+    "downArrow_key_dark": [
+        (32, 12),
+    ],
+    "downArrow_key_light": [
+        (32, 4),
+    ],
+    "down_actionPad_light": [
+        (2, 9),
+    ],
+    "down_isometricR_thumbstick_light": [
+        (11, 8),
+    ],
+    "down_isometric_thumbstick_dark": [
+        (11, 5),
+    ],
+    "down_isometric_thumbstick_light": [
+        (11, 4),
+    ],
+    "down_plus_DPad_dark": [
+        (3, 2),
+    ],
+    "down_plus_DPad_light": [
+        (3, 1),
+    ],
+    "down_plus_thumbstick_dark": [
+        (3, 6),
+    ],
+    "down_seperate_DPad_dark": [
+        (3, 8),
+    ],
+    "down_single_pointerFinger": [
+        (1, 17),
+    ],
+    "e_key_dark": [
+        (19, 10),
+    ],
+    "e_key_light": [
+        (19, 2),
+    ],
+    "end_full_key_dark": [
+        (23, 13),
+        (24, 13),
+    ],
+    "end_full_key_light": [
+        (23, 5),
+        (24, 5),
+    ],
+    "enter_key_dark": [
+        (32, 10),
+        (33, 10),
+    ],
+    "enter_key_light": [
+        (32, 2),
+        (33, 2),
+    ],
+    "equals_key_dark": [
+        (29, 9),
+    ],
+    "equals_key_light": [
+        (29, 1),
+    ],
+    "escape_key_dark": [
+        (17, 8),
+    ],
+    "escape_key_light": [
+        (17, 0),
+    ],
+    "euro_key_dark": [
+        (31, 13),
+    ],
+    "euro_key_light": [
+        (31, 5),
+    ],
+    "f10_key_dark": [
+        (27, 8),
+    ],
+    "f10_key_light": [
+        (27, 0),
+    ],
+    "f11_key_dark": [
+        (28, 8),
+    ],
+    "f11_key_light": [
+        (28, 0),
+    ],
+    "f12_key_dark": [
+        (29, 8),
+    ],
+    "f12_key_light": [
+        (29, 0),
+    ],
+    "f1_key_dark": [
+        (18, 8),
+    ],
+    "f1_key_light": [
+        (18, 0),
+    ],
+    "f2_key_dark": [
+        (19, 8),
+    ],
+    "f2_key_light": [
+        (19, 0),
+    ],
+    "f3_key_dark": [
+        (20, 8),
+    ],
+    "f3_key_light": [
+        (20, 0),
+    ],
+    "f4_key_dark": [
+        (21, 8),
+    ],
+    "f4_key_light": [
+        (21, 0),
+    ],
+    "f5_key_dark": [
+        (22, 8),
+    ],
+    "f5_key_light": [
+        (22, 0),
+    ],
+    "f6_key_dark": [
+        (23, 8),
+    ],
+    "f6_key_light": [
+        (23, 0),
+    ],
+    "f7_key_dark": [
+        (24, 8),
+    ],
+    "f7_key_light": [
+        (24, 0),
+    ],
+    "f8_key_dark": [
+        (25, 8),
+    ],
+    "f8_key_light": [
+        (25, 0),
+    ],
+    "f9_key_dark": [
+        (26, 8),
+    ],
+    "f9_key_light": [
+        (26, 0),
+    ],
+    "f_key_dark": [
+        (21, 11),
+    ],
+    "f_key_light": [
+        (21, 3),
+    ],
+    "fastBackwards_key_dark": [
+        (30, 15),
+    ],
+    "fastBackwards_key_light": [
+        (30, 7),
+    ],
+    "fastForwards_key_dark": [
+        (31, 15),
+    ],
+    "fastForwards_key_light": [
+        (31, 7),
+    ],
+    "fn_key_dark": [
+        (32, 11),
+    ],
+    "fn_key_light": [
+        (32, 3),
+    ],
+    "fullClicked_plus_DPad_dark": [
+        (7, 4),
+    ],
+    "fullClicked_plus_DPad_light": [
+        (7, 3),
+    ],
+    "fullStop_key_dark": [
+        (27, 13),
+    ],
+    "fullStop_key_light": [
+        (27, 5),
+    ],
+    "full_arrow": [
+        (33, 19),
+    ],
+    "full_isometricL_thumbstick_dark": [
+        (15, 7),
+    ],
+    "full_isometricL_thumbstick_light": [
+        (15, 6),
+    ],
+    "full_isometricR_thumbstick_dark": [
+        (15, 9),
+    ],
+    "full_isometricR_thumbstick_light": [
+        (15, 8),
+    ],
+    "full_isometric_thumbstick_dark": [
+        (15, 5),
+    ],
+    "full_isometric_thumbstick_light": [
+        (15, 4),
+    ],
+    "full_plus_thumbstick_dark": [
+        (7, 6),
+    ],
+    "full_plus_thumbstick_light": [
+        (7, 5),
+    ],
+    "full_seperate_DPad_dark": [
+        (7, 8),
+    ],
+    "full_seperate_DPad_light": [
+        (7, 7),
+    ],
+    "full_topDownL_thumbstick_dark": [
+        (15, 13),
+    ],
+    "full_topDownL_thumbstick_light": [
+        (15, 12),
+    ],
+    "full_topDownR_thumbstick_dark": [
+        (15, 15),
+    ],
+    "full_topDownR_thumbstick_light": [
+        (15, 14),
+    ],
+    "full_topDown_thumbstick_dark": [
+        (15, 11),
+    ],
+    "full_topDown_thumbstick_light": [
+        (15, 10),
+    ],
+    "g_key_dark": [
+        (22, 11),
+    ],
+    "g_key_light": [
+        (22, 3),
+    ],
+    "gamecube_a_button": [
+        (0, 18),
+    ],
+    "gamecube_b_button": [
+        (1, 18),
+    ],
+    "gamecube_x_button_dark": [
+        (3, 19),
+    ],
+    "gamecube_x_button_light": [
+        (3, 18),
+    ],
+    "gamecube_y_button_dark": [
+        (2, 19),
+    ],
+    "gamecube_y_button_light": [
+        (2, 18),
+    ],
+    "gamecube_z_button_dark": [
+        (1, 19),
+    ],
+    "gamecube_z_button_light": [
+        (0, 19),
+    ],
+    "grabbed_pointerFinger": [
+        (4, 17),
+    ],
+    "greenA_button_dark": [
+        (13, 1),
+    ],
+    "green_a_button": [
+        (4, 0),
+    ],
+    "green_a_button_dark": [
+        (8, 0),
+    ],
+    "green_bottom_actionPad_dark": [
+        (6, 10),
+    ],
+    "green_bottom_actionPad_light": [
+        (6, 9),
+    ],
+    "green_bottom_joystick": [
+        (3, 13),
+    ],
+    "green_button": [
+        (0, 0),
+    ],
+    "green_isometric_button": [
+        (5, 13),
+    ],
+    "green_joystick": [
+        (0, 13),
+    ],
+    "green_left_joystick": [
+        (4, 13),
+    ],
+    "green_pressed_isometric_button": [
+        (6, 13),
+    ],
+    "green_right_joystick": [
+        (2, 13),
+    ],
+    "green_triangle_button_dark": [
+        (17, 17),
+    ],
+    "green_triangle_button_light": [
+        (17, 16),
+    ],
+    "green_triangle_dark": [
+        (18, 17),
+    ],
+    "green_triangle_light": [
+        (18, 16),
+    ],
+    "green_up_joystick": [
+        (1, 13),
+    ],
+    "greyHighlighted_bottom_actionPad_black": [
+        (6, 12),
+    ],
+    "greyHighlighted_left_actionPad_black": [
+        (7, 12),
+    ],
+    "greyHighlighted_right_actionPad_black": [
+        (5, 12),
+    ],
+    "greyHighlighted_up_actionPad_black": [
+        (4, 12),
+    ],
+    "grey_bottom_actionPad_black": [
+        (2, 12),
+    ],
+    "grey_left_actionPad_black": [
+        (3, 12),
+    ],
+    "grey_right_actionPad_black": [
+        (1, 12),
+    ],
+    "grey_up_actionPad_black": [
+        (0, 12),
+    ],
+    "h_key_dark": [
+        (23, 11),
+    ],
+    "h_key_light": [
+        (23, 3),
+    ],
+    "hash_key_dark": [
+        (33, 8),
+    ],
+    "hash_key_light": [
+        (33, 0),
+    ],
+    "head arrow": [
+        (26, 16),
+    ],
+    "home_full_key_dark": [
+        (21, 14),
+        (22, 14),
+    ],
+    "home_full_key_light": [
+        (21, 6),
+        (22, 6),
+    ],
+    "horizontalClicked_plus_DPad_dark": [
+        (5, 4),
+    ],
+    "horizontalClicked_plus_DPad_light": [
+        (5, 3),
+    ],
+    "horizontal_arrow": [
+        (33, 17),
+    ],
+    "horizontal_isometricL_thumbstick_dark": [
+        (13, 7),
+    ],
+    "horizontal_isometricL_thumbstick_light": [
+        (13, 6),
+    ],
+    "horizontal_isometricR_thumbstick_dark": [
+        (13, 9),
+    ],
+    "horizontal_isometricR_thumbstick_light": [
+        (13, 8),
+    ],
+    "horizontal_isometric_thumbstick_dark": [
+        (13, 5),
+    ],
+    "horizontal_isometric_thumbstick_light": [
+        (13, 4),
+    ],
+    "horizontal_plus_DPad_dark": [
+        (5, 2),
+    ],
+    "horizontal_plus_DPad_light": [
+        (5, 1),
+    ],
+    "horizontal_plus_thumbstick_dark": [
+        (5, 6),
+    ],
+    "horizontal_plus_thumbstick_light": [
+        (5, 5),
+    ],
+    "horizontal_seperate_DPad_dark": [
+        (5, 8),
+    ],
+    "horizontal_seperate_DPad_light": [
+        (5, 7),
+    ],
+    "horizontal_topDownL_thumbstick_dark": [
+        (13, 13),
+    ],
+    "horizontal_topDownL_thumbstick_light": [
+        (13, 12),
+    ],
+    "horizontal_topDownR_thumbstick_dark": [
+        (13, 15),
+    ],
+    "horizontal_topDownR_thumbstick_light": [
+        (13, 14),
+    ],
+    "horizontal_topDown_thumbstick_dark": [
+        (13, 11),
+    ],
+    "horizontal_topDown_thumbstick_light": [
+        (13, 10),
+    ],
+    "i_key_dark": [
+        (24, 10),
+    ],
+    "i_key_light": [
+        (24, 2),
+    ],
+    "insert_full_key_dark": [
+        (19, 15),
+        (20, 15),
+    ],
+    "insert_full_key_light": [
+        (19, 7),
+        (20, 7),
+    ],
+    "isometricL_thumbstick_dark": [
+        (8, 7),
+    ],
+    "isometricL_thumbstick_light": [
+        (8, 6),
+    ],
+    "isometricR_thumbstick_dark": [
+        (8, 9),
+    ],
+    "isometricR_thumbstick_light": [
+        (8, 8),
+    ],
+    "isometric_thumbstick_dark": [
+        (8, 5),
+    ],
+    "isometric_thumbstick_light": [
+        (8, 4),
+    ],
+    "j_key_dark": [
+        (24, 11),
+    ],
+    "j_key_light": [
+        (24, 3),
+    ],
+    "k_key_dark": [
+        (25, 11),
+    ],
+    "k_key_light": [
+        (25, 3),
+    ],
+    "l_key_dark": [
+        (26, 11),
+    ],
+    "l_key_light": [
+        (26, 3),
+    ],
+    "leftButton1_dark": [
+        (9, 17),
+    ],
+    "leftButton1_light": [
+        (9, 16),
+    ],
+    "leftButton2_dark": [
+        (7, 19),
+    ],
+    "leftButton2_light": [
+        (7, 18),
+    ],
+    "leftClick_mouse_light": [
+        (9, 2),
+    ],
+    "leftClicked_plus_DPad_dark": [
+        (4, 4),
+    ],
+    "leftClicked_plus_DPad_light": [
+        (4, 3),
+    ],
+    "leftTrigger1_dark": [
+        (7, 17),
+    ],
+    "leftTrigger1_light": [
+        (7, 16),
+    ],
+    "leftTrigger2_dark": [
+        (11, 17),
+    ],
+    "leftTrigger2_light": [
+        (11, 16),
+    ],
+    "leftTrigger3_dark": [
+        (13, 17),
+    ],
+    "leftTrigger3_light": [
+        (13, 16),
+    ],
+    "leftTrigger4_dark": [
+        (15, 17),
+    ],
+    "leftTrigger4_light": [
+        (15, 16),
+    ],
+    "leftTrigger5_dark": [
+        (9, 19),
+    ],
+    "leftTrigger5_light": [
+        (9, 18),
+    ],
+    "left_actionPad_dark": [
+        (3, 10),
+    ],
+    "left_actionPad_light": [
+        (3, 9),
+    ],
+    "left_circle_arrow": [
+        (30, 19),
+    ],
+    "left_halfCircle_arrow": [
+        (30, 17),
+    ],
+    "left_halfSquare_arrow": [
+        (30, 16),
+    ],
+    "left_isometricL_thumbstick_dark": [
+        (12, 7),
+    ],
+    "left_isometricL_thumbstick_light": [
+        (12, 6),
+    ],
+    "left_isometricR_thumbstick_dark": [
+        (12, 9),
+    ],
+    "left_isometricR_thumbstick_light": [
+        (12, 8),
+    ],
+    "left_isometric_thumbstick_dark": [
+        (12, 5),
+    ],
+    "left_isometric_thumbstick_light": [
+        (12, 4),
+    ],
+    "left_key_dark": [
+        (33, 12),
+    ],
+    "left_key_light": [
+        (33, 4),
+    ],
+    "left_plus_DPad_dark": [
+        (4, 2),
+    ],
+    "left_plus_DPad_light": [
+        (4, 1),
+    ],
+    "left_plus_thumbstick_dark": [
+        (4, 6),
+    ],
+    "left_plus_thumbstick_light": [
+        (4, 5),
+    ],
+    "left_quarterCircle_arrow": [
+        (31, 19),
+    ],
+    "left_quarterSquare_arrow": [
+        (31, 18),
+    ],
+    "left_seperate_DPad_dark": [
+        (4, 8),
+    ],
+    "left_seperate_DPad_light": [
+        (4, 7),
+    ],
+    "left_single_pointerFinger": [
+        (5, 17),
+    ],
+    "left_square_arrow": [
+        (30, 18),
+    ],
+    "left_topDownL_thumbstick_dark": [
+        (12, 13),
+    ],
+    "left_topDownL_thumbstick_light": [
+        (12, 12),
+    ],
+    "left_topDownR_thumbstick_dark": [
+        (12, 15),
+    ],
+    "left_topDownR_thumbstick_light": [
+        (12, 14),
+    ],
+    "left_topDown_thumbstick_dark": [
+        (12, 11),
+    ],
+    "left_topDown_thumbstick_light": [
+        (12, 10),
+    ],
+    "m_key_dark": [
+        (25, 12),
+    ],
+    "m_key_light": [
+        (25, 4),
+    ],
+    "microphone_dark": [
+        (25, 17),
+    ],
+    "microphone_light": [
+        (25, 16),
+    ],
+    "middleClick_mouse_dark": [
+        (11, 3),
+    ],
+    "middleClick_mouse_light": [
+        (11, 2),
+    ],
+    "minus_key_dark": [
+        (27, 9),
+    ],
+    "minus_key_light": [
+        (27, 1),
+    ],
+    "mouseClick_key_dark": [
+        (28, 14),
+    ],
+    "mouseClick_key_light": [
+        (28, 6),
+    ],
+    "mouseLeftClick_dark": [
+        (9, 3),
+    ],
+    "mouse_dark": [
+        (8, 3),
+    ],
+    "mouse_light": [
+        (8, 2),
+    ],
+    "multiplication_key_dark": [
+        (31, 11),
+    ],
+    "multiplication_key_light": [
+        (31, 3),
+    ],
+    "n_key_dark": [
+        (24, 12),
+    ],
+    "n_key_light": [
+        (24, 4),
+    ],
+    "numLock_full_key_dark": [
+        (25, 13),
+        (26, 13),
+    ],
+    "numLock_full_key_light": [
+        (25, 5),
+        (26, 5),
+    ],
+    "o_key_dark": [
+        (25, 10),
+    ],
+    "o_key_light": [
+        (25, 2),
+    ],
+    "orange_Y_button_dark": [
+        (16, 1),
+    ],
+    "orange_bottom_joystick": [
+        (3, 16),
+    ],
+    "orange_button": [
+        (3, 0),
+    ],
+    "orange_isometric_button": [
+        (5, 16),
+    ],
+    "orange_joystick": [
+        (0, 16),
+    ],
+    "orange_left_joystick": [
+        (4, 16),
+    ],
+    "orange_pressed_isometric_button": [
+        (6, 16),
+    ],
+    "orange_right_joystick": [
+        (2, 16),
+    ],
+    "orange_up_actionPad_dark": [
+        (4, 10),
+    ],
+    "orange_up_actionPad_light": [
+        (4, 9),
+    ],
+    "orange_up_joystick": [
+        (1, 16),
+    ],
+    "orange_y_button": [
+        (7, 0),
+    ],
+    "orange_y_button_dark": [
+        (11, 0),
+    ],
+    "p_key_dark": [
+        (26, 10),
+    ],
+    "p_key_light": [
+        (26, 2),
+    ],
+    "pageDown_full_key_dark": [
+        (25, 14),
+        (26, 14),
+    ],
+    "pageDown_full_key_light": [
+        (25, 6),
+        (26, 6),
+    ],
+    "pageUp_full_key_dark": [
+        (23, 14),
+        (24, 14),
+    ],
+    "pageUp_full_key_light": [
+        (23, 6),
+        (24, 6),
+    ],
+    "pause_full_key_dark": [
+        (25, 15),
+        (26, 15),
+    ],
+    "pause_full_key_light": [
+        (25, 7),
+        (26, 7),
+    ],
+    "pause_key_dark": [
+        (28, 15),
+    ],
+    "pause_key_light": [
+        (28, 7),
+    ],
+    "percentage_key_dark": [
+        (29, 13),
+    ],
+    "percentage_key_light": [
+        (29, 5),
+    ],
+    "play_key_dark": [
+        (27, 15),
+    ],
+    "play_key_light": [
+        (27, 7),
+    ],
+    "playstation_leftButton1_dark": [
+        (19, 19),
+    ],
+    "playstation_leftButton1_light": [
+        (19, 18),
+    ],
+    "playstation_leftButton2_dark": [
+        (23, 19),
+    ],
+    "playstation_leftButton2_light": [
+        (23, 18),
+    ],
+    "playstation_leftButton3_dark": [
+        (25, 19),
+    ],
+    "playstation_leftButton3_light": [
+        (25, 18),
+    ],
+    "playstation_leftTrigger1_dark": [
+        (17, 19),
+    ],
+    "playstation_leftTrigger1_light": [
+        (17, 18),
+    ],
+    "playstation_leftTrigger2_dark": [
+        (21, 19),
+    ],
+    "playstation_leftTrigger2_light": [
+        (21, 18),
+    ],
+    "playstation_rightButton1_dark": [
+        (20, 19),
+    ],
+    "playstation_rightButton1_light": [
+        (20, 18),
+    ],
+    "playstation_rightButton2_dark": [
+        (24, 19),
+    ],
+    "playstation_rightButton2_light": [
+        (24, 18),
+    ],
+    "playstation_rightButton3_dark": [
+        (26, 19),
+    ],
+    "playstation_rightButton3_light": [
+        (26, 18),
+    ],
+    "playstation_rightTrigger1_dark": [
+        (18, 19),
+    ],
+    "playstation_rightTrigger1_light": [
+        (18, 18),
+    ],
+    "playstation_rightTrigger2_dark": [
+        (22, 19),
+    ],
+    "playstation_rightTrigger2_light": [
+        (22, 18),
+    ],
+    "plus_DPad_dark": [
+        (0, 2),
+    ],
+    "plus_DPad_light": [
+        (0, 1),
+    ],
+    "plus_key_dark": [
+        (28, 9),
+    ],
+    "plus_key_light": [
+        (28, 1),
+    ],
+    "plus_thumbstick_dark": [
+        (0, 6),
+    ],
+    "plus_thumbstick_light": [
+        (0, 5),
+    ],
+    "power_button_light": [
+        (15, 20),
+    ],
+    "pressed_isometricL_thumbstick_dark": [
+        (16, 7),
+    ],
+    "pressed_isometricL_thumbstick_light": [
+        (16, 6),
+    ],
+    "pressed_isometricR_thumbstick_dark": [
+        (16, 9),
+    ],
+    "pressed_isometricR_thumbstick_light": [
+        (16, 8),
+    ],
+    "pressed_isometric_thumbstick_dark": [
+        (16, 5),
+    ],
+    "pressed_isometric_thumbstick_light": [
+        (16, 4),
+    ],
+    "pressed_plus_DPad_dark": [
+        (7, 2),
+    ],
+    "pressed_plus_DPad_light": [
+        (7, 1),
+    ],
+    "pressed_topDownL_thumbstick_dark": [
+        (16, 13),
+    ],
+    "pressed_topDownL_thumbstick_light": [
+        (16, 12),
+    ],
+    "pressed_topDownR_thumbstick_dark": [
+        (16, 15),
+    ],
+    "pressed_topDownR_thumbstick_light": [
+        (16, 14),
+    ],
+    "pressed_topDown_thumbstick_dark": [
+        (16, 11),
+    ],
+    "pressed_topDown_thumbstick_light": [
+        (16, 10),
+    ],
+    "print_full_key_dark": [
+        (21, 15),
+        (22, 15),
+    ],
+    "print_full_key_light": [
+        (21, 7),
+        (22, 7),
+    ],
+    "purple_square_button_dark": [
+        (21, 17),
+    ],
+    "purple_square_button_light": [
+        (21, 16),
+    ],
+    "purple_square_dark": [
+        (22, 17),
+    ],
+    "purple_square_light": [
+        (22, 16),
+    ],
+    "q_key_dark": [
+        (17, 10),
+    ],
+    "q_key_light": [
+        (17, 2),
+    ],
+    "questionMark_key_dark": [
+        (28, 12),
+    ],
+    "questionMark_key_light": [
+        (28, 4),
+    ],
+    "quotationMark_key_dark": [
+        (28, 11),
+    ],
+    "quotationMark_key_light": [
+        (28, 3),
+    ],
+    "r_key_dark": [
+        (20, 10),
+    ],
+    "r_key_light": [
+        (20, 2),
+    ],
+    "redB_button_dark": [
+        (14, 1),
+    ],
+    "red_b_button": [
+        (5, 0),
+    ],
+    "red_b_button_dark": [
+        (9, 0),
+    ],
+    "red_bottom_joystick": [
+        (3, 15),
+    ],
+    "red_button": [
+        (1, 0),
+    ],
+    "red_circle_button_dark": [
+        (19, 17),
+    ],
+    "red_circle_button_light": [
+        (19, 16),
+    ],
+    "red_circle_dark": [
+        (20, 17),
+    ],
+    "red_circle_light": [
+        (20, 16),
+    ],
+    "red_isometric_button": [
+        (5, 15),
+    ],
+    "red_joystick": [
+        (0, 15),
+    ],
+    "red_left_joystick": [
+        (4, 15),
+    ],
+    "red_pressed_isometric_button": [
+        (6, 15),
+    ],
+    "red_right_actionPad_dark": [
+        (5, 10),
+    ],
+    "red_right_actionPad_light": [
+        (5, 9),
+    ],
+    "red_right_joystick": [
+        (2, 15),
+    ],
+    "red_up_joystick": [
+        (1, 15),
+    ],
+    "rightButton1_dark": [
+        (10, 17),
+    ],
+    "rightButton1_light": [
+        (10, 16),
+    ],
+    "rightButton2_dark": [
+        (8, 19),
+    ],
+    "rightButton2_light": [
+        (8, 18),
+    ],
+    "rightClick_mouse_dark": [
+        (10, 3),
+    ],
+    "rightClick_mouse_light": [
+        (10, 2),
+    ],
+    "rightClicked_plus_DPad_dark": [
+        (2, 4),
+    ],
+    "rightClicked_plus_DPad_light": [
+        (2, 3),
+    ],
+    "rightTrigger1_dark": [
+        (8, 17),
+    ],
+    "rightTrigger1_light": [
+        (8, 16),
+    ],
+    "rightTrigger2_dark": [
+        (12, 17),
+    ],
+    "rightTrigger2_light": [
+        (12, 16),
+    ],
+    "rightTrigger3_dark": [
+        (14, 17),
+    ],
+    "rightTrigger3_light": [
+        (14, 16),
+    ],
+    "rightTrigger4_dark": [
+        (16, 17),
+    ],
+    "rightTrigger4_light": [
+        (16, 16),
+    ],
+    "rightTrigger5_dark": [
+        (10, 19),
+    ],
+    "rightTrigger5_light": [
+        (10, 18),
+    ],
+    "right_actionPad_dark": [
+        (1, 10),
+    ],
+    "right_actionPad_light": [
+        (1, 9),
+    ],
+    "right_circle_arrow": [
+        (28, 19),
+    ],
+    "right_halfCircle_arrow": [
+        (28, 17),
+    ],
+    "right_halfSquare_arrow": [
+        (28, 16),
+    ],
+    "right_isometricL_thumbstick_dark": [
+        (10, 7),
+    ],
+    "right_isometricL_thumbstick_light": [
+        (10, 6),
+    ],
+    "right_isometricR_thumbstick_dark": [
+        (10, 9),
+    ],
+    "right_isometricR_thumbstick_light": [
+        (10, 8),
+    ],
+    "right_isometric_thumbstick_dark": [
+        (10, 5),
+    ],
+    "right_isometric_thumbstick_light": [
+        (10, 4),
+    ],
+    "right_key_dark": [
+        (31, 12),
+    ],
+    "right_key_light": [
+        (31, 4),
+    ],
+    "right_plus_DPad_dark": [
+        (2, 2),
+    ],
+    "right_plus_DPad_light": [
+        (2, 1),
+    ],
+    "right_plus_thumbstick_dark": [
+        (2, 6),
+    ],
+    "right_plus_thumbstick_light": [
+        (2, 5),
+    ],
+    "right_quarterCircle_arrow": [
+        (31, 17),
+    ],
+    "right_quarterSquare_arrow": [
+        (31, 16),
+    ],
+    "right_seperate_DPad_dark": [
+        (2, 8),
+    ],
+    "right_seperate_DPad_light": [
+        (2, 7),
+    ],
+    "right_single_pointerFinger": [
+        (6, 17),
+    ],
+    "right_square_arrow": [
+        (28, 18),
+    ],
+    "right_topDownL_thumbstick_dark": [
+        (10, 13),
+    ],
+    "right_topDownL_thumbstick_light": [
+        (10, 12),
+    ],
+    "right_topDownR_thumbstick_dark": [
+        (10, 15),
+    ],
+    "right_topDownR_thumbstick_light": [
+        (10, 14),
+    ],
+    "right_topDown_thumbstick_dark": [
+        (10, 11),
+    ],
+    "right_topDown_thumbstick_light": [
+        (10, 10),
+    ],
+    "s_key_dark": [
+        (19, 11),
+    ],
+    "s_key_light": [
+        (19, 3),
+    ],
+    "scrollDown_mouse_dark": [
+        (13, 3),
+    ],
+    "scrollDown_mouse_light": [
+        (13, 2),
+    ],
+    "scrollUp_mouse_dark": [
+        (12, 3),
+    ],
+    "scrollUp_mouse_light": [
+        (12, 2),
+    ],
+    "scroll_full_key_dark": [
+        (23, 15),
+        (24, 15),
+    ],
+    "scroll_full_key_light": [
+        (23, 7),
+        (24, 7),
+    ],
+    "scroll_mouse_ark": [
+        (14, 3),
+    ],
+    "scroll_mouse_light": [
+        (14, 2),
+    ],
+    "section_key_dark": [
+        (33, 11),
+    ],
+    "section_key_light": [
+        (33, 3),
+    ],
+    "semicolon_key_dark": [
+        (30, 11),
+    ],
+    "semicolon_key_light": [
+        (30, 3),
+    ],
+    "seperate_DPad_dark": [
+        (0, 8),
+    ],
+    "seperate_DPad_light": [
+        (0, 7),
+    ],
+    "shift_full_key_dark": [
+        (17, 15),
+        (18, 15),
+    ],
+    "shift_full_key_light": [
+        (17, 7),
+        (18, 7),
+    ],
+    "shift_key_dark": [
+        (17, 11),
+    ],
+    "shift_key_light": [
+        (17, 3),
+    ],
+    "single_pointerFinger": [
+        (0, 17),
+    ],
+    "skipBackwards_key_dark": [
+        (32, 15),
+    ],
+    "skipBackwards_key_light": [
+        (32, 7),
+    ],
+    "skipForwards_key_dark": [
+        (33, 15),
+    ],
+    "skipForwards_key_light": [
+        (33, 7),
+    ],
+    "slash_key_dark": [
+        (29, 12),
+    ],
+    "slash_key_light": [
+        (29, 4),
+    ],
+    "space_full_key_dark": [
+        (31, 14),
+        (32, 14),
+        (33, 14),
+    ],
+    "space_full_key_light": [
+        (31, 6),
+        (32, 6),
+        (33, 6),
+    ],
+    "space_key_dark": [
+        (17, 12),
+    ],
+    "space_key_light": [
+        (17, 4),
+    ],
+    "squareBracketsLeft_key_dark": [
+        (27, 10),
+    ],
+    "squareBracketsLeft_key_light": [
+        (27, 2),
+    ],
+    "squareBracketsRight_key_dark": [
+        (28, 10),
+    ],
+    "squareBracketsRight_key_light": [
+        (28, 2),
+    ],
+    "stop_key_dark": [
+        (29, 15),
+    ],
+    "stop_key_light": [
+        (29, 7),
+    ],
+    "super_key_dark": [
+        (18, 12),
+    ],
+    "super_key_light": [
+        (18, 4),
+    ],
+    "switchJoycon_leftButton_dark": [
+        (15, 19),
+    ],
+    "switchJoycon_leftButton_light": [
+        (15, 18),
+    ],
+    "switchJoycon_rightButton_dark": [
+        (16, 19),
+    ],
+    "switchJoycon_rightButton_light": [
+        (16, 18),
+    ],
+    "switch_leftButton_dark": [
+        (11, 19),
+    ],
+    "switch_leftButton_light": [
+        (11, 18),
+    ],
+    "switch_leftTrigger_dark": [
+        (13, 19),
+    ],
+    "switch_leftTrigger_light": [
+        (13, 18),
+    ],
+    "switch_minus_button_light": [
+        (13, 20),
+    ],
+    "switch_plus_button_light": [
+        (14, 20),
+    ],
+    "switch_rightButton_dark": [
+        (12, 19),
+    ],
+    "switch_rightButton_light": [
+        (12, 18),
+    ],
+    "switch_rightTrigger_dark": [
+        (14, 19),
+    ],
+    "switch_rightTrigger_light": [
+        (14, 18),
+    ],
+    "switch_screenshot_button_light": [
+        (12, 20),
+    ],
+    "t_key_dark": [
+        (21, 10),
+    ],
+    "t_key_light": [
+        (21, 2),
+    ],
+    "tab_full_key_dark": [
+        (19, 13),
+        (20, 13),
+    ],
+    "tab_full_key_light": [
+        (19, 5),
+        (20, 5),
+    ],
+    "tilde_key_dark": [
+        (30, 8),
+    ],
+    "tilde_key_light": [
+        (30, 0),
+    ],
+    "topDownL_thumbstick_dark": [
+        (8, 13),
+    ],
+    "topDownL_thumbstick_light": [
+        (8, 12),
+    ],
+    "topDownR_thumbstick_dark": [
+        (8, 15),
+    ],
+    "topDownR_thumbstick_light": [
+        (8, 14),
+    ],
+    "topDown_thumbstick_dark": [
+        (8, 11),
+    ],
+    "topDown_thumbstick_light": [
+        (8, 10),
+    ],
+    "top_circle_arrow": [
+        (27, 19),
+    ],
+    "top_halfCircle_arrow": [
+        (27, 17),
+    ],
+    "top_quarterCircle_arrow": [
+        (32, 19),
+    ],
+    "top_quarterSquare_arrow": [
+        (32, 18),
+    ],
+    "top_square_arrow": [
+        (27, 18),
+    ],
+    "triple_pointerFinger": [
+        (3, 17),
+    ],
+    "u_key_dark": [
+        (23, 10),
+    ],
+    "u_key_light": [
+        (23, 2),
+    ],
+    "unclicked_side_thumbstick_dark": [
+        (15, 3),
+    ],
+    "unclicked_side_thumbstick_light": [
+        (15, 2),
+    ],
+    "underscore_key_dark": [
+        (30, 9),
+    ],
+    "underscore_key_light": [
+        (30, 1),
+    ],
+    "upClicked_plus_DPad_dark": [
+        (1, 4),
+    ],
+    "upClicked_plus_DPad_light": [
+        (1, 3),
+    ],
+    "up_actionPad_dark": [
+        (0, 10),
+    ],
+    "up_actionPad_light": [
+        (0, 9),
+    ],
+    "up_halfSquare_arrow": [
+        (27, 16),
+    ],
+    "up_isometricL_thumbstick_dark": [
+        (9, 7),
+    ],
+    "up_isometricL_thumbstick_light": [
+        (9, 6),
+    ],
+    "up_isometricR_thumbstick_dark": [
+        (9, 9),
+    ],
+    "up_isometricR_thumbstick_light": [
+        (9, 8),
+    ],
+    "up_isometric_thumbstick_dark": [
+        (9, 5),
+    ],
+    "up_isometric_thumbstick_light": [
+        (9, 4),
+    ],
+    "up_key_dark": [
+        (30, 12),
+    ],
+    "up_key_light": [
+        (30, 4),
+    ],
+    "up_plus_DPad_dark": [
+        (1, 2),
+    ],
+    "up_plus_DPad_light": [
+        (1, 1),
+    ],
+    "up_plus_thumbstick_dark": [
+        (1, 6),
+    ],
+    "up_plus_thumbstick_light": [
+        (1, 5),
+    ],
+    "up_seperate_DPad_dark": [
+        (1, 8),
+    ],
+    "up_seperate_DPad_light": [
+        (1, 7),
+    ],
+    "up_topDownL_thumbstick_dark": [
+        (9, 13),
+    ],
+    "up_topDownL_thumbstick_light": [
+        (9, 12),
+    ],
+    "up_topDownR_thumbstick_dark": [
+        (9, 15),
+    ],
+    "up_topDownR_thumbstick_light": [
+        (9, 14),
+    ],
+    "up_topDown_thumbstick_dark": [
+        (9, 11),
+    ],
+    "up_topDown_thumbstick_light": [
+        (9, 10),
+    ],
+    "v_key_dark": [
+        (22, 12),
+    ],
+    "v_key_light": [
+        (22, 4),
+    ],
+    "verticalClicked_plus_DPad_dark": [
+        (6, 4),
+    ],
+    "verticalClicked_plus_DPad_light": [
+        (6, 3),
+    ],
+    "vertical_arrow": [
+        (33, 18),
+    ],
+    "vertical_isometricL_thumbstick_dark": [
+        (14, 7),
+    ],
+    "vertical_isometricL_thumbstick_light": [
+        (14, 6),
+    ],
+    "vertical_isometricR_thumbstick_dark": [
+        (14, 9),
+    ],
+    "vertical_isometricR_thumbstick_light": [
+        (14, 8),
+    ],
+    "vertical_isometric_thumbstick_dark": [
+        (14, 5),
+    ],
+    "vertical_isometric_thumbstick_light": [
+        (14, 4),
+    ],
+    "vertical_plus_DPad_dark": [
+        (6, 2),
+    ],
+    "vertical_plus_DPad_light": [
+        (6, 1),
+    ],
+    "vertical_plus_thumbstick_dark": [
+        (6, 6),
+    ],
+    "vertical_plus_thumbstick_light": [
+        (6, 5),
+    ],
+    "vertical_seperate_DPad_dark": [
+        (6, 8),
+    ],
+    "vertical_seperate_DPad_light": [
+        (6, 7),
+    ],
+    "vertical_topDownL_thumbstick_dark": [
+        (14, 13),
+    ],
+    "vertical_topDownL_thumbstick_light": [
+        (14, 12),
+    ],
+    "vertical_topDownR_thumbstick_dark": [
+        (14, 15),
+    ],
+    "vertical_topDownR_thumbstick_light": [
+        (14, 14),
+    ],
+    "vertical_topDown_thumbstick_dark": [
+        (14, 11),
+    ],
+    "vertical_topDown_thumbstick_light": [
+        (14, 10),
+    ],
+    "w_key_dark": [
+        (18, 10),
+    ],
+    "w_key_light": [
+        (18, 2),
+    ],
+    "whiteHighlighted_bottom_actionPad_black": [
+        (6, 11),
+    ],
+    "whiteHighlighted_left_actionPad_black": [
+        (7, 11),
+    ],
+    "whiteHighlighted_right_actionPad_black": [
+        (5, 11),
+    ],
+    "whiteHighlighted_up_actionPad_black": [
+        (4, 11),
+    ],
+    "white_bottom_actionPad_black": [
+        (2, 11),
+    ],
+    "white_left_actionPad_black": [
+        (3, 11),
+    ],
+    "white_right_actionPad_black": [
+        (1, 11),
+    ],
+    "white_up_actionPad_black": [
+        (0, 11),
+    ],
+    "wiiNunchuck_c_button_light": [
+        (10, 20),
+    ],
+    "wiiNunchuck_controlStick_light": [
+        (0, 20),
+    ],
+    "wiiRemote_1_button_light": [
+        (8, 20),
+    ],
+    "wiiRemote_2_button_light": [
+        (9, 20),
+    ],
+    "wiiRemote_a_button_light": [
+        (6, 20),
+    ],
+    "wiiRemote_b_button_light": [
+        (7, 20),
+    ],
+    "wiiRemote_homePressed_button_light": [
+        (3, 20),
+    ],
+    "wiiRemote_home_button_light": [
+        (2, 20),
+    ],
+    "wiiRemote_light": [
+        (1, 20),
+    ],
+    "wiiRemote_minus_button_light": [
+        (4, 20),
+    ],
+    "wiiRemote_plus_button_light": [
+        (5, 20),
+    ],
+    "x_button_dark": [
+        (10, 1),
+    ],
+    "x_button_light": [
+        (15, 0),
+    ],
+    "x_key_dark": [
+        (20, 12),
+    ],
+    "x_key_light": [
+        (20, 4),
+    ],
+    "y_button_dark": [
+        (11, 1),
+    ],
+    "y_button_light": [
+        (16, 0),
+    ],
+    "y_key_dark": [
+        (22, 10),
+    ],
+    "y_key_light": [
+        (22, 2),
+    ],
+    "z_key_dark": [
+        (19, 12),
+    ],
+    "z_key_light": [
+        (19, 4),
+    ],
+})
