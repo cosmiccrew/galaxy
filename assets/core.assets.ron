@@ -12,11 +12,17 @@
     // ),
 
     "loading_icon": File (
-        path: "planets/parts/light0.png"
+        path: "sprites/planets/parts/light0.png"
     ),
 
     "dummy": File (
-        path: "planets/planets/planet09.png"
-    )    
+        path: "sprites/planets/planets/planet09.png"
+    )
+
+    // "planet_shader": File (
+
+    //     path: "shaders/planets/earth.wgsl"
+
+    // )
 })
 
