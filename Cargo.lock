@@ -4371,13 +4371,12 @@ dependencies = [
 ]
 
 [[package]]
-name = "sprite_sheet_tool"
+name = "sprite_tool"
 version = "0.1.0"
 dependencies = [
  "anyhow",
  "clap",
  "image",
- "indexmap 2.0.0",
  "ron",
  "serde",
  "serde_json",
