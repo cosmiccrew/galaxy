@@ -19,6 +19,14 @@ need_stdout = false
 command = ["cargo", "build", "--color", "always"]
 need_stdout = false
 
+[jobs.build-fast-compile]
+command = [
+    "cargo", "build",
+    "--features", "dynamic_linking",
+    "--color", "always"
+]
+need_stdout = false
+
 [jobs.fmt]
 command = ["cargo", "fmt"]
 need_stdout = false
