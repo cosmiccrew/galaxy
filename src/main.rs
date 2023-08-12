@@ -18,8 +18,6 @@ fn main() {
             GalaxyPlayerPlugin,
             GalaxyPolarPlugin,
             GalaxyGamePlugin,
-        ))
-        // .add_plugin(bevy::diagnostic::FrameTimeDiagnosticsPlugin::default())
-        // .add_plugin(bevy::diagnostic::LogDiagnosticsPlugin::default())
-        .run();
+            GalaxyShaderPlugin,
+        ));
 }
