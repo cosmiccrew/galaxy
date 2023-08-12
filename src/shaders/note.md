@@ -1,0 +1,1 @@
+All of the shaders for these files are under the same name with the suffix .wgsl in the `assets/shaders` folder, rather than being in the same location as the source files. This is by choice, so that they can be modified by the user to be whatever you want them to be!

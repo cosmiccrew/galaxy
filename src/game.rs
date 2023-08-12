@@ -1,3 +1,10 @@
+use bevy::{
+    reflect::{TypePath, TypeUuid},
+    render::render_resource::{AsBindGroup, ShaderRef},
+    sprite::{Material2d, MaterialMesh2dBundle},
+};
+use rand::Rng;
+
 use crate::prelude::*;
 
 pub struct GalaxyGamePlugin;
@@ -7,32 +14,74 @@ impl Plugin for GalaxyGamePlugin {
         app.add_systems(OnEnter(EngineState::InGame), setup)
             .add_systems(
                 Update,
-                (planet_rotation, add_loaded_component).run_if(in_state(EngineState::InGame)),
+                (planet_rotation, add_loaded_component, planet_switching)
+                    .run_if(in_state(EngineState::InGame)),
             )
             .add_systems(OnExit(EngineState::InGame), teardown::<Loaded>);
     }
 }
 
-#[derive(Component, Reflect)]
-struct TempPlanet;
+fn setup(
+    mut commands: Commands,
+    mut meshes: ResMut<Assets<Mesh>>,
+    assets: Res<MyAssets>,
+    mut materials: ResMut<Assets<EarthlikeMaterial>>,
+) {
+    // commands.spawn((
+    //     MaterialMesh2dBundle {
+    //         // mesh: meshes
+    //         //     .add(shape::Quad::new(Vec2::new(200., 200.)).into())
+    //         //     .into(),
+    //         material: materials.add(EarthlikePlanetMaterial {
+    //             color: Color::BLUE,
+    //             color_texture: assets.dummy.clone(),
+    //         }),
+    //         ..default()
+    //     },
+    //     Planet,
+    // ));
 
-fn setup(mut commands: Commands, assets: Res<MyAssets>, time: Res<Time>) {
+    // let _b = PlanetConfig {
+    //         planet_type: PlanetType::Earthlike,
+    //         seed: 100,
+    //         ..Default::default()
+    //     };
+
+    // commands.spawn(PlanetBundle {
+    //     material_mesh_2d_bundle: MaterialMesh2dBundle {
+    //         mesh: (),
+    //         material: materials.add(asset),
+    //         ..default()
+    //     },
+    //     ..default()
+    // });
+
     commands.spawn((
-        SpriteBundle {
-            sprite: Sprite {
-                custom_size: Some(Vec2::new(500., 500.)),
+        MaterialMesh2dBundle {
+            mesh: meshes
+                .add(shape::Quad::new(Vec2::new(500., 500.)).into())
+                .into(),
+            material: materials.add(EarthlikeMaterial {
+                pixels: 100.,
                 ..default()
-            },
-            texture: assets.dummy.clone(),
+            }),
             ..default()
         },
-        TempPlanet,
+        Planet,
+    ));
+
+    commands.spawn((
+        Planet,
+        PlanetSettings {
+            planet_type: PlanetType::Earthlike,
+            ..default()
+        },
     ));
 }
 
 fn planet_rotation(
     mut commands: Commands,
-    mut query: Query<&mut Transform, With<TempPlanet>>,
+    mut query: Query<&mut Transform, With<Planet>>,
     keyboard_input: Res<Input<KeyCode>>,
     time: Res<Time>,
 ) {
@@ -49,6 +98,33 @@ fn planet_rotation(
     for mut object in &mut query {
         object.rotate_z(time.delta_seconds() * FRAC_PI_2 * direction);
     }
+}
+
+fn planet_switching(
+    mut commands: Commands,
+    mut query: Query<&mut Handle<EarthlikeMaterial>, With<Planet>>,
+    keyboard_input: Res<Input<KeyCode>>,
+    mut materials: ResMut<Assets<EarthlikeMaterial>>,
+) {
+    let planet_mat: &Handle<EarthlikeMaterial> = query.single();
+
+    let mut planet_mat = materials.get_mut(planet_mat).unwrap();
+
+    if keyboard_input.just_pressed(KeyCode::Space) {
+        planet_mat.seed = rand::thread_rng().gen::<f32>();
+    }
+
+    let mut direction = 0f32;
+
+    if keyboard_input.pressed(KeyCode::Up) {
+        direction += 1.;
+    }
+
+    if keyboard_input.pressed(KeyCode::Down) {
+        direction -= 1.;
+    }
+
+    planet_mat.pixels += direction;
 }
 
 fn add_loaded_component(
