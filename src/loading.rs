@@ -1,4 +1,5 @@
 use crate::prelude::*;
+use bevy::{sprite::Material2d, utils::HashMap};
 use bevy_asset_loader::prelude::*;
 
 #[derive(AssetCollection, Resource)]
@@ -25,6 +26,9 @@ pub struct MyAssets {
 
     // #[asset(key = "noises", collection(typed, mapped))]
     // noises: HashMap<String, Handle<Image>>,
+
+    // #[asset(key = "planet_shaders")]
+    // planet_shaders: Handle<EarthlikeShader>
 }
 
 /// Will be used to load assets when the game starts, so they are all pre-loaded
