@@ -1,16 +1,9 @@
 use galaxy::prelude::*;
 
 fn main() {
-    App::new()
-        .insert_resource(ClearColor(Color::BLACK))
+    let mut app = App::new();
+    app.insert_resource(ClearColor(Color::BLACK))
         .add_state::<EngineState>()
-        .insert_resource(bevy::winit::WinitSettings {
-            focused_mode: bevy::winit::UpdateMode::Continuous,
-            unfocused_mode: bevy::winit::UpdateMode::ReactiveLowPower {
-                max_wait: bevy::utils::Duration::from_millis(1000),
-            },
-            ..default()
-        })
         .add_plugins(GalaxyDefaultPlugins)
         .add_plugins((
             GalaxyDebugPlugin,
@@ -20,4 +13,10 @@ fn main() {
             GalaxyGamePlugin,
             GalaxyShaderPlugin,
         ));
+
+    #[cfg(feature = "render_graph")]
+    bevy_mod_debugdump::print_schedule_graph(&mut app, PreUpdate);
+
+    #[cfg(not(feature = "render_graph"))]
+    app.run();
 }
