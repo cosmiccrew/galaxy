@@ -22,7 +22,7 @@ need_stdout = false
 [jobs.build-fast-compile]
 command = [
     "cargo", "build",
-    "--features", "dynamic_linking",
+    "--features", "fast_compile",
     "--color", "always"
 ]
 need_stdout = false
@@ -83,7 +83,7 @@ allow_warnings = true
 command = [
     "cargo", "run",
     "--color", "always",
-    "--features", "dynamic_linking"
+    "--features", "fast_compile"
     # put launch parameters for your program behind a `--` separator
 ]
 need_stdout = true
