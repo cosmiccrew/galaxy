@@ -31,48 +31,52 @@ pub fn teardown<T: Component>(
 pub struct GalaxyDefaultPlugins;
 
 impl Plugin for GalaxyDefaultPlugins {
-    fn build(&self, app: &mut App) {
-        app.add_plugins(
-            DefaultPlugins
-                .set(WindowPlugin {
-                    primary_window: Some(Window {
-                        title: "Cosmic Crew: Galaxy".to_string(),
-                        fit_canvas_to_parent: true,
-                        ..default()
-                    }),
+    fn build(&self, mut app: &mut App) {
+        let mut default_plugins = DefaultPlugins
+            .set(WindowPlugin {
+                primary_window: Some(Window {
+                    title: "Cosmic Crew: Galaxy".to_string(),
+                    fit_canvas_to_parent: true,
                     ..default()
-                })
-                .set(AssetPlugin {
-                    watch_for_changes: ChangeWatcher::with_delay(Duration::from_millis(200)),
-                    asset_folder: {
-                        if cfg!(all(
-                            target_os = "macos",
-                            not(debug_assertions),
-                            not(features = "dynamic_linking")
-                        )) {
-                            "../Resources/assets".to_string()
-                        } else {
-                            "assets".to_string()
-                        }
-                    },
-                })
-                .set({
-                    use bevy::log::LogPlugin;
-                    if cfg!(debug_assertions) {
-                        LogPlugin {
-                            level: bevy::log::Level::DEBUG,
-                            filter: "debug,wgpu_core=warn,wgpu_hal=warn,naga=info,bevy=info".into(),
-                        }
+                }),
+                ..default()
+            })
+            .set(AssetPlugin {
+                watch_for_changes: ChangeWatcher::with_delay(Duration::from_millis(200)),
+                asset_folder: {
+                    if cfg!(all(
+                        target_os = "macos",
+                        not(debug_assertions),
+                        not(features = "dynamic_linking")
+                    )) {
+                        "../Resources/assets".to_string()
                     } else {
-                        // this code is compiled only if debug assertions are disabled (release
-                        // mode)
-                        LogPlugin {
-                            level: bevy::log::Level::INFO,
-                            filter: "info,wgpu_core=warn,wgpu_hal=warn".into(),
-                        }
+                        "assets".to_string()
                     }
-                })
-                .set(ImagePlugin::default_nearest()),
-        );
+                },
+            })
+            .set({
+                use bevy::log::LogPlugin;
+                if cfg!(debug_assertions) {
+                    LogPlugin {
+                        level: bevy::log::Level::DEBUG,
+                        filter: "debug,wgpu_core=warn,wgpu_hal=warn,naga=info,bevy=info".into(),
+                    }
+                } else {
+                    // this code is compiled only if debug assertions are disabled (release
+                    // mode)
+                    LogPlugin {
+                        level: bevy::log::Level::INFO,
+                        filter: "info,wgpu_core=warn,wgpu_hal=warn".into(),
+                    }
+                }
+            })
+            .set(ImagePlugin::default_nearest());
+
+        if cfg!(feature = "render_graph") {
+            default_plugins = default_plugins.disable::<bevy::log::LogPlugin>();
+        }
+
+        app.add_plugins(default_plugins);
     }
 }
