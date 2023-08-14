@@ -12,7 +12,8 @@ impl Plugin for GalaxyDebugPlugin {
         #[cfg(feature = "debug")]
         {
             use bevy_editor_pls::prelude::*;
-            app.add_plugins(EditorPlugin::default())
+            app.register_type::<PlanetBundle>()
+                .add_plugins(EditorPlugin::default())
                 .add_systems(Update, close_on_esc);
         }
     }
