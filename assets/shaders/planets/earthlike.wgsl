@@ -1,19 +1,13 @@
 // The time since startup data is in the globals binding which is part of the mesh_view_bindings import
 // #import bevy_pbr::mesh_view_bindings globals
 #import bevy_sprite::mesh2d_vertex_output  MeshVertexOutput
-
-#import bevy_pbr::utils random1D, PI
-// #import bevy_pbr::utils PI
-
-#import bevy_sprite::mesh2d_view_bindings   globals
+#import bevy_pbr::utils  random1D, PI
+#import bevy_sprite::mesh2d_view_bindings  globals
 // #import bevy_sprite::mesh2d_bindings        mesh
 // #import bevy_sprite::mesh2d_functions       mesh2d_position_local_to_clip
 
-
 struct Colour {
-
-    colour: vec4<f32>
-
+	colour: vec4<f32>
 }
 
 
@@ -22,7 +16,9 @@ var<uniform> pixels: f32;
 @group(1) @binding(1)
 var<uniform> seed: f32;
 @group(1) @binding(2)
-var<uniform> colours: array<Colour, 4>;
+var<storage> colours: array<Colour, 4>;
+@group(1) @binding(3)
+var<uniform> rotation: f32;
 
 const OCTAVES = 6; // 0 -> 20
 const size: f32 = 4.6;
@@ -32,17 +28,12 @@ const light_border_1: f32 = 0.287; // 0. -> 1.
 const light_border_2: f32 = 0.476; // 0. -> 1.
 const should_dither: bool = true; // bool
 const light_origin: vec2<f32> = vec2<f32>(0.39, 0.39);
-const rotation: f32 = 0.; // 0. -> PI*2
+// const rotation: f32 = 0.; // 0. -> PI*2
 const time_speed = 0.5;
+// const colours_length = 4;
 
 const river_colour = Colour(vec4<f32>(0.309804, 0.643137, 0.721569, 1.));
 const river_colour_dark = Colour(vec4<f32>(0.25098, 0.286275, 0.45098, 1.));
-
-fn random1D_range(start:f32, end: f32) -> f32 {
-
-    return fract(sin(dot(vec2(start, end), vec2(12.9898,78.233))) * 43758.5453123);
-
-}
 
 fn random2D(coord: vec2<f32>) -> f32 {
 	// land has to be tiled (or the contintents on this planet have to be changing very fast)
@@ -94,7 +85,7 @@ fn dither(uv1: vec2<f32>, uv2: vec2<f32>) -> bool {
 fn spherify(uv: vec2<f32>) -> vec2<f32> {
 	let centered = uv * 2. - 1.;
 	let z = sqrt(1. - dot(centered.xy, centered.xy));
-//	float z = pow(1.0 - dot(centered.xy, centered.xy), 0.5);
+	// let z = pow(1. - dot(centered.xy, centered.xy), 0.5);
 	let sphere = centered / (z + 1.);
 	
 	return sphere * 0.5 + 0.5;
@@ -108,8 +99,6 @@ fn fragment(
     var uv = floor(mesh.uv * pixels) / pixels;
 
     let dith = dither(uv, mesh.uv);
-
-	let rotation = random1D_range(0., PI*2.);
 
     let alpha = step(length(uv - vec2(0.5)), 0.49999);
 
@@ -154,9 +143,10 @@ fn fragment(
 				fbm4 *= 0.5;
 			}
 		}
-		
 	}
 	
+	// if arrayLength( &colours ) != 4;
+
 	// increase contrast on d_light
 	d_light = pow(d_light, 2.) * 0.4;
 	var colour: Colour = colours[3];
