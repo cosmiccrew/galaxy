@@ -15,8 +15,10 @@ pub mod prelude {
 
     pub use std::f32::consts::*;
 
-    pub use anyhow::{anyhow, bail, ensure, Result};
     pub use bevy::{prelude::*, reflect::*};
+
+    pub use anyhow::{anyhow, bail, ensure, Result};
+    pub use rand::prelude::*;
 
     pub use crate::debug::*;
     pub use crate::game::*;
