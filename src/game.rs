@@ -14,7 +14,7 @@ impl Plugin for GalaxyGamePlugin {
         app.add_systems(OnEnter(EngineState::InGame), setup)
             .add_systems(
                 Update,
-                (planet_rotation, add_loaded_component, planet_switching)
+                (planet_rotation, add_loaded_component, planet_randomise)
                     .run_if(in_state(EngineState::InGame)),
             )
             .add_systems(OnExit(EngineState::InGame), teardown::<Loaded>);
@@ -63,6 +63,7 @@ fn setup(
                 .into(),
             material: materials.add(EarthlikeMaterial {
                 pixels: 100.,
+                rotation: rand::thread_rng().gen_range(0f32..TAU),
                 ..default()
             }),
             ..default()
@@ -81,10 +82,16 @@ fn setup(
 
 fn planet_rotation(
     mut commands: Commands,
-    mut query: Query<&mut Transform, With<Planet>>,
+    // mut query: Query<&mut Transform, With<Planet>>,
+    mut query: Query<&mut Handle<EarthlikeMaterial>, With<Planet>>,
+    mut materials: ResMut<Assets<EarthlikeMaterial>>,
     keyboard_input: Res<Input<KeyCode>>,
     time: Res<Time>,
 ) {
+    let planet_mat: &Handle<EarthlikeMaterial> = query.single();
+
+    let mut planet_mat = materials.get_mut(planet_mat).unwrap();
+
     let mut direction = 0f32;
 
     if keyboard_input.pressed(KeyCode::Left) {
@@ -95,12 +102,10 @@ fn planet_rotation(
         direction -= 1.;
     }
 
-    for mut object in &mut query {
-        object.rotate_z(time.delta_seconds() * FRAC_PI_2 * direction);
-    }
+    planet_mat.rotation += (time.delta_seconds() * FRAC_PI_2 * direction);
 }
 
-fn planet_switching(
+fn planet_randomise(
     mut commands: Commands,
     mut query: Query<&mut Handle<EarthlikeMaterial>, With<Planet>>,
     keyboard_input: Res<Input<KeyCode>>,
@@ -111,7 +116,7 @@ fn planet_switching(
     let mut planet_mat = materials.get_mut(planet_mat).unwrap();
 
     if keyboard_input.just_pressed(KeyCode::Space) {
-        planet_mat.seed = rand::thread_rng().gen::<f32>();
+        planet_mat.randomise();
     }
 
     let mut direction = 0f32;
