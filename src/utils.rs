@@ -81,9 +81,13 @@ pub fn check_if_string_eq_bean(string: &str) -> bool {
     string == "bean"
 }
 
-#[test]
-fn test_check_if_string_eq_bean() {
-    assert!(check_if_string_eq_bean("bean"));
+#[cfg(test)]
+mod tests {
+    #[test]
+    fn test_check_if_string_eq_bean() {
+        use crate::prelude::*;
+        assert!(check_if_string_eq_bean("bean"));
 
-    assert!(!check_if_string_eq_bean("not bean"));
+        assert!(!check_if_string_eq_bean("not bean"));
+    }
 }
