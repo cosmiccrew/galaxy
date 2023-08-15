@@ -27,6 +27,11 @@ fn setup(
     assets: Res<MyAssets>,
     mut materials: ResMut<Assets<EarthlikeMaterial>>,
 ) {
+    let bean_check = check_if_string_eq_bean("bean");
+    if !bean_check {
+        println!("no bean :(");
+    }
+
     // commands.spawn((
     //     MaterialMesh2dBundle {
     //         // mesh: meshes
