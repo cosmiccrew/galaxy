@@ -54,6 +54,7 @@ jobs:
         uses: actions-rs/toolchain@v1
         with:
           toolchain: nightly
+          components: llvm-tools-preview
           override: true
 
       - name: Configure cache
@@ -77,7 +78,7 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           version: latest
       - name: Run grcov
-        run:  grcov . --binary-path ./target/debug/ -s . -t lcov --branch --ignore-not-existing --ignore '../*' --ignore "/*" -o lcov.info
+        run:  grcov . --binary-path ./target/debug/ -s . -t lcov --service-name Rust --branch --ignore-not-existing --ignore '../*' --ignore "/*" -o lcov.info
 
       - name: Upload to codecov.io
         uses: codecov/codecov-action@v3
