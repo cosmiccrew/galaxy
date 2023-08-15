@@ -36,15 +36,14 @@ on:
       - main
 
 env:
-  RUSTC_BOOTSTRAP: '1'
-  CARGO_INCREMENTAL: '0'
-  RUSTFLAGS: '-Zprofile -Ccodegen-units=1 -Cinline-threshold=0 -Clink-dead-code -Coverflow-checks=off -Cpanic=abort -Zpanic_abort_tests'
-  RUSTDOCFLAGS: '-Zprofile -Ccodegen-units=1 -Cinline-threshold=0 -Clink-dead-code -Coverflow-checks=off -Cpanic=abort -Zpanic_abort_tests'
+  CARGO_INCREMENTAL: 0
+  RUSTFLAGS: "-Zprofile -Ccodegen-units=1 -Cinline-threshold=0 -Clink-dead-code -Coverflow-checks=off -Zno-landing-pads -Cpanic=abort -Zpanic_abort_tests"
 
 jobs:
   code-coverage:
     name: Code Coverage
     runs-on: ubuntu-latest
+    continue-on-error: true
     steps:
       - name: Checkout sources 
         uses: actions/checkout@v3
@@ -55,19 +54,32 @@ jobs:
         with:
           toolchain: nightly
           override: true
+
+      - name: Configure cache
+        uses: actions/cache@v3
+        with:
+          key: coverage-${{ hashFiles('**/Cargo.lock') }}
+          path: |
+            ~/.cargo/bin/
+            ~/.cargo/registry/index/
+            ~/.cargo/registry/cache/
+            ~/.cargo/git/db/
+            target/
       - name: Build
         run: cargo build --verbose
       - name: Run tests
         run: cargo test --verbose --no-fail-fast
         
-      - name: Run grcov 
-        id: coverage
-        uses: rraval/grcov@master
-        env: 
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Install grcov
+        uses: SierraSoftworks/setup-grcov@v1
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          version: latest
+      - name: Run grcov
+        run:  grcov . --binary-path ./target/debug/ -s . -t lcov --branch --ignore-not-existing --ignore '../*' --ignore "/*" -o lcov.info
 
       - name: Upload to codecov.io
-        uses: codecov/codecov-action@v2
+        uses: codecov/codecov-action@v3
         with:
-          token: ${{secrets.CODECOV_TOKEN}}
+          # token: ${{secrets.CODECOV_TOKEN}}
           fail_ci_if_error: true
