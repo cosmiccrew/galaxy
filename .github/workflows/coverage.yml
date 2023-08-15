@@ -42,7 +42,7 @@ jobs:
       - name: Checkout sources 
         uses: actions/checkout@v3
       - name: Setup dependencies
-        run: apt-get update && apt-get install -y pkg-config libasound2-dev libudev-dev cmake g++ libfreetype6-dev libfontconfig1-dev libxcb-xfixes0-dev
+        run: sudo apt-get update && apt-get install -y pkg-config libasound2-dev libudev-dev cmake g++ libfreetype6-dev libfontconfig1-dev libxcb-xfixes0-dev
       - name: Install Rust toolchain 
         uses: actions-rs/toolchain@v1
         with:
