@@ -77,13 +77,8 @@ impl Plugin for GalaxyDefaultPlugins {
     }
 }
 
-#[allow(clippy::needless_bool)]
 pub fn check_if_string_eq_bean(string: &str) -> bool {
-    if string == "bean" {
-        true
-    } else {
-        false
-    }
+    string == "bean"
 }
 
 #[cfg(test)]
