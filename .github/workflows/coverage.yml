@@ -27,61 +27,87 @@
 #           fail_ci_if_error: true
 
 
+# name: coverage
+
+# on:
+#   pull_request:
+#   push:
+#     branches:
+#       - main
+
+# env:
+#   CARGO_INCREMENTAL: 0
+#   RUSTFLAGS: "-Zprofile -Ccodegen-units=1 -Cinline-threshold=0 -Copt-level=0 -Clink-dead-code -Coverflow-checks=off -Cpanic=abort -Zpanic_abort_tests -Cinstrument-coverage"
+#   RUSTDOCFLAGS: "-Zprofile -Ccodegen-units=1 -Cinline-threshold=0 -Copt-level=0 -Clink-dead-code -Coverflow-checks=off -Cpanic=abort -Zpanic_abort_tests -Cinstrument-coverage"
+
+# jobs:
+#   code-coverage:
+#     name: Code Coverage
+#     runs-on: ubuntu-latest
+#     continue-on-error: true
+#     steps:
+#       - name: Checkout sources 
+#         uses: actions/checkout@v3
+#       - name: Setup dependencies
+#         run: sudo apt-get update && sudo apt-get install -y pkg-config libasound2-dev libudev-dev cmake g++ libfreetype6-dev libfontconfig1-dev libxcb-xfixes0-dev
+#       - name: Install Rust toolchain 
+#         uses: actions-rs/toolchain@v1
+#         with:
+#           toolchain: nightly
+#           components: llvm-tools-preview
+#           override: true
+
+#       - name: Configure cache
+#         uses: actions/cache@v3
+#         with:
+#           key: coverage-${{ hashFiles('**/Cargo.lock') }}
+#           path: |
+#             ~/.cargo/bin/
+#             ~/.cargo/registry/index/
+#             ~/.cargo/registry/cache/
+#             ~/.cargo/git/db/
+#             target/
+#       - name: Build
+#         run: cargo build --verbose
+#       - name: Run tests
+#         run: cargo test --verbose --no-fail-fast
+#         env:
+#           LLVM_PROFILE_FILE: grcov-%p-%m.profraw
+        
+#       - name: Install grcov
+#         uses: SierraSoftworks/setup-grcov@v1
+#         with:
+#           github-token: ${{ secrets.GITHUB_TOKEN }}
+#           version: latest
+#       - name: Run grcov
+#         run:  grcov . --binary-path ./target/debug/deps -s . -t lcov --service-name Rust --llvm --branch --ignore-not-existing --ignore '../*' --ignore "/*" --ignore "*.cargo/*" -o lcov.info 
+
+#       - name: Upload to codecov.io
+#         uses: codecov/codecov-action@v3
+#         with:
+#           # token: ${{secrets.CODECOV_TOKEN}}
+#           fail_ci_if_error: true
+
 name: coverage
 
-on:
-  pull_request:
-  push:
-    branches:
-      - main
-
-env:
-  CARGO_INCREMENTAL: 0
-  LLVM_PROFILE_FILE: grcov-%p-%m.profraw
-  RUSTFLAGS: "-Zprofile -Ccodegen-units=1 -Cinline-threshold=0 -Clink-dead-code -Coverflow-checks=off -Cpanic=abort -Zpanic_abort_tests -Cinstrument-coverage"
+on: [pull_request, push]
 
 jobs:
-  code-coverage:
-    name: Code Coverage
+  coverage:
     runs-on: ubuntu-latest
-    continue-on-error: true
+    env:
+      CARGO_TERM_COLOR: always
     steps:
-      - name: Checkout sources 
-        uses: actions/checkout@v3
-      - name: Setup dependencies
-        run: sudo apt-get update && sudo apt-get install -y pkg-config libasound2-dev libudev-dev cmake g++ libfreetype6-dev libfontconfig1-dev libxcb-xfixes0-dev
-      - name: Install Rust toolchain 
-        uses: actions-rs/toolchain@v1
-        with:
-          toolchain: nightly
-          components: llvm-tools-preview
-          override: true
-
-      - name: Configure cache
-        uses: actions/cache@v3
-        with:
-          key: coverage-${{ hashFiles('**/Cargo.lock') }}
-          path: |
-            ~/.cargo/bin/
-            ~/.cargo/registry/index/
-            ~/.cargo/registry/cache/
-            ~/.cargo/git/db/
-            target/
-      - name: Build
-        run: cargo build --verbose
-      - name: Run tests
-        run: cargo test --verbose --no-fail-fast
-        
-      - name: Install grcov
-        uses: SierraSoftworks/setup-grcov@v1
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          version: latest
-      - name: Run grcov
-        run:  grcov . --binary-path ./target/debug/ -s . -t lcov --service-name Rust --branch --ignore-not-existing --ignore '../*' --ignore "/*" -o lcov.info
-
-      - name: Upload to codecov.io
+      - uses: actions/checkout@v3
+      - name: Install Rust
+        run: rustup update stable
+      - name: Install cargo-llvm-cov
+        uses: taiki-e/install-action@cargo-llvm-cov
+      - name: Generate code coverage
+        run: cargo llvm-cov --all-features --workspace --lcov --output-path lcov.info
+      - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v3
         with:
-          # token: ${{secrets.CODECOV_TOKEN}}
+          # token: ${{ secrets.CODECOV_TOKEN }} # not required for public repos
+          files: lcov.info
           fail_ci_if_error: true
