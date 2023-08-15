@@ -31,8 +31,8 @@ pub fn teardown<T: Component>(
 pub struct GalaxyDefaultPlugins;
 
 impl Plugin for GalaxyDefaultPlugins {
-    fn build(&self, app: &mut App) {
-        app.add_plugins(
+    fn build(&self, mut app: &mut App) {
+        app.insert_resource(ClearColor(Color::BLACK)).add_plugins(
             DefaultPlugins
                 .set(WindowPlugin {
                     primary_window: Some(Window {
@@ -75,4 +75,15 @@ impl Plugin for GalaxyDefaultPlugins {
                 .set(ImagePlugin::default_nearest()),
         );
     }
+}
+
+pub fn check_if_string_eq_bean(string: &str) -> bool {
+    string == "bean"
+}
+
+#[test]
+fn test_check_if_string_eq_bean() {
+    assert!(check_if_string_eq_bean("bean"));
+
+    assert!(!check_if_string_eq_bean("not bean"));
 }

@@ -3,6 +3,8 @@
 crates/*/target
 .cargo/config.toml
 
+
+
 #vscode
 *.code-workspace
 /.vscode
@@ -12,3 +14,6 @@ crates/*/target
 
 #just
 justfile
+
+#bacon
+bacon.toml

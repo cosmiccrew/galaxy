@@ -20,9 +20,9 @@ resources = ["assets"]
 
 [dependencies]
 #the bevy game engine itself
-bevy = { version = "0.11.0", features = ["serialize"] }
-#a debug menu and interface for visualising component hierarchy and changing values on the fly.
-bevy-inspector-egui = "0.19.0"
+bevy = { version = "0.11", features = ["serialize"] }
+#full on basic editor/debug engine for bevy.
+bevy_editor_pls = { git = "https://github.com/jakobhellermann/bevy_editor_pls.git", optional = true }
 #2d physics engine in bevy
 bevy_rapier2d = { version = "0.22.0", features = ["serde-serialize", "debug-render-2d"]}
 #helps with loading assets in a logical, dynamic format.
@@ -36,7 +36,6 @@ serde = "1"
 anyhow = "1"
 #pseudo random number generation
 rand = "0.8.5"
-indexmap = { version = "2.0.0", features = ["serde"] }
 
 [target.'cfg(not(target_arch = "wasm32"))'.dependencies]
 bevy_rapier2d = { version = "0.22.0", features = ["parallel"]}
@@ -46,11 +45,12 @@ bevy_rapier2d = { version = "0.22.0", features = ["wasm-bindgen"]}
 
 
 [features]
-default = []
+default = ["debug"]
 
-dynamic_linking = ["bevy/dynamic_linking"]
+fast_compile = ["bevy/dynamic_linking"]
 ci_testing = ["bevy/bevy_ci_testing"]
 
+debug = ["bevy_editor_pls"]
 
 # long_description
 
@@ -72,17 +72,6 @@ inherits = "dev"
 debug = 1
 # debug-assertions = false
 incremental = false
+
 [profile.actions.package."*"]
 opt-level = 0
-
-[profile.actions-windows]
-inherits = "actions"
-opt-level = 1
-
-#windows will otherwise result in a "too many symbols" error
-[profile.actions-windows.package."*"]
-opt-level = 2
-
-# #Release optimisations
-# [profile.release]
-# lto = "thin"
