@@ -36,7 +36,6 @@ use bevy::{reflect::*, render::render_resource::*, sprite::Material2d};
 
 #[derive(Component, Reflect)]
 pub struct Clouds {
-    pub seed: f32,
     pub cloud_cover: f32,
     pub colours: [Color; 4],
 }
@@ -44,7 +43,6 @@ pub struct Clouds {
 impl Default for Clouds {
     fn default() -> Self {
         Self {
-            seed: 5.939,
             cloud_cover: 0.47,
             colours: [
                 Color::rgb(0.960784, 1., 0.909804),
