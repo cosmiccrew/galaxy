@@ -77,6 +77,7 @@ impl Default for Planet {
 // #[derive(Component, Reflect)]
 // pub struct Planet;
 
+#[allow(clippy::large_enum_variant)]
 #[derive(Component, Reflect)]
 pub enum PlanetType {
     Earthlike(Earthlike),

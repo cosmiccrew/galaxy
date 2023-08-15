@@ -1,5 +1,5 @@
 #![allow(unused)]
-#![allow(clippy::type_complexity)]
+#![allow(clippy::type_complexity, clippy::needless_update)]
 #![warn(dead_code)]
 
 pub mod debug;
