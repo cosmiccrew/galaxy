@@ -54,8 +54,15 @@ jobs:
       - name: Install clippy
         run: rustup component add clippy
 
-      - name: Run cargo clippy
+      - name: Run cargo clippy [Linux]
+        if: matrix.config.target == 'x86_64-unknown-linux-gnu'
         run: cargo clippy --target ${{ matrix.config.target }} -- -W clippy::correctness -D warnings
+
+      - name: Run cargo clippy [WASM]
+        if: matrix.config.target == 'wasm32-unknown-unknown'
+        run: cargo clippy --profile wasm --no-default-features --target ${{ matrix.config.target }} -- -W clippy::correctness -D warnings
+        env:
+          RUSTFLAGS: "--cfg=web_sys_unstable_apis"
 
   cargo-deny:
     name: License and advisories check
