@@ -16,9 +16,9 @@ var<uniform> pixels: f32;
 @group(1) @binding(1)
 var<uniform> seed: f32;
 @group(1) @binding(2)
-var<storage> colours: array<Colour, 4>;
-@group(1) @binding(3)
 var<uniform> rotation: f32;
+@group(1) @binding(3)
+var<uniform> colours: array<Colour, 4>;
 
 const OCTAVES = 6; // 0 -> 20
 const size: f32 = 4.6;
