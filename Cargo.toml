@@ -20,7 +20,7 @@ resources = ["assets"]
 
 [dependencies]
 #the bevy game engine itself
-bevy = { version = "0.11", features = ["serialize"] }
+bevy = { version = "0.11.1", default-features = false, features = [ "android_shared_stdcxx", "animation", "bevy_animation", "bevy_asset", "bevy_audio", "bevy_core_pipeline", "bevy_gilrs", "bevy_gizmos", "bevy_gltf", "bevy_pbr", "bevy_render", "bevy_scene", "bevy_sprite", "bevy_text", "bevy_ui", "bevy_winit", "default_font", "filesystem_watcher", "hdr", "ktx2", "png", "serialize", "tonemapping_luts", "vorbis", "zstd", "multi-threaded"] } #the removal of default-features is needed to enable webgpu wasm backend.
 #full on basic editor/debug engine for bevy.
 bevy_editor_pls = { git = "https://github.com/jakobhellermann/bevy_editor_pls.git", optional = true }
 #2d physics engine in bevy
@@ -38,6 +38,7 @@ anyhow = "1"
 rand = "0.8.5"
 
 [target.'cfg(not(target_arch = "wasm32"))'.dependencies]
+# bevy = { version = "0.11.1", features = ["multi-threaded"]}
 bevy_rapier2d = { version = "0.22.0", features = ["parallel"]}
 
 [target.'cfg(target_arch = "wasm32")'.dependencies]
@@ -66,12 +67,36 @@ opt-level = 3
 # #Medium optimisations, but shorter compile times
 # opt-level = 2
 
-#Profiles for github actions
-[profile.actions]
+[profile.wasm]
+# Use release profile as default values
 inherits = "dev"
-debug = 1
-# debug-assertions = false
-incremental = false
 
-[profile.actions.package."*"]
-opt-level = 0
+# Optimize with size in mind, also try "s", sometimes it is better.
+# This doesn't increase compilation times compared to -O3, great improvements
+opt-level = "z"
+
+# # Do a second optimization pass removing duplicate or unused code from dependencies.
+# # Slows compile times, marginal improvements
+# lto = "fat"
+
+# # When building crates, optimize larger chunks at a time
+# # Slows compile times, marginal improvements
+# codegen-units = 1
+
+
+
+[profile.wasm-release]
+# Use release profile as default values
+inherits = "release"
+
+# Optimize with size in mind, also try "s", sometimes it is better.
+# This doesn't increase compilation times compared to -O3, great improvements
+opt-level = "z"
+
+# Do a second optimization pass removing duplicate or unused code from dependencies.
+# Slows compile times, marginal improvements
+lto = "fat"
+
+# # When building crates, optimize larger chunks at a time
+# # Slows compile times, marginal improvements
+# codegen-units = 1
