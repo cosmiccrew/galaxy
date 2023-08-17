@@ -28,8 +28,7 @@ jobs:
 
       - name: Install Rust
         run: |
-          rustup override set nightly
-          rustup component add llvm-tools-preview --toolchain nightly
+          rustup component add llvm-tools-preview
 
       - name: Configure cache
         uses: actions/cache@v3

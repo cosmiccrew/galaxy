@@ -145,3 +145,31 @@ fn add_loaded_component(
         commands.entity(entity).insert(Loaded);
     }
 }
+
+#[cfg(test)]
+mod tests {
+
+    #[test]
+    fn test_adding_loaded_component() {
+        use crate::game::add_loaded_component;
+        use crate::prelude::*;
+
+        let mut app = App::new();
+
+        app.add_systems(Update, add_loaded_component);
+
+        let should_have = app
+            .world
+            .spawn(Name::new("Should have loaded component"))
+            .id();
+        let should_not_change = app
+            .world
+            .spawn((Persist, Name::new("Should not change")))
+            .id();
+
+        app.update();
+
+        assert!(app.world.get::<Loaded>(should_have).is_some());
+        assert!(app.world.get::<Loaded>(should_not_change).is_none());
+    }
+}
