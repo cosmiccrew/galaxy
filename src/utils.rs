@@ -90,4 +90,22 @@ mod tests {
 
         assert!(!check_if_string_eq_bean("not bean"));
     }
+
+    #[test]
+    fn test_despawn_components() {
+        use crate::prelude::*;
+
+        let mut app = App::new();
+
+        app.add_systems(Update, teardown::<Loaded>);
+
+        let should_despawn = app.world.spawn(Loaded).id();
+
+        let should_persist = app.world.spawn((Persist, Loaded)).id();
+
+        app.update();
+
+        assert!(app.world.get::<Loaded>(should_despawn).is_none());
+        assert!(app.world.get::<Loaded>(should_persist).is_some());
+    }
 }
