@@ -25,8 +25,7 @@ To run and play Cosmic Crew: Galaxy, there are a few options:
 1. Install rust at [rustup.rs](https://rustup.rs)
 2. Clone the repo `git clone https://github.com/cosmiccrew/galaxy.git`
 3. `cd galaxy`
-4a. `cargo run` (faster compiles, slower performance)
-4b. `cargo run --release --no-default-features` (increased runtime performance, but longer compile times)
+4. `cargo run` (faster compiles, slower performance) or `cargo run --release --no-default-features` (increased runtime performance, but longer compile times)
 
 #### Using WASM
 1. follow the steps before-hand, skipping step 4
