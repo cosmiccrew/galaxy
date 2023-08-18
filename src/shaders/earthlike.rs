@@ -25,3 +25,9 @@ impl Default for Earthlike {
         }
     }
 }
+
+impl From<Earthlike> for PlanetType {
+    fn from(value: Earthlike) -> Self {
+        PlanetType::Earthlike(value)
+    }
+}

@@ -6,14 +6,14 @@ use bevy::{
     render::{extract_resource::ExtractResourcePlugin, render_resource::*, RenderApp},
     sprite::{Material2d, Material2dPlugin, MaterialMesh2dBundle, Mesh2dHandle},
 };
-use bevy_inspector_egui::InspectorOptions;
+use bevy_inspector_egui::{quick::ResourceInspectorPlugin, InspectorOptions};
 
 pub mod clouds;
 pub mod earthlike;
 
 pub use self::{clouds::*, earthlike::*};
 
-#[derive(Resource, Default, Reflect, Copy, Clone, InspectorOptions)]
+#[derive(Resource, Default, Reflect, Copy, Clone)]
 pub struct GlobalPlanetShaderSettings {
     pub enabled: bool,
 }
@@ -23,6 +23,10 @@ pub struct GalaxyShaderPlugin;
 impl Plugin for GalaxyShaderPlugin {
     fn build(&self, app: &mut App) {
         app.init_resource::<GlobalPlanetShaderSettings>();
+
+        #[cfg(feature = "debug")]
+        app.register_type::<GlobalPlanetShaderSettings>()
+            .register_type::<PlanetBundle>();
 
         let render_app = app.sub_app_mut(RenderApp);
     }
@@ -78,6 +82,7 @@ impl Default for PlanetType {
 pub struct PlanetBundle {
     pub planet: Planet,
     pub planet_type: PlanetType,
+    pub clouds: Option<Clouds>,
     pub transform: Transform,
     pub global_transform: GlobalTransform,
     /// User indication of whether an entity is visible

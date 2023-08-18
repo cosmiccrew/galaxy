@@ -46,7 +46,7 @@ fn setup(
             translation: Vec3::new(100., 100., 0.),
             ..default()
         },
-        planet_type: PlanetType::Earthlike(Earthlike {
+        planet_type: Earthlike {
             land_colours: [
                 Color::rgb(0.388235, 0.670588, 0.247059),
                 Color::rgb(0.231373, 0.490196, 0.309804),
@@ -57,10 +57,11 @@ fn setup(
                 Color::rgb(0.184314, 0.341176, 0.32549),
                 Color::rgb(0.156863, 0.207843, 0.25098),
             ],
-            clouds: Some(Clouds {
-                cloud_cover: 0.4,
-                ..default()
-            }),
+            ..default()
+        }
+        .into(),
+        clouds: Some(Clouds {
+            cloud_cover: 0.4,
             ..default()
         }),
         ..default()
@@ -80,11 +81,9 @@ fn setup(
             translation: Vec3::new(-45., 10., 0.),
             ..default()
         },
-        planet_type: PlanetType::Earthlike(Earthlike {
-            clouds: Some(Clouds {
-                cloud_cover: 0.2,
-                ..default()
-            }),
+        planet_type: Earthlike::default().into(),
+        clouds: Some(Clouds {
+            cloud_cover: 0.2,
             ..default()
         }),
         ..default()

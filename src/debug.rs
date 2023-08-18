@@ -17,13 +17,12 @@ impl Plugin for GalaxyDebugPlugin {
         #[cfg(feature = "debug")]
         {
             use bevy_editor_pls::prelude::*;
-            app.register_type::<PlanetBundle>()
-                .add_plugins((
-                    EditorPlugin::default(),
-                    FrameTimeDiagnosticsPlugin,
-                    EntityCountDiagnosticsPlugin,
-                ))
-                .add_systems(Update, close_on_esc);
+            app.add_plugins((
+                EditorPlugin::default(),
+                FrameTimeDiagnosticsPlugin,
+                EntityCountDiagnosticsPlugin,
+            ))
+            .add_systems(Update, close_on_esc);
         }
     }
 }
