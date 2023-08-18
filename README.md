@@ -51,6 +51,15 @@ please note: this will decrease runtime performance somewhat.
 
 -------
 
+## Credits
+
+This project wouldn't be possible without the hard work and dedication put in by these various projects:
+* [bevy](https://github.com/bevyengine/bevy/) - the game engine galaxy is built with, with an incredibly extensible design and countless helpful features
+* [FishFolk: Jumpy](https://github.com/fishfolk/jumpy) - a 2d couch-shooter game built in bevy, serving as great inspiration that building a full game in bevy is possible
+* [Deep-Fold's Pixel Planets](https://deep-fold.itch.io/pixel-planet-generator) - a set of shaders that create amazing 2d pixelated planets, of which shader's are extensively used in this game's planets
+
+-------
+
 ## License
 Licensed under either of
 
