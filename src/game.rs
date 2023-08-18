@@ -33,68 +33,15 @@ fn setup(
         println!("no bean :(");
     }
 
-    // commands.spawn((
-    //     MaterialMesh2dBundle {
-    //         // mesh: meshes
-    //         //     .add(shape::Quad::new(Vec2::new(200., 200.)).into())
-    //         //     .into(),
-    //         material: materials.add(EarthlikePlanetMaterial {
-    //             color: Color::BLUE,
-    //             color_texture: assets.dummy.clone(),
-    //         }),
-    //         ..default()
-    //     },
-    //     Planet,
-    // ));
-
-    // let _b = PlanetConfig {
-    //         planet_type: PlanetType::Earthlike,
-    //         seed: 100,
-    //         ..Default::default()
-    //     };
-
-    // commands.spawn(PlanetBundle {
-    //     material_mesh_2d_bundle: MaterialMesh2dBundle {
-    //         mesh: (),
-    //         material: materials.add(asset),
-    //         ..default()
-    //     },
-    //     ..default()
-    // });
-
-    // commands.spawn((
-    //     MaterialMesh2dBundle {
-    //         mesh: meshes
-    //             .add(shape::Quad::new(Vec2::new(500., 500.)).into())
-    //             .into(),
-    //         material: materials.add(EarthlikeMaterial {
-    //             pixels: 100.,
-    //             rotation: rand::thread_rng().gen_range(0f32..TAU),
-    //             ..default()
-    //         }),
-    //         ..default()
-    //     },
-    //     Planet,
-    // ));
-
-    // commands.spawn((
-    //     Planet,
-    //     PlanetSettings {
-    //         planet_type: PlanetType::Earthlike,
-    //         ..default()
-    //     },
-    // ));
-
     commands.spawn(PlanetBundle {
         planet: Planet {
             seed: 87_654.68,
             pixels: 100,
             rotation: 90f32.to_radians(),
-            ///eq to r=50
             radius: 100.,
             time_speed: 0.2,
-            // anchor: (),
         },
+
         transform: Transform {
             translation: Vec3::new(100., 100., 0.),
             ..default()

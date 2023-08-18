@@ -3,38 +3,47 @@ use crate::prelude::*;
 use bevy::{
     asset::Asset,
     reflect::{TypePath, TypeUuid},
-    render::{extract_resource::ExtractResourcePlugin, render_resource::*},
+    render::{extract_resource::ExtractResourcePlugin, render_resource::*, RenderApp},
     sprite::{Material2d, Material2dPlugin, MaterialMesh2dBundle, Mesh2dHandle},
 };
+use bevy_inspector_egui::InspectorOptions;
 
 pub mod clouds;
 pub mod earthlike;
 
 pub use self::{clouds::*, earthlike::*};
 
+#[derive(Resource, Default, Reflect, Copy, Clone, InspectorOptions)]
+pub struct GlobalPlanetShaderSettings {
+    pub enabled: bool,
+}
+
 pub struct GalaxyShaderPlugin;
 
 impl Plugin for GalaxyShaderPlugin {
     fn build(&self, app: &mut App) {
-        // app.add_plugins((
-        //     Material2dPlugin::<EarthlikeMaterial>::default(),
-        //     Material2dPlugin::<CloudsMaterial>::default(),
-        // ));
+        app.init_resource::<GlobalPlanetShaderSettings>();
 
-        // app.add_asset::<M>()
-        //     .add_plugins(ExtractComponentPlugin::<Handle<M>>::extract_visible());
+        let render_app = app.sub_app_mut(RenderApp);
     }
 }
 
+/// Settings that each planet has, no matter what unique type the planet is (e.g. galaxies, earthlikes and fireworlds all have these), but that are individual (two differing )
 #[derive(Component, Reflect)]
 pub struct Planet {
+    /// The random seed that decides how this planet should be generated - this is used to generate a near inifinite amount of differing planets easily.
     pub seed: f32,
     /// how many pixels across the planet should be
     pub pixels: u16,
     /// a rotation in radians - therefore should be within the range: 0 -> TAU (TAU is 2 PI).
-    pub rotation: f32,
     ///
+    /// This is needed rather than the rotation within `Transform, so that a planet can have its pixels aligned while being still rotated.
+    pub rotation: f32,
+    /// The raddius occupied by the actual planet, seperate from its pixels - a planet can be 10 pixels wide but 1000 pixels of actual screen size, and likewise have 1000 pixels but only 100 of screen size.
     pub radius: f32,
+    /// How fast the planet rotated around its axis - this is equivalent to a seeting deciding whether it takes the earth 24hrs to do a full rotation or 2 minutes.
+    ///
+    /// a `time_speed` of 1. is equal to [UNKNOWN] seconds for a full rotation.
     pub time_speed: f32,
 }
 

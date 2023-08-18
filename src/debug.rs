@@ -1,4 +1,9 @@
-use bevy::{input::common_conditions::input_toggle_active, window::close_on_esc};
+use bevy::{
+    asset::diagnostic::AssetCountDiagnosticsPlugin,
+    diagnostic::{EntityCountDiagnosticsPlugin, FrameTimeDiagnosticsPlugin},
+    input::common_conditions::input_toggle_active,
+    window::close_on_esc,
+};
 
 use crate::prelude::*;
 
@@ -13,7 +18,11 @@ impl Plugin for GalaxyDebugPlugin {
         {
             use bevy_editor_pls::prelude::*;
             app.register_type::<PlanetBundle>()
-                .add_plugins(EditorPlugin::default())
+                .add_plugins((
+                    EditorPlugin::default(),
+                    FrameTimeDiagnosticsPlugin,
+                    EntityCountDiagnosticsPlugin,
+                ))
                 .add_systems(Update, close_on_esc);
         }
     }

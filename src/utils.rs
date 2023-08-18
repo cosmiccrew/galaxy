@@ -58,7 +58,7 @@ impl Plugin for GalaxyDefaultPlugins {
                 })
                 .set({
                     use bevy::log::LogPlugin;
-                    if cfg!(debug_assertions) {
+                    if cfg!(feature = "debug") {
                         LogPlugin {
                             level: bevy::log::Level::DEBUG,
                             filter: "debug,wgpu_core=warn,wgpu_hal=warn,naga=info,bevy=info".into(),
