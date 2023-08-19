@@ -33,61 +33,66 @@ fn setup(
         println!("no bean :(");
     }
 
-    commands.spawn(PlanetBundle {
-        planet: Planet {
-            seed: 87_654.68,
-            pixels: 100,
-            rotation: 90f32.to_radians(),
-            radius: 100.,
-            time_speed: 0.2,
-        },
+    commands.spawn((Planet::default(), Name::from("test")));
 
-        transform: Transform {
-            translation: Vec3::new(100., 100., 0.),
+    commands.spawn((
+        PlanetBundle {
+            planet: Planet {
+                seed: 87_654.68,
+                pixels: 100,
+                rotation: 90f32.to_radians(),
+                radius: 100.,
+                time_speed: 0.2,
+            },
+
+            transform: Transform {
+                translation: Vec3::new(100., 100., 0.),
+                ..default()
+            },
+            planet_shader: Earthlike {
+                land_colours: [
+                    Color::rgb(0.388235, 0.670588, 0.247059),
+                    Color::rgb(0.231373, 0.490196, 0.309804),
+                    Color::rgb(0.184314, 0.341176, 0.32549),
+                    Color::rgb(0.156863, 0.207843, 0.25098),
+                ],
+                river_colours: [
+                    Color::rgb(0.184314, 0.341176, 0.32549),
+                    Color::rgb(0.156863, 0.207843, 0.25098),
+                ],
+                ..default()
+            },
             ..default()
         },
-        planet_type: Earthlike {
-            land_colours: [
-                Color::rgb(0.388235, 0.670588, 0.247059),
-                Color::rgb(0.231373, 0.490196, 0.309804),
-                Color::rgb(0.184314, 0.341176, 0.32549),
-                Color::rgb(0.156863, 0.207843, 0.25098),
-            ],
-            river_colours: [
-                Color::rgb(0.184314, 0.341176, 0.32549),
-                Color::rgb(0.156863, 0.207843, 0.25098),
-            ],
-            ..default()
-        }
-        .into(),
-        clouds: Some(Clouds {
+        CloudCover {
             cloud_cover: 0.4,
             ..default()
-        }),
+        },
+    ));
+
+    commands.spawn(PlanetBundle {
+        planet_shader: Earthlike::default(),
         ..default()
     });
 
-    commands.spawn(PlanetBundle {
-        planet_type: PlanetType::Earthlike(Earthlike::default()),
-        ..default()
-    });
-
-    commands.spawn(PlanetBundle {
-        planet: Planet {
-            seed: 4.68,
+    commands.spawn((
+        PlanetBundle {
+            planet: Planet {
+                seed: 4.68,
+                ..default()
+            },
+            transform: Transform {
+                translation: Vec3::new(-45., 10., 0.),
+                ..default()
+            },
+            planet_shader: Earthlike::default(),
             ..default()
         },
-        transform: Transform {
-            translation: Vec3::new(-45., 10., 0.),
-            ..default()
-        },
-        planet_type: Earthlike::default().into(),
-        clouds: Some(Clouds {
+        CloudCover {
             cloud_cover: 0.2,
             ..default()
-        }),
-        ..default()
-    });
+        },
+    ));
 }
 
 // fn planet_rotation(

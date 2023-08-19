@@ -1,13 +1,14 @@
 use crate::prelude::*;
 use bevy::{reflect::*, render::render_resource::*, sprite::Material2d};
 
-#[derive(Component, Reflect, Clone)]
-pub struct Clouds {
+#[derive(Component, Reflect, Debug, Clone, Copy, ShaderType)]
+#[reflect(Component)]
+pub struct CloudCover {
     pub cloud_cover: f32,
     pub colours: [Color; 4],
 }
 
-impl Default for Clouds {
+impl Default for CloudCover {
     fn default() -> Self {
         Self {
             cloud_cover: 0.47,

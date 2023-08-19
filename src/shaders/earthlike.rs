@@ -1,9 +1,14 @@
 // use std::fmt::Debug;
 
 use crate::prelude::*;
-use bevy::{reflect::*, render::render_resource::*, sprite::Material2d};
+use bevy::{
+    reflect::*,
+    render::{extract_component::ExtractComponent, render_resource::*},
+    sprite::Material2d,
+};
 
-#[derive(Component, Reflect, Clone)]
+#[derive(Debug, Component, Reflect, Clone, Copy, ShaderType)]
+#[reflect(Component)]
 pub struct Earthlike {
     pub land_colours: [Color; 4],
     pub river_colours: [Color; 2],
@@ -26,8 +31,10 @@ impl Default for Earthlike {
     }
 }
 
-impl From<Earthlike> for PlanetType {
-    fn from(value: Earthlike) -> Self {
-        PlanetType::Earthlike(value)
-    }
-}
+// impl From<Earthlike> for PlanetType {
+//     fn from(value: Earthlike) -> Self {
+//         PlanetType::Earthlike(value)
+//     }
+// }
+
+impl PlanetShader for Earthlike {}

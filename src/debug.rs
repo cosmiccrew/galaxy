@@ -4,6 +4,7 @@ use bevy::{
     input::common_conditions::input_toggle_active,
     window::close_on_esc,
 };
+use bevy_inspector_egui::DefaultInspectorConfigPlugin;
 
 use crate::prelude::*;
 
@@ -17,6 +18,11 @@ impl Plugin for GalaxyDebugPlugin {
         #[cfg(feature = "debug")]
         {
             use bevy_editor_pls::prelude::*;
+
+            app.register_type::<GlobalPlanetSettings>()
+                .register_type::<PlanetBundle<Earthlike>>()
+                .register_type::<CloudCover>();
+
             app.add_plugins((
                 EditorPlugin::default(),
                 FrameTimeDiagnosticsPlugin,
