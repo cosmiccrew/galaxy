@@ -4,9 +4,9 @@ on:
   push:
     tags:
       - "v*"
-  schedule:
-    # Run every night
-    - cron: "0 4 * * *"
+  # schedule:
+  #   # Run every night
+  #   - cron: "0 4 * * *"
 
 defaults:
   run:
