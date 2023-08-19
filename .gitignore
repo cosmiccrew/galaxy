@@ -3,7 +3,8 @@
 crates/*/target
 .cargo/config.toml
 
-
+#trunk
+dist
 
 #vscode
 *.code-workspace
