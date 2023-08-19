@@ -3,7 +3,7 @@
 use crate::prelude::*;
 use bevy::{reflect::*, render::render_resource::*, sprite::Material2d};
 
-#[derive(Component, Reflect)]
+#[derive(Component, Reflect, Clone)]
 pub struct Earthlike {
     pub land_colours: [Color; 4],
     pub river_colours: [Color; 2],

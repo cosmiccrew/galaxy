@@ -2,34 +2,76 @@ use crate::prelude::*;
 
 use bevy::{
     asset::Asset,
+    prelude::shape::Plane,
     reflect::{TypePath, TypeUuid},
-    render::{extract_resource::ExtractResourcePlugin, render_resource::*, RenderApp},
+    render::{extract_resource::ExtractResourcePlugin, render_resource::*, Extract, RenderApp},
     sprite::{Material2d, Material2dPlugin, MaterialMesh2dBundle, Mesh2dHandle},
 };
-use bevy_inspector_egui::{quick::ResourceInspectorPlugin, InspectorOptions};
+use bevy_inspector_egui::{
+    prelude::ReflectInspectorOptions, quick::ResourceInspectorPlugin, InspectorOptions,
+};
 
 pub mod clouds;
 pub mod earthlike;
+pub mod types;
 
+use self::types::GpuPlanetBuffer;
 pub use self::{clouds::*, earthlike::*};
 
-#[derive(Resource, Default, Reflect, Copy, Clone)]
-pub struct GlobalPlanetShaderSettings {
+/// Global settings used for every planet, regardless of its type or parameters.
+#[derive(Resource, Reflect, Copy, Clone, InspectorOptions)]
+#[reflect(InspectorOptions)]
+pub struct GlobalPlanetSettings {
     pub enabled: bool,
+}
+
+impl Default for GlobalPlanetSettings {
+    fn default() -> Self {
+        Self { enabled: true }
+    }
 }
 
 pub struct GalaxyShaderPlugin;
 
 impl Plugin for GalaxyShaderPlugin {
     fn build(&self, app: &mut App) {
-        app.init_resource::<GlobalPlanetShaderSettings>();
+        app.init_resource::<GlobalPlanetSettings>();
 
         #[cfg(feature = "debug")]
-        app.register_type::<GlobalPlanetShaderSettings>()
+        app.register_type::<GlobalPlanetSettings>()
             .register_type::<PlanetBundle>();
 
         let render_app = app.sub_app_mut(RenderApp);
+
+        render_app.add_systems(ExtractSchedule, system_extract_pipeline_assets);
     }
+
+    fn finish(&self, app: &mut App) {
+        let render_app = app.sub_app_mut(RenderApp);
+        render_app.init_resource::<PlanetShaderPipelineAssets>();
+    }
+}
+
+#[derive(Resource, Default)]
+pub struct PlanetShaderPipelineAssets {
+    pub planets: StorageBuffer<GpuPlanetBuffer>,
+}
+
+pub fn system_extract_pipeline_assets(
+    res_planet_settings: Extract<Res<GlobalPlanetSettings>>,
+    query_planet: Extract<
+        Query<(
+            &Transform,
+            &Planet,
+            Option<&PlanetType>,
+            &ComputedVisibility,
+        )>,
+    >,
+    query_clouds: Extract<Query<(&Transform, &Clouds, &ComputedVisibility)>>,
+
+    mut gpu_pipeline_assets: ResMut<PlanetShaderPipelineAssets>,
+) {
+    let planet_settings = &res_planet_settings.enabled;
 }
 
 /// Settings that each planet has, no matter what unique type the planet is (e.g. galaxies, earthlikes and fireworlds all have these), but that are individual (two differing )
@@ -43,7 +85,7 @@ pub struct Planet {
     ///
     /// This is needed rather than the rotation within `Transform, so that a planet can have its pixels aligned while being still rotated.
     pub rotation: f32,
-    /// The raddius occupied by the actual planet, seperate from its pixels - a planet can be 10 pixels wide but 1000 pixels of actual screen size, and likewise have 1000 pixels but only 100 of screen size.
+    /// The radius occupied by the actual planet, seperate from its pixels - a planet can be 10 pixels wide but 1000 pixels of actual screen size, and likewise have 1000 pixels but only 100 of screen size.
     pub radius: f32,
     /// How fast the planet rotated around its axis - this is equivalent to a seeting deciding whether it takes the earth 24hrs to do a full rotation or 2 minutes.
     ///

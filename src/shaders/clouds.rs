@@ -1,7 +1,7 @@
 use crate::prelude::*;
 use bevy::{reflect::*, render::render_resource::*, sprite::Material2d};
 
-#[derive(Component, Reflect)]
+#[derive(Component, Reflect, Clone)]
 pub struct Clouds {
     pub cloud_cover: f32,
     pub colours: [Color; 4],
