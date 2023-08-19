@@ -34,8 +34,8 @@ jobs:
       - name: Cache rust dependencies
         uses: Swatinem/rust-cache@v2
         with:
-          shared-key: ci
-          prefix-key: v2 #increment this to bust the cache if needed
+          shared-key: coverage
+          prefix-key: v0 #increment this to bust the cache if needed
           save-if: ${{ github.event_name == 'push' }}
 
       - name: Install cargo-llvm-cov
