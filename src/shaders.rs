@@ -10,9 +10,10 @@ use bevy::{
         extract_component::{ExtractComponent, ExtractComponentPlugin},
         extract_resource::{ExtractResource, ExtractResourcePlugin},
         render_graph::{self, RenderGraph},
+        render_phase::AddRenderCommand,
         render_resource::*,
         renderer::{RenderContext, RenderDevice, RenderQueue},
-        Extract, Render, RenderApp, RenderSet, render_phase::AddRenderCommand,
+        Extract, Render, RenderApp, RenderSet,
     },
     sprite::{Material2d, Material2dPlugin, MaterialMesh2dBundle, Mesh2dHandle},
 };
@@ -26,8 +27,11 @@ pub mod earthlike;
 pub mod pipeline;
 pub mod types;
 
-use self::types::{GpuCloudCover, GpuCloudCoverBuffer, GpuEarthlike, GpuEarthlikeBuffer};
 pub use self::{clouds::*, earthlike::*};
+use self::{
+    pipeline::system_queue_bind_groups,
+    types::{GpuCloudCover, GpuCloudCoverBuffer, GpuEarthlike, GpuEarthlikeBuffer},
+};
 
 /// Global settings used for every planet, regardless of its type or parameters.
 #[derive(Resource, Reflect, Copy, Clone, InspectorOptions, ExtractResource)]
@@ -61,7 +65,7 @@ impl Plugin for GalaxyShaderPlugin {
                 Render,
                 (
                     system_prepare_pipeline_assets.in_set(RenderSet::Prepare),
-                    // system_queue_bind_groups.in_set(RenderSet::Queue),
+                    system_queue_bind_groups.in_set(RenderSet::Queue),
                 ),
             );
 
@@ -81,7 +85,7 @@ impl Plugin for GalaxyShaderPlugin {
 
     fn finish(&self, app: &mut App) {
         let render_app = app.sub_app_mut(RenderApp);
-        render_app.init_resource::<PlanetShaderPipelineAssets>();
+        render_app.init_resource::<PlanetPassPipelineAssets>();
     }
 }
 
@@ -181,12 +185,12 @@ impl Plugin for GalaxyShaderPlugin {
 // }
 
 #[derive(Resource, Default)]
-pub struct PlanetShaderPipelineAssets {
+pub struct PlanetPassPipelineAssets {
     pub earthlikes: StorageBuffer<GpuEarthlikeBuffer>,
     pub clouds: StorageBuffer<GpuCloudCoverBuffer>,
 }
 
-impl PlanetShaderPipelineAssets {
+impl PlanetPassPipelineAssets {
     pub(crate) fn write_buffer(&mut self, device: &RenderDevice, queue: &RenderQueue) {
         self.earthlikes.write_buffer(device, queue);
         self.clouds.write_buffer(device, queue);
@@ -200,7 +204,7 @@ impl PlanetShaderPipelineAssets {
 pub(crate) fn system_prepare_pipeline_assets(
     render_device: Res<RenderDevice>,
     render_queue: Res<RenderQueue>,
-    mut gi_compute_assets: ResMut<PlanetShaderPipelineAssets>,
+    mut gi_compute_assets: ResMut<PlanetPassPipelineAssets>,
 ) {
     gi_compute_assets.write_buffer(&render_device, &render_queue);
 }
@@ -214,7 +218,7 @@ pub(crate) fn system_extract_pipeline_assets(
 
     query_planets_without_types: Extract<Query<(&Transform, &Planet, &ComputedVisibility)>>,
 
-    mut gpu_pipeline_assets: ResMut<PlanetShaderPipelineAssets>,
+    mut gpu_pipeline_assets: ResMut<PlanetPassPipelineAssets>,
 ) {
     let planet_settings = &res_planet_settings.enabled;
 
