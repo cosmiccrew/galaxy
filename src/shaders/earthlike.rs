@@ -1,73 +1,61 @@
-use std::fmt::Debug;
+// use std::fmt::Debug;
 
 use crate::prelude::*;
-use bevy::{reflect::*, render::render_resource::*, sprite::Material2d};
+use bevy::{
+    reflect::*,
+    render::{extract_component::ExtractComponent, render_resource::*},
+    sprite::Material2d,
+};
 
-#[derive(AsBindGroup, TypeUuid, TypePath, Debug, Clone)]
-#[uuid = "ad2446fb-f88e-47c9-9a85-c617603527c2"]
-pub struct EarthlikeMaterial {
-    /// a doc comment
+#[derive(Debug, Component, Reflect, Clone, Copy, ShaderType, AsBindGroup, TypeUuid)]
+#[reflect(Component)]
+#[uuid = "aed9b1b9-229e-402a-b5a0-14d219af5d6d"]
+pub struct Earthlike {
     #[uniform(0)]
-    pub pixels: f32,
+    pub celestial: CelestialSettings,
     #[uniform(1)]
-    pub seed: f32,
-    /// Should only be a value between 0 and TAU.
+    pub land_colours: [Color; 4],
     #[uniform(2)]
-    pub rotation: f32,
-    #[uniform(3)]
-    pub colours: [Color; 4],
+    pub river_colours: [Color; 2],
 }
 
-impl Default for EarthlikeMaterial {
+impl Earthlike {
+    pub(crate) fn randomise(&mut self) {
+        self.randomise_rotation();
+        self.randomise_seed();
+    }
+
+    pub(crate) fn randomise_seed(&mut self) {
+        self.celestial.seed = rand::thread_rng().gen();
+    }
+
+    pub(crate) fn randomise_rotation(&mut self) {
+        self.celestial.rotation = rand::thread_rng().gen_range(0f32..TAU);
+    }
+}
+
+impl Default for Earthlike {
     fn default() -> Self {
         Self {
-            pixels: 100.,
-            seed: 8.98,
-            rotation: 0.75,
-            colours: [
-                [0.388235, 0.670588, 0.247059, 1.].into(),
-                [0.231373, 0.490196, 0.309804, 1.].into(),
-                [0.184314, 0.341176, 0.32549, 1.].into(),
-                [0.156863, 0.207843, 0.25098, 1.].into(),
+            celestial: Default::default(),
+            land_colours: [
+                Color::rgb(0.388235, 0.670588, 0.247059),
+                Color::rgb(0.231373, 0.490196, 0.309804),
+                Color::rgb(0.184314, 0.341176, 0.32549),
+                Color::rgb(0.156863, 0.207843, 0.25098),
+            ],
+            river_colours: [
+                Color::rgb(0.309804, 0.643137, 0.721569),
+                Color::rgb(0.25098, 0.286275, 0.45098),
             ],
         }
     }
 }
 
-impl PlanetShader for EarthlikeMaterial {}
-
-impl EarthlikeMaterial {
-    pub fn randomise(&mut self) {
-        self.randomise_rotation();
-        self.randomise_seed();
-        // self.randomise_colours(n_colours);
-    }
-
-    fn randomise_rotation(&mut self) {
-        self.rotation = rand::thread_rng().gen_range(0f32..TAU);
-    }
-
-    fn randomise_seed(&mut self) {
-        self.seed = rand::thread_rng().gen::<f32>();
-    }
-
-    // fn randomise_colours(&mut self, n_colours: u32) {
-    //     let seed_colours = Self::gen_new_colourscheme(n_colours);
-
-    //     // seed_colours.into_iter().for_each(|colour| {
-
-    //     seed_colours.into_iter().for_each(|| {
-
-    //         let difference = Vec4::from(colour1) - Vec4::from(colour2);
-
-    //         self.colours.push(value);
-
-    //     });
-    // }
-}
-
-impl Material2d for EarthlikeMaterial {
-    fn fragment_shader() -> bevy::render::render_resource::ShaderRef {
-        "shaders/planets/earthlike.wgsl".into()
+impl Material2d for Earthlike {
+    fn fragment_shader() -> ShaderRef {
+        "shaderS/celestials/earthlike.wgsl".into()
     }
 }
+
+impl PlanetShader for Earthlike {}
