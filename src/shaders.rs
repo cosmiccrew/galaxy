@@ -1,117 +1,96 @@
 use crate::prelude::*;
 
 use bevy::{
-    asset::Asset,
+    asset::{load_internal_asset, Asset},
+    core_pipeline::core_2d,
+    ecs::component::TableStorage,
+    prelude::shape::Plane,
     reflect::{TypePath, TypeUuid},
-    render::{extract_resource::ExtractResourcePlugin, render_resource::*},
+    render::{
+        extract_component::{ExtractComponent, ExtractComponentPlugin},
+        extract_resource::{ExtractResource, ExtractResourcePlugin},
+        render_graph::{self, RenderGraph},
+        render_phase::AddRenderCommand,
+        render_resource::*,
+        renderer::{RenderContext, RenderDevice, RenderQueue},
+        Extract, Render, RenderApp, RenderSet,
+    },
     sprite::{Material2d, Material2dPlugin, MaterialMesh2dBundle, Mesh2dHandle},
 };
 
-pub mod clouds;
+use bevy_inspector_egui::{
+    prelude::ReflectInspectorOptions, quick::ResourceInspectorPlugin, InspectorOptions,
+};
+
+pub mod cloud_cover;
+pub mod consts;
 pub mod earthlike;
 
-pub use self::{clouds::*, earthlike::*};
+pub use self::{cloud_cover::*, earthlike::*};
 
 pub struct GalaxyShaderPlugin;
 
 impl Plugin for GalaxyShaderPlugin {
     fn build(&self, app: &mut App) {
+        load_internal_asset!(app, SHADER_TYPES, "shaders/types.wgsl", Shader::from_wgsl);
+
         app.add_plugins((
-            Material2dPlugin::<EarthlikeMaterial>::default(),
-            Material2dPlugin::<CloudsMaterial>::default(),
+            Material2dPlugin::<Earthlike>::default(),
+            Material2dPlugin::<CloudCover>::default(),
         ));
     }
 }
 
-#[derive(Bundle)]
-pub struct PlanetBundle {
-    // material_mesh_2d_bundle: MaterialMesh2dBundle<M>,
-    planet_settings: PlanetSettings,
-    _planet: Planet,
+#[derive(Component, Reflect, Debug, Default, Clone, Copy)]
+#[reflect(Component)]
+pub struct Celestial;
+
+/// Settings that each planet has, no matter what unique type the planet is (e.g. galaxies, earthlikes and fireworlds all have these), but that are individual (two differing )
+#[derive(Component, Reflect, Debug, Clone, Copy, ShaderType, AsBindGroup)]
+#[reflect(Component)]
+pub struct CelestialSettings {
+    /// The random seed that decides how this celestial should be generated - this is used to generate a near inifinite amount of differing celestials easily.
+    pub seed: f32,
+    /// how many pixels across the celestial should be
+    ///
+    /// despite this seeming logical to be of type u32 and not f32, for the sake of simplifying the shader this is an f32.
+    pub pixels: f32,
+    /// a rotation in radians - therefore should be within the range: 0 -> TAU (TAU is 2 PI).
+    ///
+    /// This is needed rather than the rotation within `Transform, so that a celestial can have its pixels aligned while being still rotated.
+    pub rotation: f32,
+    /// The radius occupied by the actual celestial, seperate from its pixels - a celestial can be 10 pixels wide but 1000 pixels of actual screen size, and likewise have 1000 pixels but only 100 of screen size.
+    pub radius: f32,
+    /// How fast the celestial rotated around its axis - this is equivalent to a seeting deciding whether it takes the earth 24hrs to do a full rotation or 2 minutes.
+    ///
+    /// a `time_speed` of 1. is equal to [UNKNOWN] seconds for a full rotation.
+    pub time_speed: f32,
 }
 
-impl Default for PlanetBundle {
+impl Default for CelestialSettings {
     fn default() -> Self {
         Self {
-            // material_mesh_2d_bundle: MaterialMesh2dBundle {
-            //     mesh: Default::default(),
-            //     material: Default::default(),
-            //     transform: Default::default(),
-            //     global_transform: Default::default(),
-            //     visibility: Default::default(),
-            //     computed_visibility: Default::default(),
-            // },
-            _planet: Planet,
-            planet_settings: PlanetSettings::default(),
+            seed: 8.98,
+            pixels: 100.,
+            rotation: 0.,
+            radius: 100.,
+            time_speed: 0.2,
         }
     }
 }
 
-#[derive(Component, Reflect)]
-pub struct Planet;
+pub trait PlanetShader: ShaderType + Component + AsBindGroup + Material2d {}
 
-#[derive(Component, Reflect, Default)]
-pub enum PlanetType {
-    // #[shader = EarthlikeShader]
-    #[default]
-    Earthlike,
-    NotRealYet,
-}
-
-#[derive(Component, Reflect, Default)]
-pub struct PlanetSettings {
-    pub planet_type: PlanetType,
-    pub pixels: u32,
-    pub speed: f32,
-    pub seed: i32,
-    pub mouse_pos: Vec2,
-    pub color: Color,
-    pub radius: f32,
-}
-
-impl PlanetSettings {}
-
-pub trait PlanetShader: Material2d {
-    ///
-    /// Using ideas from https://www.iquilezles.org/www/articles/palettes/palettes.htm
-    fn gen_new_colourscheme(n_colours: u32) -> Vec<Color> {
-        const SATURATION: f32 = 0.5;
-        const HUE_DIFF: f32 = 0.9;
-
-        let mut rng = rand::thread_rng();
-
-        let a = Vec3::new(
-            rng.gen_range(0f32..5f32),
-            rng.gen_range(0f32..5f32),
-            rng.gen_range(0f32..5f32),
-        );
-
-        let b = Vec3::splat(0.5) * SATURATION;
-        let c = Vec3::new(
-            rng.gen_range(0.5..1.5),
-            rng.gen_range(0.5..1.5),
-            rng.gen_range(0.5..1.5),
-        ) * HUE_DIFF;
-
-        let d = Vec3::new(
-            rng.gen_range(0f32..1f32),
-            rng.gen_range(0f32..1f32),
-            rng.gen_range(0f32..1f32),
-        ) * rng.gen_range(1f32..3f32);
-
-        let mut colours = vec![];
-
-        let n = ((n_colours as f32) - 1.).max(1.);
-
-        (0..n_colours).for_each(|i| {
-            let i = i as f32;
-            colours.push(Color::rgb(
-                a.x + b.x * f32::cos(TAU * (c.x * (i / n) + d.x)),
-                a.y + b.y * f32::cos(TAU * (c.y * (i / n) + d.y)),
-                a.z + b.z * f32::cos(TAU * (c.z * (i / n) + d.z)),
-            ));
-        });
-
-        colours
-    }
+#[derive(Bundle, Reflect, Default)]
+pub struct CelestialBundle<P: PlanetShader> {
+    pub celestial: Celestial,
+    pub celestial_shader: Handle<P>,
+    pub mesh: Mesh2dHandle,
+    // pub clouds: Option<Clouds>,
+    pub transform: Transform,
+    pub global_transform: GlobalTransform,
+    /// User indication of whether an entity is visible
+    pub visibility: Visibility,
+    /// Algorithmically-computed indication of whether an entity is visible and should be extracted for rendering
+    pub computed_visibility: ComputedVisibility,
 }
