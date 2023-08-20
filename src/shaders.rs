@@ -11,7 +11,7 @@ use bevy::{
         extract_resource::{ExtractResource, ExtractResourcePlugin},
         render_graph::{self, RenderGraph},
         render_resource::*,
-        renderer::{RenderDevice, RenderQueue, RenderContext},
+        renderer::{RenderContext, RenderDevice, RenderQueue},
         Extract, Render, RenderApp, RenderSet,
     },
     sprite::{Material2d, Material2dPlugin, MaterialMesh2dBundle, Mesh2dHandle},
