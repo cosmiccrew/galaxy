@@ -1,4 +1,4 @@
-use crate::prelude::*;
+use crate::{prelude::*, shaders::pipeline::PlanetPassPipeline};
 
 use bevy::{
     asset::Asset,
@@ -9,9 +9,10 @@ use bevy::{
     render::{
         extract_component::{ExtractComponent, ExtractComponentPlugin},
         extract_resource::{ExtractResource, ExtractResourcePlugin},
-        render_graph::RenderGraph,
+        render_graph::{self, RenderGraph},
         render_resource::*,
-        Extract, RenderApp,
+        renderer::{RenderDevice, RenderQueue, RenderContext},
+        Extract, Render, RenderApp, RenderSet,
     },
     sprite::{Material2d, Material2dPlugin, MaterialMesh2dBundle, Mesh2dHandle},
 };
@@ -22,6 +23,7 @@ use bevy_inspector_egui::{
 
 pub mod clouds;
 pub mod earthlike;
+pub mod pipeline;
 pub mod types;
 
 use self::types::{GpuCloudCover, GpuCloudCoverBuffer, GpuEarthlike, GpuEarthlikeBuffer};
@@ -53,7 +55,15 @@ impl Plugin for GalaxyShaderPlugin {
 
         let render_app = app.sub_app_mut(RenderApp);
 
-        render_app.add_systems(ExtractSchedule, system_extract_pipeline_assets);
+        render_app
+            .add_systems(ExtractSchedule, system_extract_pipeline_assets)
+            .add_systems(
+                Render,
+                (
+                    system_prepare_pipeline_assets.in_set(RenderSet::Prepare),
+                    // system_queue_bind_groups.in_set(RenderSet::Queue),
+                ),
+            );
 
         let mut render_graph = render_app.world.resource_mut::<RenderGraph>();
         // render_graph
@@ -79,8 +89,95 @@ impl Plugin for GalaxyShaderPlugin {
 #[derive(Default)]
 struct PlanetPass2DNode;
 impl PlanetPass2DNode {
-    #[allow(dead_code)]
     pub const NAME: &str = "planet_pass_2d";
+}
+
+impl render_graph::Node for PlanetPass2DNode {
+    fn update(&mut self, _world: &mut World) {}
+
+    #[rustfmt::skip]
+    fn run(
+        &self,
+        _: &mut render_graph::RenderGraphContext,
+        render_context: &mut RenderContext,
+        world: &World,
+    ) -> Result<(), render_graph::NodeRunError> {
+        // if let Some(pipeline_bind_groups) = world.get_resource::<PlanetPassPipelineBindGroups>() {
+            let pipeline_cache = world.resource::<PipelineCache>();
+            let pipeline = world.resource::<PlanetPassPipeline>();
+
+        //     if let (
+        //         Some(sdf_pipeline),
+        //         Some(ss_probe_pipeline),
+        //         Some(ss_bounce_pipeline),
+        //         Some(ss_blend_pipeline),
+        //         Some(ss_filter_pipeline),
+        //     ) = (
+        //         pipeline_cache.get_compute_pipeline(pipeline.sdf_pipeline),
+        //         pipeline_cache.get_compute_pipeline(pipeline.ss_probe_pipeline),
+        //         pipeline_cache.get_compute_pipeline(pipeline.ss_bounce_pipeline),
+        //         pipeline_cache.get_compute_pipeline(pipeline.ss_blend_pipeline),
+        //         pipeline_cache.get_compute_pipeline(pipeline.ss_filter_pipeline),
+        //     ) {
+        //         let primary_w = target_sizes.primary_target_usize.x;
+        //         let primary_h = target_sizes.primary_target_usize.y;
+        //         let sdf_w = target_sizes.sdf_target_usize.x;
+        //         let sdf_h = target_sizes.sdf_target_usize.y;
+
+        //         let mut pass =
+        //             render_context
+        //                 .command_encoder()
+        //                 .begin_compute_pass(&ComputePassDescriptor {
+        //                     label: Some("light_pass_2d"),
+        //                 });
+
+        //         {
+        //             let grid_w = sdf_w / WORKGROUP_SIZE;
+        //             let grid_h = sdf_h / WORKGROUP_SIZE;
+        //             pass.set_bind_group(0, &pipeline_bind_groups.sdf_bind_group, &[]);
+        //             pass.set_pipeline(sdf_pipeline);
+        //             pass.dispatch_workgroups(grid_w, grid_h, 1);
+        //         }
+
+        //         {
+        //             let grid_w = (primary_w / GI_SCREEN_PROBE_SIZE as u32) / WORKGROUP_SIZE;
+        //             let grid_h = (primary_h / GI_SCREEN_PROBE_SIZE as u32) / WORKGROUP_SIZE;
+        //             pass.set_bind_group(0, &pipeline_bind_groups.ss_probe_bind_group, &[]);
+        //             pass.set_pipeline(ss_probe_pipeline);
+        //             pass.dispatch_workgroups(grid_w, grid_h, 1);
+        //         }
+
+        //         {
+        //             let grid_w = (primary_w / GI_SCREEN_PROBE_SIZE as u32) / WORKGROUP_SIZE;
+        //             let grid_h = (primary_h / GI_SCREEN_PROBE_SIZE as u32) / WORKGROUP_SIZE;
+        //             pass.set_bind_group(0, &pipeline_bind_groups.ss_bounce_bind_group, &[]);
+        //             pass.set_pipeline(ss_bounce_pipeline);
+        //             pass.dispatch_workgroups(grid_w, grid_h, 1);
+        //         }
+
+        //         {
+        //             let grid_w = (primary_w / GI_SCREEN_PROBE_SIZE as u32) / WORKGROUP_SIZE;
+        //             let grid_h = (primary_h / GI_SCREEN_PROBE_SIZE as u32) / WORKGROUP_SIZE;
+        //             pass.set_bind_group(0, &pipeline_bind_groups.ss_blend_bind_group, &[]);
+        //             pass.set_pipeline(ss_blend_pipeline);
+        //             pass.dispatch_workgroups(grid_w, grid_h, 1);
+        //         }
+
+        //         {
+        //             let grid_w = primary_w / WORKGROUP_SIZE;
+        //             let grid_h = primary_h / WORKGROUP_SIZE;
+        //             pass.set_bind_group(0, &pipeline_bind_groups.ss_filter_bind_group, &[]);
+        //             pass.set_pipeline(ss_filter_pipeline);
+        //             pass.dispatch_workgroups(grid_w, grid_h, 1);
+        //         }
+        //     }
+        // } else {
+        //     log::warn!("Failed to get bind groups");
+        // }
+
+        // Ok(())
+        todo!()
+    }
 }
 
 #[derive(Resource, Default)]
@@ -89,7 +186,26 @@ pub struct PlanetShaderPipelineAssets {
     pub clouds: StorageBuffer<GpuCloudCoverBuffer>,
 }
 
-pub fn system_extract_pipeline_assets(
+impl PlanetShaderPipelineAssets {
+    pub(crate) fn write_buffer(&mut self, device: &RenderDevice, queue: &RenderQueue) {
+        self.earthlikes.write_buffer(device, queue);
+        self.clouds.write_buffer(device, queue);
+        // self.camera_params.write_buffer(device, queue);
+        // self.light_pass_params.write_buffer(device, queue);
+        // self.probes.write_buffer(device, queue);
+        // self.skylight_masks.write_buffer(device, queue);
+    }
+}
+
+pub(crate) fn system_prepare_pipeline_assets(
+    render_device: Res<RenderDevice>,
+    render_queue: Res<RenderQueue>,
+    mut gi_compute_assets: ResMut<PlanetShaderPipelineAssets>,
+) {
+    gi_compute_assets.write_buffer(&render_device, &render_queue);
+}
+
+pub(crate) fn system_extract_pipeline_assets(
     res_planet_settings: Extract<Res<GlobalPlanetSettings>>,
 
     query_earthlike: Extract<Query<(&Transform, &Planet, &Earthlike, &ComputedVisibility)>>,
