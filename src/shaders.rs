@@ -12,7 +12,7 @@ use bevy::{
         render_graph::{self, RenderGraph},
         render_resource::*,
         renderer::{RenderContext, RenderDevice, RenderQueue},
-        Extract, Render, RenderApp, RenderSet,
+        Extract, Render, RenderApp, RenderSet, render_phase::AddRenderCommand,
     },
     sprite::{Material2d, Material2dPlugin, MaterialMesh2dBundle, Mesh2dHandle},
 };
@@ -65,7 +65,7 @@ impl Plugin for GalaxyShaderPlugin {
                 ),
             );
 
-        let mut render_graph = render_app.world.resource_mut::<RenderGraph>();
+        // let mut render_graph = render_app.world.resource_mut::<RenderGraph>();
         // render_graph
         //     .add_node(PlanetPass2DNode::NAME, PlanetPass2DNode::default())
         //     .add_node_edges(
@@ -86,99 +86,99 @@ impl Plugin for GalaxyShaderPlugin {
 }
 
 // The post process node used for the render graph
-#[derive(Default)]
-struct PlanetPass2DNode;
-impl PlanetPass2DNode {
-    pub const NAME: &str = "planet_pass_2d";
-}
+// #[derive(Default)]
+// struct PlanetPass2DNode;
+// impl PlanetPass2DNode {
+//     pub const NAME: &str = "planet_pass_2d";
+// }
 
-impl render_graph::Node for PlanetPass2DNode {
-    fn update(&mut self, _world: &mut World) {}
+// impl render_graph::Node for PlanetPass2DNode {
+//     fn update(&mut self, _world: &mut World) {}
 
-    #[rustfmt::skip]
-    fn run(
-        &self,
-        _: &mut render_graph::RenderGraphContext,
-        render_context: &mut RenderContext,
-        world: &World,
-    ) -> Result<(), render_graph::NodeRunError> {
-        // if let Some(pipeline_bind_groups) = world.get_resource::<PlanetPassPipelineBindGroups>() {
-            let pipeline_cache = world.resource::<PipelineCache>();
-            let pipeline = world.resource::<PlanetPassPipeline>();
+//     #[rustfmt::skip]
+//     fn run(
+//         &self,
+//         _: &mut render_graph::RenderGraphContext,
+//         render_context: &mut RenderContext,
+//         world: &World,
+//     ) -> Result<(), render_graph::NodeRunError> {
+//         // if let Some(pipeline_bind_groups) = world.get_resource::<PlanetPassPipelineBindGroups>() {
+//             let pipeline_cache = world.resource::<PipelineCache>();
+//             let pipeline = world.resource::<PlanetPassPipeline>();
 
-        //     if let (
-        //         Some(sdf_pipeline),
-        //         Some(ss_probe_pipeline),
-        //         Some(ss_bounce_pipeline),
-        //         Some(ss_blend_pipeline),
-        //         Some(ss_filter_pipeline),
-        //     ) = (
-        //         pipeline_cache.get_compute_pipeline(pipeline.sdf_pipeline),
-        //         pipeline_cache.get_compute_pipeline(pipeline.ss_probe_pipeline),
-        //         pipeline_cache.get_compute_pipeline(pipeline.ss_bounce_pipeline),
-        //         pipeline_cache.get_compute_pipeline(pipeline.ss_blend_pipeline),
-        //         pipeline_cache.get_compute_pipeline(pipeline.ss_filter_pipeline),
-        //     ) {
-        //         let primary_w = target_sizes.primary_target_usize.x;
-        //         let primary_h = target_sizes.primary_target_usize.y;
-        //         let sdf_w = target_sizes.sdf_target_usize.x;
-        //         let sdf_h = target_sizes.sdf_target_usize.y;
+//         //     if let (
+//         //         Some(sdf_pipeline),
+//         //         Some(ss_probe_pipeline),
+//         //         Some(ss_bounce_pipeline),
+//         //         Some(ss_blend_pipeline),
+//         //         Some(ss_filter_pipeline),
+//         //     ) = (
+//         //         pipeline_cache.get_compute_pipeline(pipeline.sdf_pipeline),
+//         //         pipeline_cache.get_compute_pipeline(pipeline.ss_probe_pipeline),
+//         //         pipeline_cache.get_compute_pipeline(pipeline.ss_bounce_pipeline),
+//         //         pipeline_cache.get_compute_pipeline(pipeline.ss_blend_pipeline),
+//         //         pipeline_cache.get_compute_pipeline(pipeline.ss_filter_pipeline),
+//         //     ) {
+//         //         let primary_w = target_sizes.primary_target_usize.x;
+//         //         let primary_h = target_sizes.primary_target_usize.y;
+//         //         let sdf_w = target_sizes.sdf_target_usize.x;
+//         //         let sdf_h = target_sizes.sdf_target_usize.y;
 
-        //         let mut pass =
-        //             render_context
-        //                 .command_encoder()
-        //                 .begin_compute_pass(&ComputePassDescriptor {
-        //                     label: Some("light_pass_2d"),
-        //                 });
+//         //         let mut pass =
+//         //             render_context
+//         //                 .command_encoder()
+//         //                 .begin_compute_pass(&ComputePassDescriptor {
+//         //                     label: Some("light_pass_2d"),
+//         //                 });
 
-        //         {
-        //             let grid_w = sdf_w / WORKGROUP_SIZE;
-        //             let grid_h = sdf_h / WORKGROUP_SIZE;
-        //             pass.set_bind_group(0, &pipeline_bind_groups.sdf_bind_group, &[]);
-        //             pass.set_pipeline(sdf_pipeline);
-        //             pass.dispatch_workgroups(grid_w, grid_h, 1);
-        //         }
+//         //         {
+//         //             let grid_w = sdf_w / WORKGROUP_SIZE;
+//         //             let grid_h = sdf_h / WORKGROUP_SIZE;
+//         //             pass.set_bind_group(0, &pipeline_bind_groups.sdf_bind_group, &[]);
+//         //             pass.set_pipeline(sdf_pipeline);
+//         //             pass.dispatch_workgroups(grid_w, grid_h, 1);
+//         //         }
 
-        //         {
-        //             let grid_w = (primary_w / GI_SCREEN_PROBE_SIZE as u32) / WORKGROUP_SIZE;
-        //             let grid_h = (primary_h / GI_SCREEN_PROBE_SIZE as u32) / WORKGROUP_SIZE;
-        //             pass.set_bind_group(0, &pipeline_bind_groups.ss_probe_bind_group, &[]);
-        //             pass.set_pipeline(ss_probe_pipeline);
-        //             pass.dispatch_workgroups(grid_w, grid_h, 1);
-        //         }
+//         //         {
+//         //             let grid_w = (primary_w / GI_SCREEN_PROBE_SIZE as u32) / WORKGROUP_SIZE;
+//         //             let grid_h = (primary_h / GI_SCREEN_PROBE_SIZE as u32) / WORKGROUP_SIZE;
+//         //             pass.set_bind_group(0, &pipeline_bind_groups.ss_probe_bind_group, &[]);
+//         //             pass.set_pipeline(ss_probe_pipeline);
+//         //             pass.dispatch_workgroups(grid_w, grid_h, 1);
+//         //         }
 
-        //         {
-        //             let grid_w = (primary_w / GI_SCREEN_PROBE_SIZE as u32) / WORKGROUP_SIZE;
-        //             let grid_h = (primary_h / GI_SCREEN_PROBE_SIZE as u32) / WORKGROUP_SIZE;
-        //             pass.set_bind_group(0, &pipeline_bind_groups.ss_bounce_bind_group, &[]);
-        //             pass.set_pipeline(ss_bounce_pipeline);
-        //             pass.dispatch_workgroups(grid_w, grid_h, 1);
-        //         }
+//         //         {
+//         //             let grid_w = (primary_w / GI_SCREEN_PROBE_SIZE as u32) / WORKGROUP_SIZE;
+//         //             let grid_h = (primary_h / GI_SCREEN_PROBE_SIZE as u32) / WORKGROUP_SIZE;
+//         //             pass.set_bind_group(0, &pipeline_bind_groups.ss_bounce_bind_group, &[]);
+//         //             pass.set_pipeline(ss_bounce_pipeline);
+//         //             pass.dispatch_workgroups(grid_w, grid_h, 1);
+//         //         }
 
-        //         {
-        //             let grid_w = (primary_w / GI_SCREEN_PROBE_SIZE as u32) / WORKGROUP_SIZE;
-        //             let grid_h = (primary_h / GI_SCREEN_PROBE_SIZE as u32) / WORKGROUP_SIZE;
-        //             pass.set_bind_group(0, &pipeline_bind_groups.ss_blend_bind_group, &[]);
-        //             pass.set_pipeline(ss_blend_pipeline);
-        //             pass.dispatch_workgroups(grid_w, grid_h, 1);
-        //         }
+//         //         {
+//         //             let grid_w = (primary_w / GI_SCREEN_PROBE_SIZE as u32) / WORKGROUP_SIZE;
+//         //             let grid_h = (primary_h / GI_SCREEN_PROBE_SIZE as u32) / WORKGROUP_SIZE;
+//         //             pass.set_bind_group(0, &pipeline_bind_groups.ss_blend_bind_group, &[]);
+//         //             pass.set_pipeline(ss_blend_pipeline);
+//         //             pass.dispatch_workgroups(grid_w, grid_h, 1);
+//         //         }
 
-        //         {
-        //             let grid_w = primary_w / WORKGROUP_SIZE;
-        //             let grid_h = primary_h / WORKGROUP_SIZE;
-        //             pass.set_bind_group(0, &pipeline_bind_groups.ss_filter_bind_group, &[]);
-        //             pass.set_pipeline(ss_filter_pipeline);
-        //             pass.dispatch_workgroups(grid_w, grid_h, 1);
-        //         }
-        //     }
-        // } else {
-        //     log::warn!("Failed to get bind groups");
-        // }
+//         //         {
+//         //             let grid_w = primary_w / WORKGROUP_SIZE;
+//         //             let grid_h = primary_h / WORKGROUP_SIZE;
+//         //             pass.set_bind_group(0, &pipeline_bind_groups.ss_filter_bind_group, &[]);
+//         //             pass.set_pipeline(ss_filter_pipeline);
+//         //             pass.dispatch_workgroups(grid_w, grid_h, 1);
+//         //         }
+//         //     }
+//         // } else {
+//         //     log::warn!("Failed to get bind groups");
+//         // }
 
-        // Ok(())
-        todo!()
-    }
-}
+//         // Ok(())
+//         todo!()
+//     }
+// }
 
 #[derive(Resource, Default)]
 pub struct PlanetShaderPipelineAssets {
@@ -229,7 +229,6 @@ pub(crate) fn system_extract_pipeline_assets(
                 earthlikes.data.push(GpuEarthlike::new(*planet, *earthlike));
             }
         }
-        println!("{:?}", earthlikes)
     }
 
     {
@@ -243,7 +242,6 @@ pub(crate) fn system_extract_pipeline_assets(
                 clouds.data.push(GpuCloudCover::new(*planet, *cloud));
             }
         }
-        println!("{:?}", clouds)
     }
 }
 
