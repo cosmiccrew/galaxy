@@ -28,8 +28,8 @@ jobs:
       fail-fast: false
       matrix:
         config:
-          - { target: "x86_64-unknown-linux-gnu" }
-          - { target: "wasm32-unknown-unknown" }
+          - { target: "x86_64-unknown-linux-gnu", name: "linux" }
+          - { target: "wasm32-unknown-unknown", name: "wasm" }
     steps:
       - name: Checkout source
         uses: actions/checkout@v3
@@ -40,7 +40,7 @@ jobs:
       - name: Cache rust dependencies
         uses: Swatinem/rust-cache@v2
         with:
-          shared-key: ci
+          shared-key: ci-${{ matrix.config.name }}
           prefix-key: v2 #increment this to bust the cache if needed
           save-if: ${{ github.event_name == 'push' }}
 
