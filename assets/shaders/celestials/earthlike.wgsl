@@ -1,24 +1,24 @@
 // The time since startup data is in the globals binding which is part of the mesh_view_bindings import
-// #import bevy_pbr::mesh_view_bindings globals
 #import bevy_sprite::mesh2d_vertex_output  MeshVertexOutput
 #import bevy_pbr::utils  random1D, PI
 #import bevy_sprite::mesh2d_view_bindings  globals
-// #import bevy_sprite::mesh2d_bindings        mesh
-// #import bevy_sprite::mesh2d_functions       mesh2d_position_local_to_clip
-
-struct Colour {
-	colour: vec4<f32>
-}
-
+#import galaxy::shader_types CelestialSettings, Colour
 
 @group(1) @binding(0)
-var<uniform> pixels: f32;
+var<uniform> settings: CelestialSettings;
 @group(1) @binding(1)
-var<uniform> seed: f32;
+var<uniform> land_colours: array<Colour, 4>;
 @group(1) @binding(2)
-var<uniform> rotation: f32;
-@group(1) @binding(3)
-var<uniform> colours: array<Colour, 4>;
+var<uniform> river_colours: array<Colour, 2>;
+
+// @group(1) @binding(0)
+// var<uniform> settings.pixels: f32;
+// @group(1) @binding(1)
+// var<uniform> settings.seed: f32;
+// @group(1) @binding(2)
+// var<uniform> settings.rotation: f32;
+// @group(1) @binding(3)
+// var<uniform> colours: array<Colour, 4>;
 
 const OCTAVES = 6; // 0 -> 20
 const size: f32 = 4.6;
@@ -28,12 +28,12 @@ const light_border_1: f32 = 0.287; // 0. -> 1.
 const light_border_2: f32 = 0.476; // 0. -> 1.
 const should_dither: bool = true; // bool
 const light_origin: vec2<f32> = vec2<f32>(0.5, 0.5); // 0. -> 1.
-// const rotation: f32 = 0.; // 0. -> PI*2
-const time_speed = 0.5;
+// const settings.rotation: f32 = 0.; // 0. -> PI*2
+// const settings.time_speed = 0.5;
 // const colours_length = 4;
 
-const river_colour = Colour(vec4<f32>(0.309804, 0.643137, 0.721569, 1.));
-const river_colour_dark = Colour(vec4<f32>(0.25098, 0.286275, 0.45098, 1.));
+// const river_colour = Colour(vec4<f32>(0.309804, 0.643137, 0.721569, 1.));
+// const river_colour_dark = Colour(vec4<f32>(0.25098, 0.286275, 0.45098, 1.));
 
 fn random2D(coord: vec2<f32>) -> f32 {
 	// land has to be tiled (or the contintents on this planet have to be changing very fast)
@@ -41,7 +41,7 @@ fn random2D(coord: vec2<f32>) -> f32 {
 	// it would probably be better to only allow integer sizes
 	// multiply by vec2(2,1) to simulate planet having another side
 	let coord = coord % (vec2(2.0,1.0) * round(size));
-	return fract(sin(dot(coord.xy ,vec2(12.9898,78.233))) * 15.5453 * seed);
+	return fract(sin(dot(coord.xy ,vec2(12.9898,78.233))) * 15.5453 * settings.seed);
 }
 
 fn noise(coord: vec2<f32>) -> f32 {
@@ -79,7 +79,7 @@ fn fbm(coord: vec2<f32>) -> f32 {
 }
 
 fn dither(uv1: vec2<f32>, uv2: vec2<f32>) -> bool {
-	return (uv1.x+uv2.y) % (2. / pixels) <= 1. / pixels;
+	return (uv1.x+uv2.y) % (2. / settings.pixels) <= 1. / settings.pixels;
 }
 
 fn spherify(uv: vec2<f32>) -> vec2<f32> {
@@ -96,7 +96,9 @@ fn fragment(
     mesh: MeshVertexOutput,
 ) -> @location(0) vec4<f32> {
 
-    var uv = floor(mesh.uv * pixels) / pixels;
+	
+
+    var uv = floor(mesh.uv * settings.pixels) / settings.pixels;
 
     let dith = dither(uv, mesh.uv);
 
@@ -106,10 +108,10 @@ fn fragment(
 
     var d_light = distance(uv, light_origin);
 
-	uv = rotate(uv, rotation);
+	uv = rotate(uv, settings.rotation);
 
     //replace time with globals.time
-    let base_fbm_uv = uv * size + vec2(globals.time * time_speed, 0.);
+    let base_fbm_uv = uv * size + vec2(globals.time * settings.time_speed, 0.);
 
     var fbm1: f32 = fbm(base_fbm_uv);
     var fbm2: f32 = fbm(base_fbm_uv - light_origin * fbm1);
@@ -121,7 +123,7 @@ fn fragment(
 	river_fbm = step(river_cutoff, river_fbm);
 	
 	// size of edge in which colors should be dithered
-	let dither_border: f32 = (1.0 / pixels) * dither_size;
+	let dither_border: f32 = (1.0 / settings.pixels) * dither_size;
 
     // lots of magic numbers here
 	// you can mess with them, it changes the color distribution
@@ -145,24 +147,22 @@ fn fragment(
 		}
 	}
 	
-	// if arrayLength( &colours ) != 4;
-
 	// increase contrast on d_light
 	d_light = pow(d_light, 2.) * 0.4;
-	var colour: Colour = colours[3];
+	var colour: Colour = land_colours[3];
 	if (fbm4 + d_light < fbm1*1.5) {
-		colour = colours[2];
+		colour = land_colours[2];
 	}
 	if (fbm3 + d_light < fbm1 * 1.) {
-		colour = colours[1];
+		colour = land_colours[1];
 	}
 	if (fbm2 + d_light < fbm1) {
-		colour = colours[0];
+		colour = land_colours[0];
 	}
 	if (river_fbm < fbm1 * 0.5) {
-		colour = river_colour_dark;
+		colour = river_colours[1];
 		if (fbm4 + d_light < fbm1 * 1.5) {
-			colour = river_colour;
+			colour = river_colours[0];
 		}
 	}
 

@@ -19,8 +19,7 @@ impl Plugin for GalaxyDebugPlugin {
         {
             use bevy_editor_pls::prelude::*;
 
-            app.register_type::<GlobalPlanetSettings>()
-                .register_type::<PlanetBundle<Earthlike>>()
+            app.register_type::<CelestialBundle<Earthlike>>()
                 .register_type::<CloudCover>();
 
             app.add_plugins((

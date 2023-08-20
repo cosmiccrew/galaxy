@@ -26,30 +26,31 @@ fn setup(
     mut commands: Commands,
     mut meshes: ResMut<Assets<Mesh>>,
     assets: Res<MyAssets>,
-    // mut materials: ResMut<Assets<EarthlikeMaterial>>,
+    mut earthlike_materials: ResMut<Assets<Earthlike>>,
+    mut cloud_cover_materials: ResMut<Assets<CloudCover>>,
 ) {
     let bean_check = check_if_string_eq_bean("bean");
     if !bean_check {
         println!("no bean :(");
     }
 
-    commands.spawn((Planet::default(), Name::from("test")));
-
     commands.spawn((
-        PlanetBundle {
-            planet: Planet {
-                seed: 87_654.68,
-                pixels: 100,
-                rotation: 90f32.to_radians(),
-                radius: 100.,
-                time_speed: 0.2,
-            },
-
+        CelestialBundle {
             transform: Transform {
-                translation: Vec3::new(100., 100., 0.),
+                translation: Vec3::new(300., 200., 0.),
                 ..default()
             },
-            planet_shader: Earthlike {
+            mesh: meshes
+                .add(shape::Quad::new(Vec2::new(200., 200.)).into())
+                .into(),
+            celestial_shader: earthlike_materials.add(Earthlike {
+                celestial: CelestialSettings {
+                    seed: 87_654.68,
+                    pixels: 100.,
+                    rotation: 90f32.to_radians(),
+                    radius: 100.,
+                    time_speed: 0.2,
+                },
                 land_colours: [
                     Color::rgb(0.388235, 0.670588, 0.247059),
                     Color::rgb(0.231373, 0.490196, 0.309804),
@@ -61,37 +62,47 @@ fn setup(
                     Color::rgb(0.156863, 0.207843, 0.25098),
                 ],
                 ..default()
-            },
+            }),
             ..default()
         },
-        CloudCover {
-            cloud_cover: 0.4,
-            ..default()
-        },
+        // cloud_cover_materials.add(CloudCover {
+        //     cloud_cover: 0.4,
+        //     ..default()
+        // }),
     ));
 
-    commands.spawn(PlanetBundle {
-        planet_shader: Earthlike::default(),
+    commands.spawn(CelestialBundle {
+        transform: Transform::from_xyz(-450., -100., 0.),
+        mesh: meshes
+            .add(shape::Quad::new(Vec2::new(300., 300.)).into())
+            .into(),
+        celestial_shader: earthlike_materials.add(Earthlike::default()),
         ..default()
     });
 
     commands.spawn((
-        PlanetBundle {
-            planet: Planet {
-                seed: 4.68,
-                ..default()
-            },
+        CelestialBundle {
             transform: Transform {
                 translation: Vec3::new(-45., 10., 0.),
                 ..default()
             },
-            planet_shader: Earthlike::default(),
+            mesh: meshes
+                .add(shape::Quad::new(Vec2::new(500., 500.)).into())
+                .into(),
+            celestial_shader: earthlike_materials.add(Earthlike {
+                celestial: CelestialSettings {
+                    seed: 4.68,
+                    ..default()
+                },
+
+                ..default()
+            }),
             ..default()
         },
-        CloudCover {
-            cloud_cover: 0.2,
-            ..default()
-        },
+        // cloud_cover_materials.add(CloudCover {
+        //     cloud_cover: 0.2,
+        //     ..default()
+        // }),
     ));
 }
 

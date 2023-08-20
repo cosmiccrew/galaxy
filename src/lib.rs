@@ -25,7 +25,7 @@ pub mod prelude {
     pub use crate::loading::*;
     pub use crate::player::*;
     pub use crate::polar::*;
-    pub use crate::shaders::*;
+    pub use crate::shaders::{*,consts::*,earthlike::*,cloud_cover::*};
     pub use crate::state::*;
     pub use crate::utils::*;
 }

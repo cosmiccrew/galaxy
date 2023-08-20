@@ -7,18 +7,22 @@ use bevy::{
     sprite::Material2d,
 };
 
-#[derive(Debug, Component, Reflect, Clone, Copy, ShaderType, AsBindGroup)]
+#[derive(Debug, Component, Reflect, Clone, Copy, ShaderType, AsBindGroup, TypeUuid)]
 #[reflect(Component)]
+#[uuid = "aed9b1b9-229e-402a-b5a0-14d219af5d6d"]
 pub struct Earthlike {
     #[uniform(0)]
-    pub land_colours: [Color; 4],
+    pub celestial: CelestialSettings,
     #[uniform(1)]
+    pub land_colours: [Color; 4],
+    #[uniform(2)]
     pub river_colours: [Color; 2],
 }
 
 impl Default for Earthlike {
     fn default() -> Self {
         Self {
+            celestial: Default::default(),
             land_colours: [
                 Color::rgb(0.388235, 0.670588, 0.247059),
                 Color::rgb(0.231373, 0.490196, 0.309804),
@@ -33,10 +37,10 @@ impl Default for Earthlike {
     }
 }
 
-// impl From<Earthlike> for PlanetType {
-//     fn from(value: Earthlike) -> Self {
-//         PlanetType::Earthlike(value)
-//     }
-// }
+impl Material2d for Earthlike {
+    fn fragment_shader() -> ShaderRef {
+        "shaderS/celestials/earthlike.wgsl".into()
+    }
+}
 
 impl PlanetShader for Earthlike {}
