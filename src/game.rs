@@ -14,8 +14,7 @@ impl Plugin for GalaxyGamePlugin {
         app.add_systems(OnEnter(EngineState::InGame), setup)
             .add_systems(
                 Update,
-                (add_loaded_component/*,planet_rotation,
-                planet_randomise */)
+                (add_loaded_component, planet_rotation, planet_randomise)
                     .run_if(in_state(EngineState::InGame)),
             )
             .add_systems(OnExit(EngineState::InGame), teardown::<Loaded>);
@@ -106,57 +105,45 @@ fn setup(
     ));
 }
 
-// fn planet_rotation(
-//     mut commands: Commands,
-//     // mut query: Query<&mut Transform, With<Planet>>,
-//     mut query: Query<&mut Handle<EarthlikeMaterial>, With<Planet>>,
-//     mut materials: ResMut<Assets<EarthlikeMaterial>>,
-//     keyboard_input: Res<Input<KeyCode>>,
-//     time: Res<Time>,
-// ) {
-//     let planet_mat: &Handle<EarthlikeMaterial> = query.single();
+fn planet_rotation(
+    mut commands: Commands,
+    // mut query: Query<&mut Transform, With<Planet>>,
+    mut query: Query<&mut Handle<Earthlike>, With<Celestial>>,
+    mut materials: ResMut<Assets<Earthlike>>,
+    keyboard_input: Res<Input<KeyCode>>,
+    time: Res<Time>,
+) {
+    for earthlike_handle in query.iter() {
+        let mut earthlike_material = materials.get_mut(earthlike_handle).unwrap();
 
-//     let mut planet_mat = materials.get_mut(planet_mat).unwrap();
+        let mut direction = 0f32;
 
-//     let mut direction = 0f32;
+        if keyboard_input.pressed(KeyCode::Left) {
+            direction += 1.;
+        }
 
-//     if keyboard_input.pressed(KeyCode::Left) {
-//         direction += 1.;
-//     }
+        if keyboard_input.pressed(KeyCode::Right) {
+            direction -= 1.;
+        }
 
-//     if keyboard_input.pressed(KeyCode::Right) {
-//         direction -= 1.;
-//     }
+        earthlike_material.celestial.rotation += (time.delta_seconds() * FRAC_PI_2 * direction);
+    }
+}
 
-//     planet_mat.rotation += (time.delta_seconds() * FRAC_PI_2 * direction);
-// }
+fn planet_randomise(
+    mut commands: Commands,
+    mut query: Query<&mut Handle<Earthlike>, With<Celestial>>,
+    keyboard_input: Res<Input<KeyCode>>,
+    mut materials: ResMut<Assets<Earthlike>>,
+) {
+    for earthlike_handle in query.iter() {
+        let mut earthlike_material = materials.get_mut(earthlike_handle).unwrap();
 
-// fn planet_randomise(
-//     mut commands: Commands,
-//     mut query: Query<&mut Handle<EarthlikeMaterial>, With<Planet>>,
-//     keyboard_input: Res<Input<KeyCode>>,
-//     mut materials: ResMut<Assets<EarthlikeMaterial>>,
-// ) {
-//     let planet_mat: &Handle<EarthlikeMaterial> = query.single();
-
-//     let mut planet_mat = materials.get_mut(planet_mat).unwrap();
-
-//     if keyboard_input.just_pressed(KeyCode::Space) {
-//         planet_mat.randomise();
-//     }
-
-//     let mut direction = 0f32;
-
-//     if keyboard_input.pressed(KeyCode::Up) {
-//         direction += 1.;
-//     }
-
-//     if keyboard_input.pressed(KeyCode::Down) {
-//         direction -= 1.;
-//     }
-
-//     planet_mat.pixels += direction;
-// }
+        if keyboard_input.just_pressed(KeyCode::Space) {
+            earthlike_material.randomise();
+        }
+    }
+}
 
 fn add_loaded_component(
     mut commands: Commands,

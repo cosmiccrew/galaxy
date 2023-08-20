@@ -52,7 +52,7 @@ pub struct CelestialSettings {
     /// The random seed that decides how this celestial should be generated - this is used to generate a near inifinite amount of differing celestials easily.
     pub seed: f32,
     /// how many pixels across the celestial should be
-    /// 
+    ///
     /// despite this seeming logical to be of type u32 and not f32, for the sake of simplifying the shader this is an f32.
     pub pixels: f32,
     /// a rotation in radians - therefore should be within the range: 0 -> TAU (TAU is 2 PI).

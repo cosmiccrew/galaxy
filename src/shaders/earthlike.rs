@@ -19,6 +19,21 @@ pub struct Earthlike {
     pub river_colours: [Color; 2],
 }
 
+impl Earthlike {
+    pub(crate) fn randomise(&mut self) {
+        self.randomise_rotation();
+        self.randomise_seed();
+    }
+
+    pub(crate) fn randomise_seed(&mut self) {
+        self.celestial.seed = rand::thread_rng().gen();
+    }
+
+    pub(crate) fn randomise_rotation(&mut self) {
+        self.celestial.rotation = rand::thread_rng().gen_range(0f32..TAU);
+    }
+}
+
 impl Default for Earthlike {
     fn default() -> Self {
         Self {
