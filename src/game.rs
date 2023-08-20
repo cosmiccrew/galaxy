@@ -14,7 +14,12 @@ impl Plugin for GalaxyGamePlugin {
         app.add_systems(OnEnter(EngineState::InGame), setup)
             .add_systems(
                 Update,
-                (planet_rotation, add_loaded_component, planet_randomise)
+                (
+                    add_loaded_component,
+                    planet_rotation,
+                    planet_randomise,
+                    planet_change_pixels,
+                )
                     .run_if(in_state(EngineState::InGame)),
             )
             .add_systems(OnExit(EngineState::InGame), teardown::<Loaded>);
@@ -25,116 +30,145 @@ fn setup(
     mut commands: Commands,
     mut meshes: ResMut<Assets<Mesh>>,
     assets: Res<MyAssets>,
-    mut materials: ResMut<Assets<EarthlikeMaterial>>,
+    mut earthlike_materials: ResMut<Assets<Earthlike>>,
+    mut cloud_cover_materials: ResMut<Assets<CloudCover>>,
 ) {
     let bean_check = check_if_string_eq_bean("bean");
     if !bean_check {
         println!("no bean :(");
     }
 
-    // commands.spawn((
-    //     MaterialMesh2dBundle {
-    //         // mesh: meshes
-    //         //     .add(shape::Quad::new(Vec2::new(200., 200.)).into())
-    //         //     .into(),
-    //         material: materials.add(EarthlikePlanetMaterial {
-    //             color: Color::BLUE,
-    //             color_texture: assets.dummy.clone(),
-    //         }),
-    //         ..default()
-    //     },
-    //     Planet,
-    // ));
-
-    // let _b = PlanetConfig {
-    //         planet_type: PlanetType::Earthlike,
-    //         seed: 100,
-    //         ..Default::default()
-    //     };
-
-    // commands.spawn(PlanetBundle {
-    //     material_mesh_2d_bundle: MaterialMesh2dBundle {
-    //         mesh: (),
-    //         material: materials.add(asset),
-    //         ..default()
-    //     },
-    //     ..default()
-    // });
-
     commands.spawn((
-        MaterialMesh2dBundle {
+        CelestialBundle {
+            transform: Transform {
+                translation: Vec3::new(350., 200., 0.),
+                ..default()
+            },
             mesh: meshes
-                .add(shape::Quad::new(Vec2::new(500., 500.)).into())
+                .add(shape::Quad::new(Vec2::new(200., 200.)).into())
                 .into(),
-            material: materials.add(EarthlikeMaterial {
-                pixels: 100.,
-                rotation: rand::thread_rng().gen_range(0f32..TAU),
+            celestial_shader: earthlike_materials.add(Earthlike {
+                celestial: CelestialSettings {
+                    seed: 87_654.68,
+                    pixels: 100.,
+                    rotation: 90f32.to_radians(),
+                    radius: 100.,
+                    time_speed: 0.2,
+                },
+                land_colours: [
+                    Color::rgb(0.388235, 0.670588, 0.247059),
+                    Color::rgb(0.231373, 0.490196, 0.309804),
+                    Color::rgb(0.184314, 0.341176, 0.32549),
+                    Color::rgb(0.156863, 0.207843, 0.25098),
+                ],
+                river_colours: [
+                    Color::rgb(0.184314, 0.341176, 0.32549),
+                    Color::rgb(0.156863, 0.207843, 0.25098),
+                ],
                 ..default()
             }),
             ..default()
         },
-        Planet,
+        // cloud_cover_materials.add(CloudCover {
+        //     cloud_cover: 0.4,
+        //     ..default()
+        // }),
     ));
 
+    commands.spawn(CelestialBundle {
+        transform: Transform::from_xyz(-450., -100., 0.),
+        mesh: meshes
+            .add(shape::Quad::new(Vec2::new(300., 300.)).into())
+            .into(),
+        celestial_shader: earthlike_materials.add(Earthlike::default()),
+        ..default()
+    });
+
     commands.spawn((
-        Planet,
-        PlanetSettings {
-            planet_type: PlanetType::Earthlike,
+        CelestialBundle {
+            mesh: meshes
+                .add(shape::Quad::new(Vec2::new(500., 500.)).into())
+                .into(),
+            celestial_shader: earthlike_materials.add(Earthlike {
+                celestial: CelestialSettings {
+                    seed: 4.68,
+                    ..default()
+                },
+
+                ..default()
+            }),
             ..default()
         },
+        // cloud_cover_materials.add(CloudCover {
+        //     cloud_cover: 0.2,
+        //     ..default()
+        // }),
     ));
 }
 
 fn planet_rotation(
     mut commands: Commands,
     // mut query: Query<&mut Transform, With<Planet>>,
-    mut query: Query<&mut Handle<EarthlikeMaterial>, With<Planet>>,
-    mut materials: ResMut<Assets<EarthlikeMaterial>>,
+    mut query: Query<&mut Handle<Earthlike>, With<Celestial>>,
+    mut materials: ResMut<Assets<Earthlike>>,
     keyboard_input: Res<Input<KeyCode>>,
     time: Res<Time>,
 ) {
-    let planet_mat: &Handle<EarthlikeMaterial> = query.single();
+    for earthlike_handle in query.iter() {
+        let mut earthlike_material = materials.get_mut(earthlike_handle).unwrap();
 
-    let mut planet_mat = materials.get_mut(planet_mat).unwrap();
+        let mut direction = 0f32;
 
-    let mut direction = 0f32;
+        if keyboard_input.pressed(KeyCode::Left) {
+            direction += 1.;
+        }
 
-    if keyboard_input.pressed(KeyCode::Left) {
-        direction += 1.;
+        if keyboard_input.pressed(KeyCode::Right) {
+            direction -= 1.;
+        }
+
+        earthlike_material.celestial.rotation += (time.delta_seconds() * FRAC_PI_2 * direction);
     }
-
-    if keyboard_input.pressed(KeyCode::Right) {
-        direction -= 1.;
-    }
-
-    planet_mat.rotation += (time.delta_seconds() * FRAC_PI_2 * direction);
 }
 
 fn planet_randomise(
     mut commands: Commands,
-    mut query: Query<&mut Handle<EarthlikeMaterial>, With<Planet>>,
+    mut query: Query<&mut Handle<Earthlike>, With<Celestial>>,
     keyboard_input: Res<Input<KeyCode>>,
-    mut materials: ResMut<Assets<EarthlikeMaterial>>,
+    mut materials: ResMut<Assets<Earthlike>>,
 ) {
-    let planet_mat: &Handle<EarthlikeMaterial> = query.single();
+    for earthlike_handle in query.iter() {
+        let mut earthlike_material = materials.get_mut(earthlike_handle).unwrap();
 
-    let mut planet_mat = materials.get_mut(planet_mat).unwrap();
-
-    if keyboard_input.just_pressed(KeyCode::Space) {
-        planet_mat.randomise();
+        if keyboard_input.just_pressed(KeyCode::Space) {
+            earthlike_material.randomise();
+        }
     }
+}
 
-    let mut direction = 0f32;
+fn planet_change_pixels(
+    mut commands: Commands,
+    // mut query: Query<&mut Transform, With<Planet>>,
+    mut query: Query<&mut Handle<Earthlike>, With<Celestial>>,
+    mut materials: ResMut<Assets<Earthlike>>,
+    keyboard_input: Res<Input<KeyCode>>,
+    time: Res<Time>,
+) {
+    for earthlike_handle in query.iter() {
+        let mut earthlike_material = materials.get_mut(earthlike_handle).unwrap();
 
-    if keyboard_input.pressed(KeyCode::Up) {
-        direction += 1.;
+        let mut direction = 0f32;
+
+        if keyboard_input.pressed(KeyCode::Up) {
+            direction += 1.;
+        }
+
+        if keyboard_input.pressed(KeyCode::Down) {
+            direction -= 1.;
+        }
+
+        earthlike_material.celestial.pixels += direction;
     }
-
-    if keyboard_input.pressed(KeyCode::Down) {
-        direction -= 1.;
-    }
-
-    planet_mat.pixels += direction;
 }
 
 fn add_loaded_component(

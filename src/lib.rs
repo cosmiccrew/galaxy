@@ -1,5 +1,5 @@
 #![allow(unused)]
-#![allow(clippy::type_complexity)]
+#![allow(clippy::type_complexity, clippy::needless_update)]
 #![warn(dead_code)]
 
 pub mod debug;
@@ -25,7 +25,7 @@ pub mod prelude {
     pub use crate::loading::*;
     pub use crate::player::*;
     pub use crate::polar::*;
-    pub use crate::shaders::*;
+    pub use crate::shaders::{cloud_cover::*, consts::*, earthlike::*, *};
     pub use crate::state::*;
     pub use crate::utils::*;
 }
