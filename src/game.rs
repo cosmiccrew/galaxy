@@ -14,7 +14,12 @@ impl Plugin for GalaxyGamePlugin {
         app.add_systems(OnEnter(EngineState::InGame), setup)
             .add_systems(
                 Update,
-                (add_loaded_component, planet_rotation, planet_randomise)
+                (
+                    add_loaded_component,
+                    planet_rotation,
+                    planet_randomise,
+                    planet_change_pixels,
+                )
                     .run_if(in_state(EngineState::InGame)),
             )
             .add_systems(OnExit(EngineState::InGame), teardown::<Loaded>);
@@ -36,7 +41,7 @@ fn setup(
     commands.spawn((
         CelestialBundle {
             transform: Transform {
-                translation: Vec3::new(300., 200., 0.),
+                translation: Vec3::new(350., 200., 0.),
                 ..default()
             },
             mesh: meshes
@@ -81,10 +86,6 @@ fn setup(
 
     commands.spawn((
         CelestialBundle {
-            transform: Transform {
-                translation: Vec3::new(-45., 10., 0.),
-                ..default()
-            },
             mesh: meshes
                 .add(shape::Quad::new(Vec2::new(500., 500.)).into())
                 .into(),
@@ -142,6 +143,31 @@ fn planet_randomise(
         if keyboard_input.just_pressed(KeyCode::Space) {
             earthlike_material.randomise();
         }
+    }
+}
+
+fn planet_change_pixels(
+    mut commands: Commands,
+    // mut query: Query<&mut Transform, With<Planet>>,
+    mut query: Query<&mut Handle<Earthlike>, With<Celestial>>,
+    mut materials: ResMut<Assets<Earthlike>>,
+    keyboard_input: Res<Input<KeyCode>>,
+    time: Res<Time>,
+) {
+    for earthlike_handle in query.iter() {
+        let mut earthlike_material = materials.get_mut(earthlike_handle).unwrap();
+
+        let mut direction = 0f32;
+
+        if keyboard_input.pressed(KeyCode::Up) {
+            direction += 1.;
+        }
+
+        if keyboard_input.pressed(KeyCode::Down) {
+            direction -= 1.;
+        }
+
+        earthlike_material.celestial.pixels += direction;
     }
 }
 
