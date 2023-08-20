@@ -85,7 +85,9 @@ impl Plugin for GalaxyShaderPlugin {
 
     fn finish(&self, app: &mut App) {
         let render_app = app.sub_app_mut(RenderApp);
-        render_app.init_resource::<PlanetPassPipelineAssets>();
+        render_app
+            .init_resource::<PlanetPassPipeline>()
+            .init_resource::<PlanetPassPipelineAssets>();
     }
 }
 

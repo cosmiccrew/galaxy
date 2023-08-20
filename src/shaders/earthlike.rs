@@ -7,10 +7,12 @@ use bevy::{
     sprite::Material2d,
 };
 
-#[derive(Debug, Component, Reflect, Clone, Copy, ShaderType)]
+#[derive(Debug, Component, Reflect, Clone, Copy, ShaderType, AsBindGroup)]
 #[reflect(Component)]
 pub struct Earthlike {
+    #[uniform(0)]
     pub land_colours: [Color; 4],
+    #[uniform(1)]
     pub river_colours: [Color; 2],
 }
 
