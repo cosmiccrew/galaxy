@@ -65,10 +65,8 @@ mod test {
 
     use crate::prelude::*;
 
-
     #[test]
     fn test_earthlike_randomise() {
-        
         let first = Earthlike::default();
 
         let mut second = first;
@@ -80,12 +78,10 @@ mod test {
 
         //now that second is randomised, it shouldn't have the same values as first!
         assert_ne!(first, second);
-
     }
 
     #[test]
     fn test_earthlike_randomise_seed() {
-        
         let first = Earthlike::default();
 
         let mut second = first;
@@ -97,12 +93,10 @@ mod test {
 
         //now that second is randomised, it shouldn't have the same values as first!
         assert_ne!(first.celestial.seed, second.celestial.seed);
-
     }
 
     #[test]
     fn test_earthlike_randomise_rotation() {
-        
         let first = Earthlike::default();
 
         let mut second = first;
@@ -114,7 +108,5 @@ mod test {
 
         //now that second is randomised, it shouldn't have the same values as first!
         assert_ne!(first.celestial.rotation, second.celestial.rotation);
-
     }
-
 }
