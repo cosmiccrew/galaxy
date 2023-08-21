@@ -19,15 +19,7 @@ pub struct Earthlike {
     pub river_colours: [Color; 2],
 }
 
-impl CelestialShader for Earthlike {
-    fn randomise_seed(&mut self) {
-        self.celestial.seed = rand::thread_rng().gen();
-    }
-
-    fn randomise_rotation(&mut self) {
-        self.celestial.rotation = rand::thread_rng().gen_range(0f32..TAU);
-    }
-}
+add_celestial_shader_impl!(Earthlike);
 
 impl Default for Earthlike {
     fn default() -> Self {
@@ -61,7 +53,7 @@ mod test {
     use crate::prelude::*;
 
     #[test]
-    fn test_earthlike_material2d_impl() {
+    fn test_material2d_impl() {
         let shader_ref = Earthlike::fragment_shader();
 
         let ShaderRef::Path(asset_path) = shader_ref else {
@@ -77,23 +69,8 @@ mod test {
     }
 
     #[test]
-    fn test_earthlike_randomise() {
-        let first = Earthlike::default();
-
-        let mut second = first;
-
-        //they should be equal here
-        assert_eq!(first, second);
-
-        second.randomise();
-
-        //now that second is randomised, it shouldn't have the same values as first!
-        assert_ne!(first, second);
-    }
-
-    #[test]
-    fn test_earthlike_randomise_seed() {
-        let first = Earthlike::default();
+    fn test_randomise() {
+        let first = CloudCover::default();
 
         let mut second = first;
 
@@ -102,22 +79,34 @@ mod test {
 
         second.randomise_seed();
 
-        //now that second is randomised, it shouldn't have the same values as first!
         assert_ne!(first.celestial.seed, second.celestial.seed);
-    }
-
-    #[test]
-    fn test_earthlike_randomise_rotation() {
-        let first = Earthlike::default();
-
-        let mut second = first;
-
-        //they should be equal here
-        assert_eq!(first, second);
 
         second.randomise_rotation();
 
-        //now that second is randomised, it shouldn't have the same values as first!
         assert_ne!(first.celestial.rotation, second.celestial.rotation);
+
+        //reset
+        second = first;
+
+        second.randomise();
+
+        assert_ne!(first, second);
+    }
+
+    #[test]
+    fn test_celestial_impls() {
+        let mut subject = Earthlike::default();
+
+        let value = 123.456;
+
+        subject.set_seed(value);
+        subject.set_rotation(value);
+        subject.set_pixels(value);
+        subject.set_time_speed(value);
+
+        assert_eq!(subject.celestial.seed, value);
+        assert_eq!(subject.celestial.rotation, value);
+        assert_eq!(subject.celestial.pixels, value);
+        assert_eq!(subject.celestial.time_speed, value);
     }
 }
