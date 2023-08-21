@@ -28,7 +28,7 @@ jobs:
 
       - name: Install Rust
         run: |
-          rustup override set nightly
+          rustup override set nightly-2023-08-20
           rustup component add llvm-tools-preview --toolchain nightly
 
       - name: Cache rust dependencies
