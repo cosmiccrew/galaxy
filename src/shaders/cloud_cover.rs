@@ -34,4 +34,4 @@ impl Material2d for CloudCover {
     }
 }
 
-impl PlanetShader for CloudCover {}
+impl CelestialShader for CloudCover {}

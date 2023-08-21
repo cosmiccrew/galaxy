@@ -79,7 +79,7 @@ impl Default for CelestialSettings {
     }
 }
 
-pub trait PlanetShader: ShaderType + Component + AsBindGroup + Material2d {
+pub trait CelestialShader: ShaderType + Component + AsBindGroup + Material2d {
     fn randomise(&mut self) {
         self.randomise_seed();
         self.randomise_rotation();
@@ -101,7 +101,7 @@ pub trait PlanetShader: ShaderType + Component + AsBindGroup + Material2d {
 }
 
 #[derive(Bundle, Reflect, Default, Clone)]
-pub struct CelestialBundle<P: PlanetShader> {
+pub struct CelestialBundle<P: CelestialShader> {
     pub celestial: Celestial,
     pub celestial_shader: Handle<P>,
     pub mesh: Mesh2dHandle,
