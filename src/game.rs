@@ -53,7 +53,7 @@ fn setup(
                     pixels: 100.,
                     rotation: 90f32.to_radians(),
                     radius: 100.,
-                    time_speed: 0.2,
+                    time_speed: 10.,
                 },
                 land_colours: [
                     Color::rgb(0.388235, 0.670588, 0.247059),

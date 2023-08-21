@@ -79,7 +79,26 @@ impl Default for CelestialSettings {
     }
 }
 
-pub trait PlanetShader: ShaderType + Component + AsBindGroup + Material2d {}
+pub trait PlanetShader: ShaderType + Component + AsBindGroup + Material2d {
+    fn randomise(&mut self) {
+        self.randomise_seed();
+        self.randomise_rotation();
+    }
+    fn randomise_seed(&mut self) {
+        self.set_seed(rand::thread_rng().gen());
+    }
+    fn randomise_rotation(&mut self) {
+        self.set_rotation(rand::thread_rng().gen_range(0f32..TAU));
+    }
+
+    fn set_seed(&mut self, seed: f32) {}
+
+    fn set_rotation(&mut self, rotation: f32) {}
+
+    fn set_pixels(&mut self, pixels: f32) {}
+
+    fn set_time_speed(&mut self, time_speed: f32) {}
+}
 
 #[derive(Bundle, Reflect, Default, Clone)]
 pub struct CelestialBundle<P: PlanetShader> {

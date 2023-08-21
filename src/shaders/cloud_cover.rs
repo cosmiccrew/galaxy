@@ -30,7 +30,7 @@ impl Default for CloudCover {
 
 impl Material2d for CloudCover {
     fn fragment_shader() -> ShaderRef {
-        "shaderS/celestials/generic/cloud_cover.wgsl".into()
+        "shaders/celestials/generic/cloud_cover.wgsl".into()
     }
 }
 

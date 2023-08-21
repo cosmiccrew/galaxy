@@ -19,17 +19,12 @@ pub struct Earthlike {
     pub river_colours: [Color; 2],
 }
 
-impl Earthlike {
-    pub(crate) fn randomise(&mut self) {
-        self.randomise_rotation();
-        self.randomise_seed();
-    }
-
-    pub(crate) fn randomise_seed(&mut self) {
+impl PlanetShader for Earthlike {
+    fn randomise_seed(&mut self) {
         self.celestial.seed = rand::thread_rng().gen();
     }
 
-    pub(crate) fn randomise_rotation(&mut self) {
+    fn randomise_rotation(&mut self) {
         self.celestial.rotation = rand::thread_rng().gen_range(0f32..TAU);
     }
 }
@@ -58,12 +53,28 @@ impl Material2d for Earthlike {
     }
 }
 
-impl PlanetShader for Earthlike {}
-
 #[cfg(test)]
 mod test {
 
+    use bevy::{asset::AssetPath, render::render_resource::ShaderRef, sprite::Material2d};
+
     use crate::prelude::*;
+
+    #[test]
+    fn test_earthlike_material2d_impl() {
+        let shader_ref = Earthlike::fragment_shader();
+
+        let ShaderRef::Path(asset_path) = shader_ref else {
+
+            panic!("\"ShaderRef\" from \"Earthlike::fragment_shader()\" isn't of enum variant \"ShaderRef::Path\"");
+
+        };
+
+        assert_eq!(
+            asset_path,
+            AssetPath::from("shaders/celestials/earthlike.wgsl")
+        );
+    }
 
     #[test]
     fn test_earthlike_randomise() {
