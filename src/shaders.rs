@@ -46,7 +46,7 @@ impl Plugin for GalaxyShaderPlugin {
 pub struct Celestial;
 
 /// Settings that each planet has, no matter what unique type the planet is (e.g. galaxies, earthlikes and fireworlds all have these), but that are individual (two differing )
-#[derive(Component, Reflect, Debug, PartialEq, Clone, Copy, ShaderType, AsBindGroup)]
+#[derive(Component, Reflect, Debug, PartialEq, Clone, Copy, ShaderType)]
 #[reflect(Component)]
 pub struct CelestialSettings {
     /// The random seed that decides how this celestial should be generated - this is used to generate a near inifinite amount of differing celestials easily.

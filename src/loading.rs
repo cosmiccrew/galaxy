@@ -49,7 +49,7 @@ impl Plugin for GalaxyLoadingPlugin {
         .add_systems(OnEnter(EngineState::LoadingAssets), splash_setup)
         .add_systems(
             Update,
-            (tick_timer, rotate_loading_icon).run_if(in_state(EngineState::LoadingAssets)),
+            (tick_splash_timer, rotate_loading_icon).run_if(in_state(EngineState::LoadingAssets)),
         )
         // When exiting the state, despawn everything that was spawned for this screen
         .add_systems(
@@ -123,6 +123,34 @@ fn rotate_loading_icon(commands: Commands, mut query: Query<&mut Transform, With
 }
 
 // tick the `SplashTimer` timer
-fn tick_timer(time: Res<Time>, mut timer: ResMut<SplashTimer>) {
+fn tick_splash_timer(time: Res<Time>, mut timer: ResMut<SplashTimer>) {
     timer.tick(time.delta());
+}
+
+#[cfg(test)]
+mod tests {
+
+    #[test]
+    fn test_rotate_loading_icon() {
+        use crate::{
+            loading::{rotate_loading_icon, splash_setup, LoadingIcon},
+            prelude::*,
+        };
+
+        let mut app = App::new();
+
+        app.add_systems(Update, rotate_loading_icon);
+
+        let loading_icon = app
+            .world
+            .spawn((TransformBundle::default(), LoadingIcon))
+            .id();
+
+        app.update();
+
+        assert_eq!(
+            app.world.get::<Transform>(loading_icon).unwrap().rotation,
+            Quat::from_rotation_z(10f32.to_radians())
+        );
+    }
 }
