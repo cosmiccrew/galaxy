@@ -33,11 +33,6 @@ fn setup(
     mut earthlike_materials: ResMut<Assets<Earthlike>>,
     mut cloud_cover_materials: ResMut<Assets<CloudCover>>,
 ) {
-    let bean_check = check_if_string_eq_bean("bean");
-    if !bean_check {
-        println!("no bean :(");
-    }
-
     commands.spawn((
         CelestialBundle {
             transform: Transform {
