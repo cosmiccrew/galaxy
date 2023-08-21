@@ -19,7 +19,7 @@ pub struct Earthlike {
     pub river_colours: [Color; 2],
 }
 
-impl PlanetShader for Earthlike {
+impl CelestialShader for Earthlike {
     fn randomise_seed(&mut self) {
         self.celestial.seed = rand::thread_rng().gen();
     }
