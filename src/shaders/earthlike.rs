@@ -7,7 +7,7 @@ use bevy::{
     sprite::Material2d,
 };
 
-#[derive(Debug, Component, Reflect, Clone, Copy, ShaderType, AsBindGroup, TypeUuid)]
+#[derive(Debug, Component, Reflect, Clone, Copy, ShaderType, AsBindGroup, TypeUuid, PartialEq)]
 #[reflect(Component)]
 #[uuid = "aed9b1b9-229e-402a-b5a0-14d219af5d6d"]
 pub struct Earthlike {
@@ -59,3 +59,62 @@ impl Material2d for Earthlike {
 }
 
 impl PlanetShader for Earthlike {}
+
+#[cfg(test)]
+mod test {
+
+    use crate::prelude::*;
+
+
+    #[test]
+    fn test_earthlike_randomise() {
+        
+        let first = Earthlike::default();
+
+        let mut second = first;
+
+        //they should be equal here
+        assert_eq!(first, second);
+
+        second.randomise();
+
+        //now that second is randomised, it shouldn't have the same values as first!
+        assert_ne!(first, second);
+
+    }
+
+    #[test]
+    fn test_earthlike_randomise_seed() {
+        
+        let first = Earthlike::default();
+
+        let mut second = first;
+
+        //they should be equal here
+        assert_eq!(first, second);
+
+        second.randomise_seed();
+
+        //now that second is randomised, it shouldn't have the same values as first!
+        assert_ne!(first.celestial.seed, second.celestial.seed);
+
+    }
+
+    #[test]
+    fn test_earthlike_randomise_rotation() {
+        
+        let first = Earthlike::default();
+
+        let mut second = first;
+
+        //they should be equal here
+        assert_eq!(first, second);
+
+        second.randomise_rotation();
+
+        //now that second is randomised, it shouldn't have the same values as first!
+        assert_ne!(first.celestial.rotation, second.celestial.rotation);
+
+    }
+
+}
