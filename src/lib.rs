@@ -28,4 +28,6 @@ pub mod prelude {
     pub use crate::shaders::{cloud_cover::*, consts::*, earthlike::*, *};
     pub use crate::state::*;
     pub use crate::utils::*;
+
+    pub use crate::add_celestial_shader_impl;
 }
