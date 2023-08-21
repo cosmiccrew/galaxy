@@ -54,7 +54,7 @@ impl Default for Earthlike {
 
 impl Material2d for Earthlike {
     fn fragment_shader() -> ShaderRef {
-        "shaderS/celestials/earthlike.wgsl".into()
+        "shaders/celestials/earthlike.wgsl".into()
     }
 }
 
