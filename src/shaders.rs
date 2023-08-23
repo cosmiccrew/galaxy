@@ -67,24 +67,6 @@ pub struct CelestialSettings {
     pub time_speed: f32,
 }
 
-impl CelestialSettings {
-    fn set_seed(&mut self, seed: f32) {
-        self.seed = seed;
-    }
-
-    fn set_rotation(&mut self, rotation: f32) {
-        self.rotation = rotation;
-    }
-
-    fn set_pixels(&mut self, pixels: f32) {
-        self.pixels = pixels;
-    }
-
-    fn set_time_speed(&mut self, time_speed: f32) {
-        self.time_speed = time_speed;
-    }
-}
-
 impl Default for CelestialSettings {
     fn default() -> Self {
         Self {
@@ -98,47 +80,7 @@ impl Default for CelestialSettings {
 }
 
 pub trait CelestialShader: ShaderType + Component + AsBindGroup + Material2d {
-    fn randomise(&mut self) {
-        self.randomise_seed();
-        self.randomise_rotation();
-    }
-    fn randomise_seed(&mut self) {
-        self.set_seed(rand::thread_rng().gen());
-    }
-    fn randomise_rotation(&mut self) {
-        self.set_rotation(rand::thread_rng().gen_range(0f32..TAU));
-    }
-
-    fn set_seed(&mut self, seed: f32);
-
-    fn set_rotation(&mut self, rotation: f32);
-
-    fn set_pixels(&mut self, pixels: f32);
-
-    fn set_time_speed(&mut self, time_speed: f32);
-}
-
-#[macro_export]
-macro_rules! add_celestial_shader_impl {
-    ($struct_name:ident) => {
-        impl CelestialShader for $struct_name {
-            fn set_seed(&mut self, seed: f32) {
-                self.celestial.set_seed(seed);
-            }
-
-            fn set_rotation(&mut self, rotation: f32) {
-                self.celestial.set_rotation(rotation);
-            }
-
-            fn set_pixels(&mut self, pixels: f32) {
-                self.celestial.set_pixels(pixels);
-            }
-
-            fn set_time_speed(&mut self, time_speed: f32) {
-                self.celestial.set_time_speed(time_speed);
-            }
-        }
-    };
+    fn randomise(&mut self);
 }
 
 #[derive(Bundle, Reflect, Default, Clone)]

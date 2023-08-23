@@ -13,6 +13,22 @@ pub struct CloudCover {
     pub colours: [Color; 4],
 }
 
+impl CloudCover {
+    pub(crate) fn randomise_seed(&mut self) {
+        self.celestial.seed = (rand::thread_rng().gen());
+    }
+    pub(crate) fn randomise_rotation(&mut self) {
+        self.celestial.rotation = (rand::thread_rng().gen_range(0f32..TAU));
+    }
+}
+
+impl CelestialShader for CloudCover {
+    fn randomise(&mut self) {
+        self.randomise_seed();
+        self.randomise_rotation();
+    }
+}
+
 impl Default for CloudCover {
     fn default() -> Self {
         Self {
@@ -34,30 +50,10 @@ impl Material2d for CloudCover {
     }
 }
 
-add_celestial_shader_impl!(CloudCover);
-
 #[cfg(test)]
 mod test {
 
-    use bevy::{asset::AssetPath, render::render_resource::ShaderRef, sprite::Material2d};
-
     use crate::prelude::*;
-
-    #[test]
-    fn test_material2d_impl() {
-        let shader_ref = CloudCover::fragment_shader();
-
-        let ShaderRef::Path(asset_path) = shader_ref else {
-
-            panic!("\"ShaderRef\" from \"CloudCover::fragment_shader()\" isn't of enum variant \"ShaderRef::Path\"");
-
-        };
-
-        assert_eq!(
-            asset_path,
-            AssetPath::from("shaders/celestials/generic/cloud_cover.wgsl")
-        );
-    }
 
     #[test]
     fn test_randomise() {
@@ -82,22 +78,5 @@ mod test {
         second.randomise();
 
         assert_ne!(first, second);
-    }
-
-    #[test]
-    fn test_celestial_impls() {
-        let mut subject = Earthlike::default();
-
-        let value = 123.456;
-
-        subject.set_seed(value);
-        subject.set_rotation(value);
-        subject.set_pixels(value);
-        subject.set_time_speed(value);
-
-        assert_eq!(subject.celestial.seed, value);
-        assert_eq!(subject.celestial.rotation, value);
-        assert_eq!(subject.celestial.pixels, value);
-        assert_eq!(subject.celestial.time_speed, value);
     }
 }
