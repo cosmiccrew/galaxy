@@ -23,7 +23,7 @@ jobs:
 
   clippy:
     runs-on: ubuntu-latest
-    name: Clippy correctness checks
+    name: Clippy correctness checks (${{ matrix.config.name }})
     strategy:
       fail-fast: false
       matrix:
