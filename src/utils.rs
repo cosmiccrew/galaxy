@@ -38,6 +38,7 @@ impl Plugin for GalaxyDefaultPlugins {
                     primary_window: Some(Window {
                         title: "Cosmic Crew: Galaxy".to_string(),
                         fit_canvas_to_parent: true,
+                        prevent_default_event_handling: false,
                         ..default()
                     }),
                     ..default()
@@ -47,8 +48,8 @@ impl Plugin for GalaxyDefaultPlugins {
                     asset_folder: {
                         if cfg!(all(
                             target_os = "macos",
-                            not(debug_assertions),
-                            not(features = "dynamic_linking")
+                            not(features = "debug"),
+                            not(features = "fast_compile"),
                         )) {
                             "../Resources/assets".to_string()
                         } else {
