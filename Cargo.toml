@@ -26,7 +26,11 @@ bevy_editor_pls = { git = "https://github.com/jakobhellermann/bevy_editor_pls.gi
 #resource and asset inspection in bevy
 bevy-inspector-egui = "0.19.0"
 #2d physics engine in bevy
-bevy_rapier2d = { version = "0.22.0", features = ["serde-serialize", "debug-render-2d"]}
+bevy_xpbd_2d = { git = "https://github.com/Jondolf/bevy_xpbd", features = ["enhanced-determinism"] }
+#bevu "rollback" ggrs networking library
+bevy_ggrs = { version = "0.13.0", features = ["wasm-bindgen"] }
+bevy_matchbox = { version = "0.7.0", features = ["ggrs"] }
+
 #helps with loading assets in a logical, dynamic format.
 bevy_asset_loader = { version = "0.17.0", features = ["2d", "standard_dynamic_assets"] }
 #handling inputs in a logical, extensible way with options for command combinations or aliases.
@@ -39,12 +43,13 @@ anyhow = "1"
 #pseudo random number generation
 rand = "0.8.5"
 
-[target.'cfg(not(target_arch = "wasm32"))'.dependencies]
-# bevy = { version = "0.11.1", features = ["multi-threaded"]}
-bevy_rapier2d = { version = "0.22.0", features = ["parallel"]}
 
-[target.'cfg(target_arch = "wasm32")'.dependencies]
-bevy_rapier2d = { version = "0.22.0", features = ["wasm-bindgen"]}
+# [target.'cfg(not(target_arch = "wasm32"))'.dependencies]
+# # bevy = { version = "0.11.1", features = ["multi-threaded"]}
+# bevy_rapier2d = { version = "0.22.0", features = ["parallel"]}
+
+# [target.'cfg(target_arch = "wasm32")'.dependencies]
+# bevy_rapier2d = { version = "0.22.0", features = ["wasm-bindgen"]}
 
 
 [features]
@@ -53,7 +58,7 @@ default = ["debug"]
 fast_compile = ["bevy/dynamic_linking"]
 ci_testing = ["bevy/bevy_ci_testing"]
 
-debug = ["bevy_editor_pls"]
+debug = ["bevy_editor_pls", "bevy_xpbd_2d/debug-plugin"]
 
 # long_description
 

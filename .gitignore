@@ -1,7 +1,7 @@
 #cargo
 /target
 crates/*/target
-.cargo/config.toml
+# .cargo/config.toml
 
 #trunk
 dist
