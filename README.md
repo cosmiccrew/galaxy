@@ -28,8 +28,9 @@ To run and play Cosmic Crew: Galaxy, there are a few options:
 4. `cargo run` (faster compiles, slower performance) or `cargo run --release --no-default-features` (increased runtime performance, but longer compile times)
 
 #### Using WASM
-1. follow the steps before-hand, skipping step 4
-2. `RUSTFLAGS="--cfg=web_sys_unstable_apis" cargo run --profile wasm --no-default-features --target wasm32-unknown-unknown`, running with bevy's webgpu backend
+1. follow the from source instructions, skipping step 4
+2. `cargo run --profile wasm --no-default-features --target wasm32-unknown-unknown`, running with bevy's webgpu backend
+NOTE: (this uses will not work without additional config if .cargo/config.toml is removed)
 -------
 
 ## Contributing
@@ -47,7 +48,7 @@ The development build by default has some **runtime performance** improvements e
 cargo run --features fast_compile
 ```
 You may want to create a `Makefile`, shell alias, or other similar script runner (e.g. [Just](https://just.systems/)) for this.
-please note: this will decrease runtime performance somewhat.
+NOTE: this will decrease runtime performance somewhat.
 
 -------
 
