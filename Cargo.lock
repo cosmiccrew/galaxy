@@ -3215,6 +3215,7 @@ dependencies = [
  "bevy_ggrs",
  "bevy_matchbox",
  "bevy_xpbd_2d",
+ "clap",
  "leafwing-input-manager",
  "rand",
  "serde",

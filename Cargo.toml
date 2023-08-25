@@ -42,6 +42,8 @@ serde = "1"
 anyhow = "1"
 #pseudo random number generation
 rand = "0.8.5"
+#cli parsing for startup asset config's
+clap = { version = "4.4.0", features = ["derive"] }
 
 
 # [target.'cfg(not(target_arch = "wasm32"))'.dependencies]

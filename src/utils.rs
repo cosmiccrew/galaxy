@@ -48,8 +48,8 @@ impl Plugin for GalaxyDefaultPlugins {
                     asset_folder: {
                         if cfg!(all(
                             target_os = "macos",
-                            not(features = "debug"),
-                            not(features = "fast_compile"),
+                            not(feature = "debug"),
+                            not(feature = "fast_compile"),
                         )) {
                             "../Resources/assets".to_string()
                         } else {
