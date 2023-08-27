@@ -1,6 +1,6 @@
-#![allow(unused)]
+// #![allow(unused)]
 #![allow(clippy::type_complexity, clippy::needless_update)]
-#![warn(dead_code)]
+// #![warn(dead_code)]
 
 pub mod debug;
 pub mod game;
@@ -9,6 +9,7 @@ pub mod player;
 pub mod polar;
 pub mod shaders;
 pub mod state;
+pub mod ui;
 pub mod utils;
 
 pub mod prelude {
@@ -27,5 +28,6 @@ pub mod prelude {
     pub use crate::polar::*;
     pub use crate::shaders::{cloud_cover::*, consts::*, earthlike::*, *};
     pub use crate::state::*;
+    pub use crate::ui::*;
     pub use crate::utils::*;
 }

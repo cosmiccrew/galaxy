@@ -1,10 +1,3 @@
-use bevy::{
-    reflect::{TypePath, TypeUuid},
-    render::render_resource::{AsBindGroup, ShaderRef},
-    sprite::{Material2d, MaterialMesh2dBundle},
-};
-use rand::Rng;
-
 use crate::prelude::*;
 
 pub struct GalaxyGamePlugin;
@@ -29,9 +22,9 @@ impl Plugin for GalaxyGamePlugin {
 fn setup(
     mut commands: Commands,
     mut meshes: ResMut<Assets<Mesh>>,
-    assets: Res<MyAssets>,
+    _assets: Res<MyAssets>,
     mut earthlike_materials: ResMut<Assets<Earthlike>>,
-    mut cloud_cover_materials: ResMut<Assets<CloudCover>>,
+    _cloud_cover_materials: ResMut<Assets<CloudCover>>,
 ) {
     commands.spawn((
         CelestialBundle {
@@ -102,15 +95,15 @@ fn setup(
 }
 
 fn planet_rotation(
-    mut commands: Commands,
+    _commands: Commands,
     // mut query: Query<&mut Transform, With<Planet>>,
-    mut query: Query<&mut Handle<Earthlike>, With<Celestial>>,
+    query: Query<&mut Handle<Earthlike>, With<Celestial>>,
     mut materials: ResMut<Assets<Earthlike>>,
     keyboard_input: Res<Input<KeyCode>>,
     time: Res<Time>,
 ) {
     for earthlike_handle in query.iter() {
-        let mut earthlike_material = materials.get_mut(earthlike_handle).unwrap();
+        let earthlike_material = materials.get_mut(earthlike_handle).unwrap();
 
         let mut direction = 0f32;
 
@@ -122,18 +115,18 @@ fn planet_rotation(
             direction -= 1.;
         }
 
-        earthlike_material.celestial.rotation += (time.delta_seconds() * FRAC_PI_2 * direction);
+        earthlike_material.celestial.rotation += time.delta_seconds() * FRAC_PI_2 * direction;
     }
 }
 
 fn planet_randomise(
-    mut commands: Commands,
-    mut query: Query<&mut Handle<Earthlike>, With<Celestial>>,
+    _commands: Commands,
+    query: Query<&mut Handle<Earthlike>, With<Celestial>>,
     keyboard_input: Res<Input<KeyCode>>,
     mut materials: ResMut<Assets<Earthlike>>,
 ) {
     for earthlike_handle in query.iter() {
-        let mut earthlike_material = materials.get_mut(earthlike_handle).unwrap();
+        let earthlike_material = materials.get_mut(earthlike_handle).unwrap();
 
         if keyboard_input.just_pressed(KeyCode::Space) {
             earthlike_material.randomise();
@@ -142,15 +135,15 @@ fn planet_randomise(
 }
 
 fn planet_change_pixels(
-    mut commands: Commands,
+    _commands: Commands,
     // mut query: Query<&mut Transform, With<Planet>>,
-    mut query: Query<&mut Handle<Earthlike>, With<Celestial>>,
+    query: Query<&mut Handle<Earthlike>, With<Celestial>>,
     mut materials: ResMut<Assets<Earthlike>>,
     keyboard_input: Res<Input<KeyCode>>,
-    time: Res<Time>,
+    _time: Res<Time>,
 ) {
     for earthlike_handle in query.iter() {
-        let mut earthlike_material = materials.get_mut(earthlike_handle).unwrap();
+        let earthlike_material = materials.get_mut(earthlike_handle).unwrap();
 
         let mut direction = 0f32;
 

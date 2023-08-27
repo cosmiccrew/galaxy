@@ -8,6 +8,7 @@ fn main() {
             GalaxyDebugPlugin,
             GalaxyLoadingPlugin,
             GalaxyPlayerPlugin,
+            GalaxyUIPlugin,
             GalaxyPolarPlugin,
             GalaxyGamePlugin,
             GalaxyShaderPlugin,

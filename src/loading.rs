@@ -1,5 +1,5 @@
 use crate::prelude::*;
-use bevy::{sprite::Material2d, utils::HashMap};
+
 use bevy_asset_loader::prelude::*;
 
 #[derive(AssetCollection, Resource)]
@@ -116,7 +116,7 @@ fn splash_setup(mut commands: Commands, asset_server: Res<AssetServer>) {
     commands.insert_resource(SplashTimer(Timer::from_seconds(5.0, TimerMode::Once)));
 }
 
-fn rotate_loading_icon(commands: Commands, mut query: Query<&mut Transform, With<LoadingIcon>>) {
+fn rotate_loading_icon(_commands: Commands, mut query: Query<&mut Transform, With<LoadingIcon>>) {
     for mut object in &mut query {
         object.rotate_z(10f32.to_radians());
     }
@@ -133,7 +133,7 @@ mod tests {
     #[test]
     fn test_rotate_loading_icon() {
         use crate::{
-            loading::{rotate_loading_icon, splash_setup, LoadingIcon},
+            loading::{rotate_loading_icon, LoadingIcon},
             prelude::*,
         };
 

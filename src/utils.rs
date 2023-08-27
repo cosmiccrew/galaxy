@@ -31,7 +31,7 @@ pub fn teardown<T: Component>(
 pub struct GalaxyDefaultPlugins;
 
 impl Plugin for GalaxyDefaultPlugins {
-    fn build(&self, mut app: &mut App) {
+    fn build(&self, app: &mut App) {
         app.insert_resource(ClearColor(Color::BLACK)).add_plugins(
             DefaultPlugins
                 .set(WindowPlugin {

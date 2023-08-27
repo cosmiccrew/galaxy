@@ -1,8 +1,8 @@
 use crate::prelude::*;
 
-pub struct GalaxyPolarPlugin;
+pub struct GalaxyUIPlugin;
 
-impl Plugin for GalaxyPolarPlugin {
+impl Plugin for GalaxyUIPlugin {
     fn build(&self, _app: &mut App) {
 
         // app.add_systems((

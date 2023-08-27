@@ -15,10 +15,10 @@ pub struct CloudCover {
 
 impl CloudCover {
     pub(crate) fn randomise_seed(&mut self) {
-        self.celestial.seed = (rand::thread_rng().gen());
+        self.celestial.seed = rand::thread_rng().gen();
     }
     pub(crate) fn randomise_rotation(&mut self) {
-        self.celestial.rotation = (rand::thread_rng().gen_range(0f32..TAU));
+        self.celestial.rotation = rand::thread_rng().gen_range(0f32..TAU);
     }
 }
 
