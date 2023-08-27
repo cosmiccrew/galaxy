@@ -38,7 +38,7 @@ pub struct GalaxyLoadingPlugin;
 impl Plugin for GalaxyLoadingPlugin {
     fn build(&self, app: &mut App) {
         app.add_loading_state(
-            LoadingState::new(EngineState::LoadingAssets).continue_to_state(EngineState::InGame),
+            LoadingState::new(EngineState::LoadingAssets).continue_to_state(EngineState::MainMenu),
         )
         .add_dynamic_collection_to_loading_state::<_, StandardDynamicAssetCollection>(
             EngineState::LoadingAssets,
@@ -52,13 +52,7 @@ impl Plugin for GalaxyLoadingPlugin {
             (tick_splash_timer, rotate_loading_icon).run_if(in_state(EngineState::LoadingAssets)),
         )
         // When exiting the state, despawn everything that was spawned for this screen
-        .add_systems(
-            OnTransition {
-                from: EngineState::LoadingAssets,
-                to: EngineState::InGame,
-            },
-            teardown::<Loaded>,
-        );
+        .add_systems(OnExit(EngineState::LoadingAssets), teardown::<Loaded>);
     }
 }
 

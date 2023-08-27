@@ -12,19 +12,16 @@ pub struct GalaxyDebugPlugin;
 
 impl Plugin for GalaxyDebugPlugin {
     fn build(&self, app: &mut App) {
-        #[cfg(feature = "debug")]
-        {
-            use bevy_editor_pls::prelude::*;
+        use bevy_editor_pls::prelude::*;
 
-            app.register_type::<CelestialBundle<Earthlike>>()
-                .register_type::<CloudCover>();
+        app.register_type::<CelestialBundle<Earthlike>>()
+            .register_type::<CloudCover>();
 
-            app.add_plugins((
-                EditorPlugin::default(),
-                FrameTimeDiagnosticsPlugin,
-                EntityCountDiagnosticsPlugin,
-            ))
-            .add_systems(Update, close_on_esc);
-        }
+        app.add_plugins((
+            EditorPlugin::default(),
+            FrameTimeDiagnosticsPlugin,
+            EntityCountDiagnosticsPlugin,
+        ))
+        .add_systems(Update, close_on_esc);
     }
 }

@@ -5,6 +5,7 @@ fn main() {
         .add_state::<EngineState>()
         .add_plugins(GalaxyDefaultPlugins)
         .add_plugins((
+            #[cfg(feature = "debug")]
             GalaxyDebugPlugin,
             GalaxyLoadingPlugin,
             GalaxyPlayerPlugin,

@@ -4,15 +4,12 @@ pub struct GalaxyGamePlugin;
 
 impl Plugin for GalaxyGamePlugin {
     fn build(&self, app: &mut App) {
-        app.add_systems(OnEnter(EngineState::InGame), setup)
+        app.insert_resource(WinitSettings::default())
+            .add_systems(OnEnter(EngineState::InGame), setup)
+            .add_systems(PreUpdate, add_loaded_component)
             .add_systems(
                 Update,
-                (
-                    add_loaded_component,
-                    planet_rotation,
-                    planet_randomise,
-                    planet_change_pixels,
-                )
+                (planet_rotation, planet_randomise, planet_change_pixels)
                     .run_if(in_state(EngineState::InGame)),
             )
             .add_systems(OnExit(EngineState::InGame), teardown::<Loaded>);
@@ -156,42 +153,5 @@ fn planet_change_pixels(
         }
 
         earthlike_material.celestial.pixels += direction;
-    }
-}
-
-fn add_loaded_component(
-    mut commands: Commands,
-    query: Query<Entity, (Without<Loaded>, Without<Persist>)>,
-) {
-    for entity in &query {
-        commands.entity(entity).insert(Loaded);
-    }
-}
-
-#[cfg(test)]
-mod tests {
-
-    #[test]
-    fn test_adding_loaded_component() {
-        use crate::game::add_loaded_component;
-        use crate::prelude::*;
-
-        let mut app = App::new();
-
-        app.add_systems(Update, add_loaded_component);
-
-        let should_have = app
-            .world
-            .spawn(Name::new("Should have loaded component"))
-            .id();
-        let should_not_change = app
-            .world
-            .spawn((Persist, Name::new("Should not change")))
-            .id();
-
-        app.update();
-
-        assert!(app.world.get::<Loaded>(should_have).is_some());
-        assert!(app.world.get::<Loaded>(should_not_change).is_none());
     }
 }

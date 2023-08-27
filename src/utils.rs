@@ -28,6 +28,15 @@ pub fn teardown<T: Component>(
     }
 }
 
+pub fn add_loaded_component(
+    mut commands: Commands,
+    query: Query<Entity, (Without<Loaded>, Without<Persist>)>,
+) {
+    for entity in &query {
+        commands.entity(entity).insert(Loaded);
+    }
+}
+
 pub struct GalaxyDefaultPlugins;
 
 impl Plugin for GalaxyDefaultPlugins {
@@ -49,6 +58,7 @@ impl Plugin for GalaxyDefaultPlugins {
                         if cfg!(all(
                             target_os = "macos",
                             not(feature = "debug"),
+                            not(debug_assertions),
                             not(feature = "fast_compile"),
                         )) {
                             "../Resources/assets".to_string()
@@ -81,10 +91,10 @@ impl Plugin for GalaxyDefaultPlugins {
 #[cfg(test)]
 mod tests {
 
+    use crate::prelude::*;
+
     #[test]
     fn test_despawn_components() {
-        use crate::prelude::*;
-
         let mut app = App::new();
 
         app.add_systems(Update, teardown::<Loaded>);
@@ -97,5 +107,26 @@ mod tests {
 
         assert!(app.world.get::<Loaded>(should_despawn).is_none());
         assert!(app.world.get::<Loaded>(should_persist).is_some());
+    }
+
+    #[test]
+    fn test_adding_loaded_component() {
+        let mut app = App::new();
+
+        app.add_systems(Update, add_loaded_component);
+
+        let should_have = app
+            .world
+            .spawn(Name::new("Should have loaded component"))
+            .id();
+        let should_not_change = app
+            .world
+            .spawn((Persist, Name::new("Should not change")))
+            .id();
+
+        app.update();
+
+        assert!(app.world.get::<Loaded>(should_have).is_some());
+        assert!(app.world.get::<Loaded>(should_not_change).is_none());
     }
 }

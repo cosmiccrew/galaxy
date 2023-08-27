@@ -5,11 +5,7 @@ pub struct GalaxyPolarPlugin;
 impl Plugin for GalaxyPolarPlugin {
     fn build(&self, _app: &mut App) {
 
-        // app.add_systems((
-        //     setup.in_schedule(OnEnter(EngineState::InGame)),
-        //     move_planet.in_set(OnUpdate(EngineState::InGame)),
-        //     // game.in_set(OnUpdate(GameState::Game)),
-        //     teardown::<Loaded>.in_schedule(OnExit(EngineState::InGame)),
-        // ));
+        // app.add_systems(OnEnter(EngineState::InGame), setup)
+        //     .add_systems(OnExit(EngineState::InGame), teardown::<Loaded>);
     }
 }
