@@ -6,7 +6,7 @@ impl Plugin for GalaxyGamePlugin {
     fn build(&self, app: &mut App) {
         app.insert_resource(WinitSettings::default())
             .add_systems(OnEnter(EngineState::InGame), setup)
-            .add_systems(PreUpdate, add_loaded_component)
+            // .add_systems(PreUpdate, add_loaded_component)
             .add_systems(
                 Update,
                 (planet_rotation, planet_randomise, planet_change_pixels)
@@ -54,20 +54,23 @@ fn setup(
             }),
             ..default()
         },
-        // cloud_cover_materials.add(CloudCover {
-        //     cloud_cover: 0.4,
-        //     ..default()
-        // }),
+        Loaded, // cloud_cover_materials.add(CloudCover {
+                //     cloud_cover: 0.4,
+                //     ..default()
+                // }),
     ));
 
-    commands.spawn(CelestialBundle {
-        transform: Transform::from_xyz(-450., -100., 0.),
-        mesh: meshes
-            .add(shape::Quad::new(Vec2::new(300., 300.)).into())
-            .into(),
-        celestial_shader: earthlike_materials.add(Earthlike::default()),
-        ..default()
-    });
+    commands.spawn((
+        CelestialBundle {
+            transform: Transform::from_xyz(-450., -100., 0.),
+            mesh: meshes
+                .add(shape::Quad::new(Vec2::new(300., 300.)).into())
+                .into(),
+            celestial_shader: earthlike_materials.add(Earthlike::default()),
+            ..default()
+        },
+        Loaded,
+    ));
 
     commands.spawn((
         CelestialBundle {
@@ -88,6 +91,7 @@ fn setup(
         //     cloud_cover: 0.2,
         //     ..default()
         // }),
+        Loaded,
     ));
 }
 

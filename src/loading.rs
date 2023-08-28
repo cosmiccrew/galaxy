@@ -7,8 +7,8 @@ pub struct MyAssets {
     // This file will be converted to a texture atlas
     // The configuration for that is part of the `.assets` file
     // Type in `assets/full_dynamic_collection.assets.ron`: `TextureAtlas`
-    #[asset(optional, key = "texture_atlas")]
-    pub texture_atlas: Option<Handle<TextureAtlas>>,
+    #[asset(key = "ui/icons/prompts")]
+    pub ui_icon_prompts: Handle<TextureAtlas>,
 
     #[asset(key = "dummy")]
     pub dummy: Handle<Image>,
@@ -59,13 +59,11 @@ impl Plugin for GalaxyLoadingPlugin {
 fn setup(mut commands: Commands, query: Query<Entity>) {
     info!("Setting up the world...");
 
-    commands.spawn((Camera2dBundle::default(), Persist));
-
-    //Add the Persist entity to all current items, as these should never be removed
-    // by a teardown.
-    for entity in &query {
-        commands.entity(entity).insert(Persist);
-    }
+    commands.spawn((
+        Camera2dBundle::default(),
+        Persist,
+        Name::from("Main Camera"),
+    ));
 
     info!("World has been set up!");
 }
@@ -83,6 +81,9 @@ fn splash_setup(mut commands: Commands, asset_server: Res<AssetServer>) {
 
     commands
         .spawn((
+            Name::from("Loading Icon Node"),
+            Loaded,
+            LoadingIcon,
             NodeBundle {
                 style: Style {
                     align_items: AlignItems::Center,
@@ -92,8 +93,6 @@ fn splash_setup(mut commands: Commands, asset_server: Res<AssetServer>) {
                 },
                 ..default()
             },
-            Loaded,
-            LoadingIcon,
         ))
         .with_children(|parent| {
             parent.spawn(ImageBundle {
