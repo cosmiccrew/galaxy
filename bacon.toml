@@ -79,6 +79,16 @@ command = [
 need_stdout = true
 allow_warnings = true
 
+[jobs.no-default-features]
+command = [
+    "cargo", "run",
+    "--color", "always",
+    "--no-default-features"
+    # put launch parameters for your program behind a `--` separator
+]
+need_stdout = true
+allow_warnings = true
+
 [jobs.fast-compile]
 command = [
     "cargo", "run",
@@ -117,3 +127,4 @@ f = "job:fmt"
 shift-f = "job:clippy-fix"
 shift-b = "job:build-fast-compile"
 w = "job:wasm"
+n = "job:no-default-features"
