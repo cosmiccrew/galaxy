@@ -10,6 +10,9 @@ dist
 *.code-workspace
 /.vscode
 
+#aesprite
+*.aesprite
+
 #macos
 *.DS_Store
 
