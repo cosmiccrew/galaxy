@@ -29,7 +29,6 @@ pub struct MyAssets {
 
     // #[asset(key = "planet_shaders")]
     // planet_shaders: Handle<EarthlikeShader>
-
     #[asset(key = "fonts/slkscre.ttf")]
     pub font: Handle<Font>,
 }

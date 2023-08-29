@@ -72,17 +72,36 @@ fn setup(mut commands: Commands, assets: Res<MyAssets>) {
                     ..default()
                 })
                 .with_children(|parent| {
-
                     let font = assets.font.clone();
 
-                    main_menu_button(parent, font.clone(), MainMenuButton::Local, ButtonState::Enabled);
-                    main_menu_button(parent, font.clone(),MainMenuButton::Online, ButtonState::Disabled);
-                    main_menu_button(parent, font,MainMenuButton::Settings, ButtonState::Disabled);
+                    main_menu_button(
+                        parent,
+                        font.clone(),
+                        MainMenuButton::Local,
+                        ButtonState::Enabled,
+                    );
+                    main_menu_button(
+                        parent,
+                        font.clone(),
+                        MainMenuButton::Online,
+                        ButtonState::Disabled,
+                    );
+                    main_menu_button(
+                        parent,
+                        font,
+                        MainMenuButton::Settings,
+                        ButtonState::Disabled,
+                    );
                 });
         });
 }
 
-fn main_menu_button(parent: &mut ChildBuilder, font: Handle<Font>,button_type: MainMenuButton, state: ButtonState) {
+fn main_menu_button(
+    parent: &mut ChildBuilder,
+    font: Handle<Font>,
+    button_type: MainMenuButton,
+    state: ButtonState,
+) {
     let text = match button_type {
         MainMenuButton::Local => "Local (1-4)",
         MainMenuButton::Online => "Online (1-8)",
