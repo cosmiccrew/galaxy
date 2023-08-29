@@ -74,78 +74,58 @@ fn setup(mut commands: Commands, assets: Res<MyAssets>) {
                 .with_children(|parent| {
                     let font = assets.font.clone();
 
-                    main_menu_button(
-                        parent,
-                        font.clone(),
-                        MainMenuButton::Local,
-                        ButtonState::Enabled,
-                    );
-                    main_menu_button(
-                        parent,
-                        font.clone(),
-                        MainMenuButton::Online,
-                        ButtonState::Disabled,
-                    );
-                    main_menu_button(
-                        parent,
-                        font,
-                        MainMenuButton::Settings,
-                        ButtonState::Disabled,
-                    );
+                    let mut main_menu_button = |button_type: MainMenuButton, state: ButtonState| {
+                        let text = match button_type {
+                            MainMenuButton::Local => "Local (1-4)",
+                            MainMenuButton::Online => "Online (1-8)",
+                            MainMenuButton::Settings => "Settings",
+                        };
+
+                        parent
+                            .spawn((
+                                state,
+                                button_type,
+                                Name::from(format!("Main Menu Button ({text})")),
+                                ButtonBundle {
+                                    style: Style {
+                                        border: UiRect::all(Val::Px(5.)),
+                                        width: Val::Percent(100.),
+                                        height: Val::Percent(20.),
+                                        justify_content: JustifyContent::Center,
+                                        align_items: AlignItems::Center,
+                                        ..default()
+                                    },
+                                    // image: ,
+                                    background_color: match state {
+                                        ButtonState::Disabled => DISABLED_BUTTON,
+                                        ButtonState::Enabled => ENABLED_BUTTON,
+                                    }
+                                    .into(),
+                                    border_color: match state {
+                                        ButtonState::Enabled => ENABLED_BUTTON_BORDER,
+                                        ButtonState::Disabled => DISABLED_BUTTON_BORDER,
+                                    }
+                                    .into(),
+                                    ..default()
+                                },
+                            ))
+                            .with_children(|parent| {
+                                parent.spawn(TextBundle::from_section(
+                                    text,
+                                    TextStyle {
+                                        font: font.clone(),
+                                        font_size: 40.0,
+                                        color: Color::rgb(0.4, 0.4, 0.4),
+                                        ..default()
+                                    },
+                                ));
+                            });
+                    };
+
+                    main_menu_button(MainMenuButton::Local, ButtonState::Enabled);
+                    main_menu_button(MainMenuButton::Online, ButtonState::Disabled);
+                    main_menu_button(MainMenuButton::Settings, ButtonState::Disabled);
                 });
-        });
-}
-
-fn main_menu_button(
-    parent: &mut ChildBuilder,
-    font: Handle<Font>,
-    button_type: MainMenuButton,
-    state: ButtonState,
-) {
-    let text = match button_type {
-        MainMenuButton::Local => "Local (1-4)",
-        MainMenuButton::Online => "Online (1-8)",
-        MainMenuButton::Settings => "Settings",
-    };
-
-    parent
-        .spawn((
-            state,
-            button_type,
-            Name::from(format!("Main Menu Button ({text})")),
-            ButtonBundle {
-                style: Style {
-                    border: UiRect::all(Val::Px(5.)),
-                    width: Val::Percent(100.),
-                    height: Val::Percent(20.),
-                    justify_content: JustifyContent::Center,
-                    align_items: AlignItems::Center,
-                    ..default()
-                },
-                // image: ,
-                background_color: match state {
-                    ButtonState::Disabled => DISABLED_BUTTON,
-                    ButtonState::Enabled => ENABLED_BUTTON,
-                }
-                .into(),
-                border_color: match state {
-                    ButtonState::Enabled => ENABLED_BUTTON_BORDER,
-                    ButtonState::Disabled => DISABLED_BUTTON_BORDER,
-                }
-                .into(),
-                ..default()
-            },
-        ))
-        .with_children(|parent| {
-            parent.spawn(TextBundle::from_section(
-                text,
-                TextStyle {
-                    font,
-                    font_size: 40.0,
-                    color: Color::rgb(0.4, 0.4, 0.4),
-                    ..default()
-                },
-            ));
         });
 }
 
@@ -180,8 +160,6 @@ fn main_menu_button_system(
                             // engine_state.set(EngineState::InGame);
                         }
                     }
-
-                    // border_color.0 = Color::RED;
                 }
                 Interaction::Hovered => {
                     *color = HOVERED_BUTTON.into();
