@@ -14,3 +14,10 @@ pub enum GameState {
     Playing,
     Paused,
 }
+
+#[derive(Debug, Clone, Copy, Default, Eq, PartialEq, Hash, States, Reflect)]
+pub enum MainMenuState {
+    #[default]
+    MainMenu,
+    Settings,
+}

@@ -4,7 +4,8 @@ pub struct GalaxyMainMenuPlugin;
 
 impl Plugin for GalaxyMainMenuPlugin {
     fn build(&self, app: &mut App) {
-        app.insert_resource(WinitSettings::desktop_app())
+        app.add_state::<MainMenuState>()
+            .insert_resource(WinitSettings::desktop_app())
             .add_systems(OnEnter(EngineState::MainMenu), setup)
             .add_systems(Update, main_menu_button_system)
             .add_systems(OnExit(EngineState::MainMenu), teardown::<Loaded>);
@@ -33,11 +34,55 @@ enum MainMenuButton {
     Settings,
 }
 
-// #[derive(Component, Debug, Default, Reflect, PartialEq, Eq, Clone, Copy)]
-// #[reflect(Component)]
-// struct MainMenuButton;
+fn setup(mut commands: Commands, assets: Res<MyAssets>) {
+    //Main UI Node
+    commands
+        .spawn((
+            Name::from("Main UI Node"),
+            Loaded,
+            NodeBundle {
+                style: Style {
+                    border: UiRect::all(Val::Px(5.)),
+                    padding: UiRect::vertical(Val::Percent(5.)),
+                    width: Val::Percent(100.),
+                    height: Val::Percent(100.),
+                    justify_content: JustifyContent::Center,
+                    ..default()
+                },
+                border_color: Color::RED.into(),
+                ..default()
+            },
+        ))
+        .with_children(|parent| {
+            //Menu Buttons (50% center)
+            parent
+                .spawn(NodeBundle {
+                    style: Style {
+                        border: UiRect::all(Val::Px(5.)),
+                        padding: UiRect::vertical(Val::Percent(5.)),
+                        width: Val::Percent(50.),
+                        height: Val::Percent(100.),
+                        flex_direction: FlexDirection::Column, //align items in a column
+                        align_items: AlignItems::Center,
+                        justify_content: JustifyContent::SpaceEvenly,
 
-fn main_menu_button(parent: &mut ChildBuilder, button_type: MainMenuButton, state: ButtonState) {
+                        ..default()
+                    },
+                    border_color: Color::GREEN.into(),
+                    ..default()
+                })
+                .with_children(|parent| {
+
+                    let font = assets.font.clone();
+
+                    main_menu_button(parent, font.clone(), MainMenuButton::Local, ButtonState::Enabled);
+                    main_menu_button(parent, font.clone(),MainMenuButton::Online, ButtonState::Disabled);
+                    main_menu_button(parent, font,MainMenuButton::Settings, ButtonState::Disabled);
+                });
+        });
+}
+
+fn main_menu_button(parent: &mut ChildBuilder, font: Handle<Font>,button_type: MainMenuButton, state: ButtonState) {
     let text = match button_type {
         MainMenuButton::Local => "Local (1-4)",
         MainMenuButton::Online => "Online (1-8)",
@@ -76,56 +121,12 @@ fn main_menu_button(parent: &mut ChildBuilder, button_type: MainMenuButton, stat
             parent.spawn(TextBundle::from_section(
                 text,
                 TextStyle {
+                    font,
                     font_size: 40.0,
                     color: Color::rgb(0.4, 0.4, 0.4),
                     ..default()
                 },
             ));
-        });
-}
-
-fn setup(mut commands: Commands, asset_server: Res<AssetServer>) {
-    //Main UI Node
-    commands
-        .spawn((
-            Name::from("Main UI Node"),
-            Loaded,
-            NodeBundle {
-                style: Style {
-                    border: UiRect::all(Val::Px(5.)),
-                    padding: UiRect::vertical(Val::Percent(5.)),
-                    width: Val::Percent(100.),
-                    height: Val::Percent(100.),
-                    justify_content: JustifyContent::Center,
-                    ..default()
-                },
-                border_color: Color::RED.into(),
-                ..default()
-            },
-        ))
-        .with_children(|parent| {
-            //Menu Buttons (50% center)
-            parent
-                .spawn(NodeBundle {
-                    style: Style {
-                        border: UiRect::all(Val::Px(5.)),
-                        padding: UiRect::vertical(Val::Percent(5.)),
-                        width: Val::Percent(50.),
-                        height: Val::Percent(100.),
-                        flex_direction: FlexDirection::Column, //align items in a column
-                        align_items: AlignItems::Center,
-                        justify_content: JustifyContent::SpaceEvenly,
-
-                        ..default()
-                    },
-                    border_color: Color::GREEN.into(),
-                    ..default()
-                })
-                .with_children(|parent| {
-                    main_menu_button(parent, MainMenuButton::Local, ButtonState::Enabled);
-                    main_menu_button(parent, MainMenuButton::Online, ButtonState::Disabled);
-                    main_menu_button(parent, MainMenuButton::Settings, ButtonState::Disabled);
-                });
         });
 }
 
@@ -143,13 +144,10 @@ fn main_menu_button_system(
         (Changed<Interaction>, With<Button>),
     >,
 ) {
-    println!("f");
     for (interaction, mut color, mut border_color, main_button_type, button_state) in
         &mut interaction_query
     {
-        println!("g");
         if *button_state == ButtonState::Enabled {
-            println!("e");
             match *interaction {
                 Interaction::Pressed => {
                     match *main_button_type {
@@ -178,17 +176,6 @@ fn main_menu_button_system(
         }
     }
 }
-
-// fn every_other_time() -> impl Condition<()> {
-//     IntoSystem::into_system(|mut flag: Local<bool>| {
-//         if *flag {
-//             true
-//         } else {
-//             *flag = true;
-//             false
-//         }
-//     })
-// }
 
 #[cfg(test)]
 mod tests {

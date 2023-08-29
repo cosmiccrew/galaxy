@@ -11,6 +11,10 @@
     //     rows: 1
     // ),
 
+    "fonts/slkscre.ttf": File (
+        path: "fonts/slkscre.ttf"
+    ),
+
     "ui/icons/prompts": TextureAtlas (
         path: "ui/icons/prompts_16x16.png",
         tile_size_x: 16.,

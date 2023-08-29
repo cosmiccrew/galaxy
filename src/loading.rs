@@ -2,7 +2,7 @@ use crate::prelude::*;
 
 use bevy_asset_loader::prelude::*;
 
-#[derive(AssetCollection, Resource)]
+#[derive(AssetCollection, Resource, Clone)]
 pub struct MyAssets {
     // This file will be converted to a texture atlas
     // The configuration for that is part of the `.assets` file
@@ -29,6 +29,9 @@ pub struct MyAssets {
 
     // #[asset(key = "planet_shaders")]
     // planet_shaders: Handle<EarthlikeShader>
+
+    #[asset(key = "fonts/slkscre.ttf")]
+    pub font: Handle<Font>,
 }
 
 /// Will be used to load assets when the game starts, so they are all pre-loaded

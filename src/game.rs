@@ -4,9 +4,9 @@ pub struct GalaxyGamePlugin;
 
 impl Plugin for GalaxyGamePlugin {
     fn build(&self, app: &mut App) {
-        app.insert_resource(WinitSettings::default())
+        app.add_state::<GameState>()
+            .insert_resource(WinitSettings::default())
             .add_systems(OnEnter(EngineState::InGame), setup)
-            // .add_systems(PreUpdate, add_loaded_component)
             .add_systems(
                 Update,
                 (planet_rotation, planet_randomise, planet_change_pixels)
@@ -54,10 +54,7 @@ fn setup(
             }),
             ..default()
         },
-        Loaded, // cloud_cover_materials.add(CloudCover {
-                //     cloud_cover: 0.4,
-                //     ..default()
-                // }),
+        Loaded,
     ));
 
     commands.spawn((

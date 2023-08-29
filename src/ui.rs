@@ -8,7 +8,7 @@ pub struct GalaxyUIPlugin;
 
 impl Plugin for GalaxyUIPlugin {
     fn build(&self, app: &mut App) {
-        app.add_plugins((GalaxyMainMenuPlugin,));
+        app.add_plugins(GalaxyMainMenuPlugin);
         // app.add_systems(OnEnter(EngineState::InGame), setup)
         //     .add_systems(OnExit(EngineState::InGame), teardown::<Loaded>);
     }

@@ -10,7 +10,7 @@ pub mod loading;
 pub mod player;
 pub mod polar;
 pub mod shaders;
-pub mod state;
+pub mod states;
 pub mod ui;
 pub mod utils;
 
@@ -30,7 +30,7 @@ pub mod prelude {
     pub use crate::player::*;
     pub use crate::polar::*;
     pub use crate::shaders::{cloud_cover::*, consts::*, earthlike::*, *};
-    pub use crate::state::*;
+    pub use crate::states::*;
     pub use crate::ui::*;
     pub use crate::utils::*;
 }
