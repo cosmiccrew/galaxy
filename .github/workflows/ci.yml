@@ -21,15 +21,40 @@ jobs:
       - name: Run cargo fmt
         run: cargo fmt --all -- --check
 
-  clippy-test:
+  test:
     runs-on: ubuntu-latest
-    name: ${{ matrix.variant.name}} (${{ matrix.config.name }})
+    name: Test (${{ matrix.config.name }})
     strategy:
       fail-fast: false
       matrix:
-        variant:
-          - { type: "clippy", name: "Clippy correctness checks" }
-          - { type: "test", name: "Workspace tests" }
+        config:
+          - { target: "x86_64-unknown-linux-gnu", name: "linux" }
+          # - { target: "wasm32-unknown-unknown", name: "wasm" }
+
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v3
+
+      - name: Install dependencies
+        run: sudo apt-get update; sudo apt-get install pkg-config libx11-dev libasound2-dev libudev-dev
+
+      - name: Cache rust dependencies
+        uses: Swatinem/rust-cache@v2
+        with:
+          shared-key: ci-test-${{ matrix.config.name }}
+          prefix-key: v0 #increment this to bust the cache if needed
+          save-if: ${{ github.event_name == 'push' }}
+
+      - name: Run cargo test [Linux]
+        if: matrix.config.target == 'x86_64-unknown-linux-gnu'
+        run: cargo test --target ${{ matrix.config.target }}
+
+  clippy:
+    runs-on: ubuntu-latest
+    name: Clippy correctness checks (${{ matrix.config.name }})
+    strategy:
+      fail-fast: false
+      matrix:
         config:
           - { target: "x86_64-unknown-linux-gnu", name: "linux" }
           - { target: "wasm32-unknown-unknown", name: "wasm" }
@@ -44,7 +69,7 @@ jobs:
       - name: Cache rust dependencies
         uses: Swatinem/rust-cache@v2
         with:
-          shared-key: ci-${{matrix.variant.type}}-${{ matrix.config.name }}
+          shared-key: ci-clippy-${{ matrix.config.name }}
           prefix-key: v0 #increment this to bust the cache if needed
           save-if: ${{ github.event_name == 'push' }}
 
@@ -58,20 +83,12 @@ jobs:
 
 
       - name: Run cargo clippy [Linux]
-        if: matrix.config.target == 'x86_64-unknown-linux-gnu' && matrix.variant.type == 'clippy'
+        if: matrix.config.target == 'x86_64-unknown-linux-gnu'
         run: cargo clippy --target ${{ matrix.config.target }} -- -W clippy::correctness -D warnings
 
       - name: Run cargo clippy [WASM]
-        if: matrix.config.target == 'wasm32-unknown-unknown' && matrix.variant.type == 'clippy'
+        if: matrix.config.target == 'wasm32-unknown-unknown'
         run: cargo clippy --profile wasm --no-default-features --target ${{ matrix.config.target }} -- -W clippy::correctness -D warnings
-
-      - name: Run cargo test [Linux]
-        if: matrix.config.target == 'x86_64-unknown-linux-gnu' && matrix.variant.type == 'test'
-        run: cargo test --target ${{ matrix.config.target }}
-
-      - name: Run cargo test [WASM]
-        if: matrix.config.target == 'wasm32-unknown-unknown' && matrix.variant.type == 'test'
-        run: cargo test --profile wasm --no-default-features --target ${{ matrix.config.target }}
 
   cargo-deny:
     name: License and advisories check
