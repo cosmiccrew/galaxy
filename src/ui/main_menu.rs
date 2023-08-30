@@ -151,6 +151,7 @@ fn main_menu_button_system(
                 Interaction::Pressed => {
                     match *main_button_type {
                         MainMenuButton::Local => {
+                            //in future, this should go to another main menu section, where
                             engine_state.set(EngineState::InGame);
                         }
                         MainMenuButton::Online => {
@@ -232,15 +233,17 @@ mod tests {
             &EngineState::default()
         );
 
-        let mut disabled_interaction = app.world.get_mut::<Interaction>(disabled).unwrap();
+        *app.world.get_mut::<Interaction>(disabled).unwrap() = Interaction::Pressed;
 
-        *disabled_interaction = Interaction::Pressed;
+        // *disabled_interaction = Interaction::Pressed;
 
         //has to be performed twice, as state changes take two updates
         app.update();
         app.update();
 
-        //as this button is disabled, nothing should change
+        *app.world.get_mut::<Interaction>(disabled).unwrap() = Interaction::None;
+
+        //nothing should happen in either situation here
         assert_eq!(
             app.world
                 .get_resource::<State<EngineState>>()
@@ -249,13 +252,34 @@ mod tests {
             &EngineState::default()
         );
 
-        let mut enabled_interaction = app.world.get_mut::<Interaction>(enabled).unwrap();
+        app.update();
+        app.update();
 
-        println!("{:?}", &*enabled_interaction);
+        //as this button is disabled, nothing should change here
+        assert_eq!(
+            app.world
+                .get_resource::<State<EngineState>>()
+                .unwrap()
+                .get(),
+            &EngineState::default()
+        );
 
-        *enabled_interaction = Interaction::Pressed;
+        *app.world.get_mut::<Interaction>(enabled).unwrap() = Interaction::Pressed;
 
-        println!("{:?}", &*enabled_interaction);
+        //has to be performed twice, as state changes take two updates
+        app.update();
+        app.update();
+
+        //the state shouldn't have changed yet!
+        assert_eq!(
+            app.world
+                .get_resource::<State<EngineState>>()
+                .unwrap()
+                .get(),
+            &EngineState::default()
+        );
+
+        *app.world.get_mut::<Interaction>(enabled).unwrap() = Interaction::Pressed;
 
         //has to be performed twice, as state changes take two updates
         app.update();
