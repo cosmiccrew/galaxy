@@ -21,15 +21,19 @@ jobs:
       - name: Run cargo fmt
         run: cargo fmt --all -- --check
 
-  clippy:
+  clippy-test:
     runs-on: ubuntu-latest
-    name: Clippy correctness checks (${{ matrix.config.name }})
+    name: ${{ matrix.variant.name}} (${{ matrix.config.name }})
     strategy:
       fail-fast: false
       matrix:
+        variant:
+          - { type: "clippy", name: "Clippy correctness checks" }
+          - { type: "test", name: "Workspace tests" }
         config:
           - { target: "x86_64-unknown-linux-gnu", name: "linux" }
           - { target: "wasm32-unknown-unknown", name: "wasm" }
+
     steps:
       - name: Checkout source
         uses: actions/checkout@v3
@@ -40,7 +44,7 @@ jobs:
       - name: Cache rust dependencies
         uses: Swatinem/rust-cache@v2
         with:
-          shared-key: ci-${{ matrix.config.name }}
+          shared-key: ci-${{matrix.variant.type}}-${{ matrix.config.name }}
           prefix-key: v0 #increment this to bust the cache if needed
           save-if: ${{ github.event_name == 'push' }}
 
@@ -54,12 +58,20 @@ jobs:
 
 
       - name: Run cargo clippy [Linux]
-        if: matrix.config.target == 'x86_64-unknown-linux-gnu'
+        if: matrix.config.target == 'x86_64-unknown-linux-gnu' && matrix.variant.type == 'clippy'
         run: cargo clippy --target ${{ matrix.config.target }} -- -W clippy::correctness -D warnings
 
       - name: Run cargo clippy [WASM]
-        if: matrix.config.target == 'wasm32-unknown-unknown'
+        if: matrix.config.target == 'wasm32-unknown-unknown' && matrix.variant.type == 'clippy'
         run: cargo clippy --profile wasm --no-default-features --target ${{ matrix.config.target }} -- -W clippy::correctness -D warnings
+
+      - name: Run cargo test [Linux]
+        if: matrix.config.target == 'x86_64-unknown-linux-gnu' && matrix.variant.type == 'test'
+        run: cargo test --target ${{ matrix.config.target }} --workspace
+
+      - name: Run cargo test [WASM]
+        if: matrix.config.target == 'wasm32-unknown-unknown' && matrix.variant.type == 'test'
+        run: cargo test --profile wasm --no-default-features --target ${{ matrix.config.target }} --workspace
 
   cargo-deny:
     name: License and advisories check
