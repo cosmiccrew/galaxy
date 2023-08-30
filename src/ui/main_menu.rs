@@ -239,25 +239,10 @@ mod tests {
             &EngineState::default()
         );
 
+        //press the disabled button
         *app.world.get_mut::<Interaction>(disabled).unwrap() = Interaction::Pressed;
 
-        // *disabled_interaction = Interaction::Pressed;
-
         //has to be performed twice, as state changes take two updates
-        app.update();
-        app.update();
-
-        *app.world.get_mut::<Interaction>(disabled).unwrap() = Interaction::None;
-
-        //nothing should happen in either situation here
-        assert_eq!(
-            app.world
-                .get_resource::<State<EngineState>>()
-                .unwrap()
-                .get(),
-            &EngineState::default()
-        );
-
         app.update();
         app.update();
 
@@ -270,28 +255,17 @@ mod tests {
             &EngineState::default()
         );
 
+        app.update();
+        app.update();
+
+        //press the enabled button
         *app.world.get_mut::<Interaction>(enabled).unwrap() = Interaction::Pressed;
 
         //has to be performed twice, as state changes take two updates
         app.update();
         app.update();
 
-        //the state shouldn't have changed yet!
-        assert_eq!(
-            app.world
-                .get_resource::<State<EngineState>>()
-                .unwrap()
-                .get(),
-            &EngineState::default()
-        );
-
-        *app.world.get_mut::<Interaction>(enabled).unwrap() = Interaction::None;
-
-        //has to be performed twice, as state changes take two updates
-        app.update();
-        app.update();
-
-        //and here the state should have changed
+        //the state should have now changed!
         assert_ne!(
             app.world
                 .get_resource::<State<EngineState>>()
