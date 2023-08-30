@@ -1,14 +1,14 @@
 use crate::prelude::*;
-use bevy::{sprite::Material2d, utils::HashMap};
+
 use bevy_asset_loader::prelude::*;
 
-#[derive(AssetCollection, Resource)]
+#[derive(AssetCollection, Resource, Clone)]
 pub struct MyAssets {
     // This file will be converted to a texture atlas
     // The configuration for that is part of the `.assets` file
     // Type in `assets/full_dynamic_collection.assets.ron`: `TextureAtlas`
-    #[asset(optional, key = "texture_atlas")]
-    pub texture_atlas: Option<Handle<TextureAtlas>>,
+    #[asset(key = "ui/icons/prompts")]
+    pub ui_icon_prompts: Handle<TextureAtlas>,
 
     #[asset(key = "dummy")]
     pub dummy: Handle<Image>,
@@ -29,6 +29,8 @@ pub struct MyAssets {
 
     // #[asset(key = "planet_shaders")]
     // planet_shaders: Handle<EarthlikeShader>
+    #[asset(key = "fonts/slkscre.ttf")]
+    pub font: Handle<Font>,
 }
 
 /// Will be used to load assets when the game starts, so they are all pre-loaded
@@ -38,7 +40,7 @@ pub struct GalaxyLoadingPlugin;
 impl Plugin for GalaxyLoadingPlugin {
     fn build(&self, app: &mut App) {
         app.add_loading_state(
-            LoadingState::new(EngineState::LoadingAssets).continue_to_state(EngineState::InGame),
+            LoadingState::new(EngineState::LoadingAssets).continue_to_state(EngineState::MainMenu),
         )
         .add_dynamic_collection_to_loading_state::<_, StandardDynamicAssetCollection>(
             EngineState::LoadingAssets,
@@ -52,26 +54,18 @@ impl Plugin for GalaxyLoadingPlugin {
             (tick_splash_timer, rotate_loading_icon).run_if(in_state(EngineState::LoadingAssets)),
         )
         // When exiting the state, despawn everything that was spawned for this screen
-        .add_systems(
-            OnTransition {
-                from: EngineState::LoadingAssets,
-                to: EngineState::InGame,
-            },
-            teardown::<Loaded>,
-        );
+        .add_systems(OnExit(EngineState::LoadingAssets), teardown::<Loaded>);
     }
 }
 
 fn setup(mut commands: Commands, query: Query<Entity>) {
     info!("Setting up the world...");
 
-    commands.spawn((Camera2dBundle::default(), Persist));
-
-    //Add the Persist entity to all current items, as these should never be removed
-    // by a teardown.
-    for entity in &query {
-        commands.entity(entity).insert(Persist);
-    }
+    commands.spawn((
+        Camera2dBundle::default(),
+        Persist,
+        Name::from("Main Camera"),
+    ));
 
     info!("World has been set up!");
 }
@@ -89,6 +83,9 @@ fn splash_setup(mut commands: Commands, asset_server: Res<AssetServer>) {
 
     commands
         .spawn((
+            Name::from("Loading Icon Node"),
+            Loaded,
+            LoadingIcon,
             NodeBundle {
                 style: Style {
                     align_items: AlignItems::Center,
@@ -98,8 +95,6 @@ fn splash_setup(mut commands: Commands, asset_server: Res<AssetServer>) {
                 },
                 ..default()
             },
-            Loaded,
-            LoadingIcon,
         ))
         .with_children(|parent| {
             parent.spawn(ImageBundle {
@@ -116,7 +111,7 @@ fn splash_setup(mut commands: Commands, asset_server: Res<AssetServer>) {
     commands.insert_resource(SplashTimer(Timer::from_seconds(5.0, TimerMode::Once)));
 }
 
-fn rotate_loading_icon(commands: Commands, mut query: Query<&mut Transform, With<LoadingIcon>>) {
+fn rotate_loading_icon(_commands: Commands, mut query: Query<&mut Transform, With<LoadingIcon>>) {
     for mut object in &mut query {
         object.rotate_z(10f32.to_radians());
     }
@@ -133,7 +128,7 @@ mod tests {
     #[test]
     fn test_rotate_loading_icon() {
         use crate::{
-            loading::{rotate_loading_icon, splash_setup, LoadingIcon},
+            loading::{rotate_loading_icon, LoadingIcon},
             prelude::*,
         };
 

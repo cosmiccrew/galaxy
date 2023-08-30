@@ -1,11 +1,7 @@
 // use std::fmt::Debug;
 
 use crate::prelude::*;
-use bevy::{
-    reflect::*,
-    render::{extract_component::ExtractComponent, render_resource::*},
-    sprite::Material2d,
-};
+use bevy::{reflect::*, render::render_resource::*, sprite::Material2d};
 
 #[derive(Debug, Component, Reflect, Clone, Copy, ShaderType, AsBindGroup, TypeUuid, PartialEq)]
 #[reflect(Component)]
@@ -21,11 +17,11 @@ pub struct Earthlike {
 
 impl Earthlike {
     pub(crate) fn randomise_seed(&mut self) {
-        self.celestial.seed = (rand::thread_rng().gen());
+        self.celestial.seed = rand::thread_rng().gen();
     }
 
     pub(crate) fn randomise_rotation(&mut self) {
-        self.celestial.rotation = (rand::thread_rng().gen_range(0f32..TAU));
+        self.celestial.rotation = rand::thread_rng().gen_range(0f32..TAU);
     }
 }
 

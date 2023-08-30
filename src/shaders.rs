@@ -1,25 +1,9 @@
 use crate::prelude::*;
 
 use bevy::{
-    asset::{load_internal_asset, Asset},
-    core_pipeline::core_2d,
-    ecs::component::TableStorage,
-    prelude::shape::Plane,
-    reflect::{TypePath, TypeUuid},
-    render::{
-        extract_component::{ExtractComponent, ExtractComponentPlugin},
-        extract_resource::{ExtractResource, ExtractResourcePlugin},
-        render_graph::{self, RenderGraph},
-        render_phase::AddRenderCommand,
-        render_resource::*,
-        renderer::{RenderContext, RenderDevice, RenderQueue},
-        Extract, Render, RenderApp, RenderSet,
-    },
-    sprite::{Material2d, Material2dPlugin, MaterialMesh2dBundle, Mesh2dHandle},
-};
-
-use bevy_inspector_egui::{
-    prelude::ReflectInspectorOptions, quick::ResourceInspectorPlugin, InspectorOptions,
+    asset::load_internal_asset,
+    render::render_resource::*,
+    sprite::{Material2d, Material2dPlugin, Mesh2dHandle},
 };
 
 pub mod cloud_cover;
