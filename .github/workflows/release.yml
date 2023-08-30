@@ -82,8 +82,7 @@ jobs:
       # - name: Install platform specific dependencies [Linux]
       #   if: matrix.config.os == 'ubuntu-latest'
       #   run: |
-      #     sudo apt-get update &&
-      #     sudo apt-get install -y g++ pkg-config libx11-dev libasound2-dev libudev-dev
+      #     sudo apt-get update; sudo apt-get install libasound2-dev libudev-dev --no-install-recommends
 
 
       - name: Cache rust dependencies
