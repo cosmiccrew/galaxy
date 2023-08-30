@@ -142,6 +142,7 @@ fn main_menu_button_system(
         ),
         (Changed<Interaction>, With<Button>),
     >,
+    mut flag: Local<bool>,
 ) {
     for (interaction, mut color, mut border_color, main_button_type, button_state) in
         &mut interaction_query
@@ -149,26 +150,31 @@ fn main_menu_button_system(
         if *button_state == ButtonState::Enabled {
             match *interaction {
                 Interaction::Pressed => {
-                    match *main_button_type {
-                        MainMenuButton::Local => {
-                            //in future, this should go to another main menu section, where
-                            engine_state.set(EngineState::InGame);
-                        }
-                        MainMenuButton::Online => {
-                            // engine_state.set(EngineState::InGame);
-                        }
-                        MainMenuButton::Settings => {
-                            // engine_state.set(EngineState::InGame);
-                        }
+                    if !*flag {
+                        *flag = true;
                     }
                 }
-                Interaction::Hovered => {
-                    *color = HOVERED_BUTTON.into();
-                    border_color.0 = Color::DARK_GRAY;
-                }
-                Interaction::None => {
-                    *color = ENABLED_BUTTON.into();
-                    border_color.0 = Color::BLACK;
+                interation => {
+                    if *flag {
+                        match *main_button_type {
+                            MainMenuButton::Local => {
+                                //in future, this should go to another main menu section, where
+                                engine_state.set(EngineState::InGame);
+                            }
+                            MainMenuButton::Online => {
+                                // engine_state.set(EngineState::InGame);
+                            }
+                            MainMenuButton::Settings => {
+                                // engine_state.set(EngineState::InGame);
+                            }
+                        }
+                    } else if interaction == &Interaction::Hovered {
+                        *color = HOVERED_BUTTON.into();
+                        border_color.0 = Color::DARK_GRAY;
+                    } else if interaction == &Interaction::None {
+                        *color = ENABLED_BUTTON.into();
+                        border_color.0 = Color::BLACK;
+                    }
                 }
             }
         }
