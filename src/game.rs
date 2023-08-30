@@ -1,25 +1,15 @@
-use bevy::{
-    reflect::{TypePath, TypeUuid},
-    render::render_resource::{AsBindGroup, ShaderRef},
-    sprite::{Material2d, MaterialMesh2dBundle},
-};
-use rand::Rng;
-
 use crate::prelude::*;
 
 pub struct GalaxyGamePlugin;
 
 impl Plugin for GalaxyGamePlugin {
     fn build(&self, app: &mut App) {
-        app.add_systems(OnEnter(EngineState::InGame), setup)
+        app.add_state::<GameState>()
+            .insert_resource(WinitSettings::default())
+            .add_systems(OnEnter(EngineState::InGame), setup)
             .add_systems(
                 Update,
-                (
-                    add_loaded_component,
-                    planet_rotation,
-                    planet_randomise,
-                    planet_change_pixels,
-                )
+                (planet_rotation, planet_randomise, planet_change_pixels)
                     .run_if(in_state(EngineState::InGame)),
             )
             .add_systems(OnExit(EngineState::InGame), teardown::<Loaded>);
@@ -29,9 +19,9 @@ impl Plugin for GalaxyGamePlugin {
 fn setup(
     mut commands: Commands,
     mut meshes: ResMut<Assets<Mesh>>,
-    assets: Res<MyAssets>,
+    _assets: Res<MyAssets>,
     mut earthlike_materials: ResMut<Assets<Earthlike>>,
-    mut cloud_cover_materials: ResMut<Assets<CloudCover>>,
+    _cloud_cover_materials: ResMut<Assets<CloudCover>>,
 ) {
     commands.spawn((
         CelestialBundle {
@@ -64,20 +54,20 @@ fn setup(
             }),
             ..default()
         },
-        // cloud_cover_materials.add(CloudCover {
-        //     cloud_cover: 0.4,
-        //     ..default()
-        // }),
+        Loaded,
     ));
 
-    commands.spawn(CelestialBundle {
-        transform: Transform::from_xyz(-450., -100., 0.),
-        mesh: meshes
-            .add(shape::Quad::new(Vec2::new(300., 300.)).into())
-            .into(),
-        celestial_shader: earthlike_materials.add(Earthlike::default()),
-        ..default()
-    });
+    commands.spawn((
+        CelestialBundle {
+            transform: Transform::from_xyz(-450., -100., 0.),
+            mesh: meshes
+                .add(shape::Quad::new(Vec2::new(300., 300.)).into())
+                .into(),
+            celestial_shader: earthlike_materials.add(Earthlike::default()),
+            ..default()
+        },
+        Loaded,
+    ));
 
     commands.spawn((
         CelestialBundle {
@@ -98,19 +88,20 @@ fn setup(
         //     cloud_cover: 0.2,
         //     ..default()
         // }),
+        Loaded,
     ));
 }
 
 fn planet_rotation(
-    mut commands: Commands,
+    _commands: Commands,
     // mut query: Query<&mut Transform, With<Planet>>,
-    mut query: Query<&mut Handle<Earthlike>, With<Celestial>>,
+    query: Query<&mut Handle<Earthlike>, With<Celestial>>,
     mut materials: ResMut<Assets<Earthlike>>,
     keyboard_input: Res<Input<KeyCode>>,
     time: Res<Time>,
 ) {
     for earthlike_handle in query.iter() {
-        let mut earthlike_material = materials.get_mut(earthlike_handle).unwrap();
+        let earthlike_material = materials.get_mut(earthlike_handle).unwrap();
 
         let mut direction = 0f32;
 
@@ -122,18 +113,18 @@ fn planet_rotation(
             direction -= 1.;
         }
 
-        earthlike_material.celestial.rotation += (time.delta_seconds() * FRAC_PI_2 * direction);
+        earthlike_material.celestial.rotation += time.delta_seconds() * FRAC_PI_2 * direction;
     }
 }
 
 fn planet_randomise(
-    mut commands: Commands,
-    mut query: Query<&mut Handle<Earthlike>, With<Celestial>>,
+    _commands: Commands,
+    query: Query<&mut Handle<Earthlike>, With<Celestial>>,
     keyboard_input: Res<Input<KeyCode>>,
     mut materials: ResMut<Assets<Earthlike>>,
 ) {
     for earthlike_handle in query.iter() {
-        let mut earthlike_material = materials.get_mut(earthlike_handle).unwrap();
+        let earthlike_material = materials.get_mut(earthlike_handle).unwrap();
 
         if keyboard_input.just_pressed(KeyCode::Space) {
             earthlike_material.randomise();
@@ -142,15 +133,15 @@ fn planet_randomise(
 }
 
 fn planet_change_pixels(
-    mut commands: Commands,
+    _commands: Commands,
     // mut query: Query<&mut Transform, With<Planet>>,
-    mut query: Query<&mut Handle<Earthlike>, With<Celestial>>,
+    query: Query<&mut Handle<Earthlike>, With<Celestial>>,
     mut materials: ResMut<Assets<Earthlike>>,
     keyboard_input: Res<Input<KeyCode>>,
-    time: Res<Time>,
+    _time: Res<Time>,
 ) {
     for earthlike_handle in query.iter() {
-        let mut earthlike_material = materials.get_mut(earthlike_handle).unwrap();
+        let earthlike_material = materials.get_mut(earthlike_handle).unwrap();
 
         let mut direction = 0f32;
 
@@ -163,42 +154,5 @@ fn planet_change_pixels(
         }
 
         earthlike_material.celestial.pixels += direction;
-    }
-}
-
-fn add_loaded_component(
-    mut commands: Commands,
-    query: Query<Entity, (Without<Loaded>, Without<Persist>)>,
-) {
-    for entity in &query {
-        commands.entity(entity).insert(Loaded);
-    }
-}
-
-#[cfg(test)]
-mod tests {
-
-    #[test]
-    fn test_adding_loaded_component() {
-        use crate::game::add_loaded_component;
-        use crate::prelude::*;
-
-        let mut app = App::new();
-
-        app.add_systems(Update, add_loaded_component);
-
-        let should_have = app
-            .world
-            .spawn(Name::new("Should have loaded component"))
-            .id();
-        let should_not_change = app
-            .world
-            .spawn((Persist, Name::new("Should not change")))
-            .id();
-
-        app.update();
-
-        assert!(app.world.get::<Loaded>(should_have).is_some());
-        assert!(app.world.get::<Loaded>(should_not_change).is_none());
     }
 }
