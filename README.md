@@ -1,6 +1,7 @@
 `Cosmic Crew: Galaxy`
 ==================
 ![CI](https://github.com/cosmiccrew/galaxy/actions/workflows/ci.yml/badge.svg)
+[![Pages](https://github.com/cosmiccrew/galaxy/actions/workflows/pages.yml/badge.svg)](https://cosmiccrew.github.io/galaxy)
 ![Release](https://github.com/cosmiccrew/galaxy/actions/workflows/release.yml/badge.svg)
 <!-- [![Coverage](https://codecov.io/gh/cosmiccrew/galaxy/branch/main/graph/badge.svg?token=5OAH8CQSIL)](https://codecov.io/gh/cosmiccrew/galaxy) -->
 
