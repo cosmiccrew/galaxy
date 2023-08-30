@@ -279,7 +279,7 @@ mod tests {
             &EngineState::default()
         );
 
-        *app.world.get_mut::<Interaction>(enabled).unwrap() = Interaction::Pressed;
+        *app.world.get_mut::<Interaction>(enabled).unwrap() = Interaction::None;
 
         //has to be performed twice, as state changes take two updates
         app.update();
