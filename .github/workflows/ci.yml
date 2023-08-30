@@ -67,11 +67,11 @@ jobs:
 
       - name: Run cargo test [Linux]
         if: matrix.config.target == 'x86_64-unknown-linux-gnu' && matrix.variant.type == 'test'
-        run: cargo test --target ${{ matrix.config.target }} --workspace
+        run: cargo test --target ${{ matrix.config.target }}
 
       - name: Run cargo test [WASM]
         if: matrix.config.target == 'wasm32-unknown-unknown' && matrix.variant.type == 'test'
-        run: cargo test --profile wasm --no-default-features --target ${{ matrix.config.target }} --workspace
+        run: cargo test --profile wasm --no-default-features --target ${{ matrix.config.target }}
 
   cargo-deny:
     name: License and advisories check
