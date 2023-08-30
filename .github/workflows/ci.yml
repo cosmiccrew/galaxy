@@ -29,14 +29,14 @@ jobs:
       matrix:
         config:
           - { target: "x86_64-unknown-linux-gnu", name: "linux" }
-          # - { target: "wasm32-unknown-unknown", name: "wasm" }
 
     steps:
       - name: Checkout source
         uses: actions/checkout@v3
 
       - name: Install dependencies
-        run: sudo apt-get update; sudo apt-get install pkg-config libx11-dev libasound2-dev libudev-dev
+        if: matrix.config.target == 'x86_64-unknown-linux-gnu'
+        run: sudo apt-get update; sudo apt-get install libasound2-dev libudev-dev --no-install-recommends
 
       - name: Cache rust dependencies
         uses: Swatinem/rust-cache@v2
@@ -64,7 +64,8 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Install dependencies
-        run: sudo apt-get update; sudo apt-get install pkg-config libx11-dev libasound2-dev libudev-dev
+        if: matrix.config.target == 'x86_64-unknown-linux-gnu'
+        run: sudo apt-get update; sudo apt-get install libasound2-dev libudev-dev --no-install-recommends
 
       - name: Cache rust dependencies
         uses: Swatinem/rust-cache@v2
