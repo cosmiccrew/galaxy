@@ -56,21 +56,24 @@ fn setup(mut commands: Commands, assets: Res<MyAssets>) {
         .with_children(|parent| {
             //Menu Buttons (50% center)
             parent
-                .spawn(NodeBundle {
-                    style: Style {
-                        border: UiRect::all(Val::Px(5.)),
-                        padding: UiRect::vertical(Val::Percent(5.)),
-                        width: Val::Percent(50.),
-                        height: Val::Percent(100.),
-                        flex_direction: FlexDirection::Column, //align items in a column
-                        align_items: AlignItems::Center,
-                        justify_content: JustifyContent::SpaceEvenly,
+                .spawn((
+                    Name::from("Menu Buttons"),
+                    NodeBundle {
+                        style: Style {
+                            border: UiRect::all(Val::Px(5.)),
+                            padding: UiRect::vertical(Val::Percent(5.)),
+                            width: Val::Percent(50.),
+                            height: Val::Percent(100.),
+                            flex_direction: FlexDirection::Column, //align items in a column
+                            align_items: AlignItems::Center,
+                            justify_content: JustifyContent::SpaceEvenly,
 
+                            ..default()
+                        },
+                        border_color: Color::GREEN.into(),
                         ..default()
                     },
-                    border_color: Color::GREEN.into(),
-                    ..default()
-                })
+                ))
                 .with_children(|parent| {
                     let font = assets.font.clone();
 
@@ -110,14 +113,17 @@ fn setup(mut commands: Commands, assets: Res<MyAssets>) {
                                 },
                             ))
                             .with_children(|parent| {
-                                parent.spawn(TextBundle::from_section(
-                                    text,
-                                    TextStyle {
-                                        font: font.clone(),
-                                        font_size: 40.0,
-                                        color: Color::rgb(0.4, 0.4, 0.4),
-                                        ..default()
-                                    },
+                                parent.spawn((
+                                    Name::from("Text Bundle"),
+                                    TextBundle::from_section(
+                                        text,
+                                        TextStyle {
+                                            font: font.clone(),
+                                            font_size: 40.0,
+                                            color: Color::rgb(0.4, 0.4, 0.4),
+                                            ..default()
+                                        },
+                                    ),
                                 ));
                             });
                     };
@@ -155,9 +161,11 @@ fn main_menu_button_system(
                             engine_state.set(EngineState::InGame);
                         }
                         MainMenuButton::Online => {
+                            todo!();
                             // engine_state.set(EngineState::InGame);
                         }
                         MainMenuButton::Settings => {
+                            todo!();
                             // engine_state.set(EngineState::InGame);
                         }
                     }
