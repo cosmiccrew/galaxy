@@ -20,7 +20,7 @@ resources = ["assets"]
 
 [dependencies]
 #the bevy game engine itself
-bevy = { version = "0.11.2", default-features = false, features = [ "android_shared_stdcxx", "animation", "bevy_animation", "bevy_asset", "bevy_audio", "bevy_core_pipeline", "bevy_gilrs", "bevy_gizmos", "bevy_gltf", "bevy_pbr", "bevy_render", "bevy_scene", "bevy_sprite", "bevy_text", "bevy_ui", "bevy_winit", "default_font", "filesystem_watcher", "hdr", "ktx2", "png", "serialize", "tonemapping_luts", "vorbis", "zstd", "multi-threaded"] } #the removal of default-features is needed to enable webgpu wasm backend.
+bevy = { version = "0.11.2", default-features = false, features = [ "android_shared_stdcxx", "animation", "bevy_animation", "bevy_asset", "bevy_audio", "bevy_core_pipeline", "bevy_gilrs", "bevy_gizmos", "bevy_gltf", "bevy_pbr", "bevy_render", "bevy_scene", "bevy_sprite", "bevy_text", "bevy_ui", "bevy_winit", "default_font", "filesystem_watcher", "hdr", "ktx2", "png", "serialize", "tonemapping_luts", "vorbis", "zstd", "multi-threaded", "x11"] } #the removal of default-features is needed to enable webgpu wasm backend.
 #resource and asset inspection in bevy
 bevy-inspector-egui = { version = "0.19.0", optional = true }
 #2d physics engine in bevy
