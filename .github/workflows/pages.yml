@@ -35,6 +35,8 @@ jobs:
             - name: Build Release
               run: |
                 trunk build --no-default-features --release --public-url "${GITHUB_REPOSITORY#*/}"
+              env:
+                RUSTFLAGS: --cfg=web_sys_unstable_apis    
 
             - name: optimize WASM
               uses: NiklasEi/wasm-opt-action@v2
