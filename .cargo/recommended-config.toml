@@ -5,6 +5,17 @@
 # requires that `cargo install wasm-server-runner` is installed.
 [target.wasm32-unknown-unknown]
 runner = "wasm-server-runner"
+#enables WebGPU support
+rustflags = ["--cfg=web_sys_unstable_apis"]
+
+# you may want to add these to reduce repeating commands
+[alias]
+rd = "run --features debug"
+bd = "build --features debug"
+rf = "run --features fast_compile"
+bf = "build --features fast_compile"
+w = "r --target wasm32-unknown-unknown --profile wasm --no-default-features"
+bw = "b --target wasm32-unknown-unknown --profile wasm --no-default-features"
 
 [target.x86_64-unknown-linux-gnu]
 linker = "clang"
