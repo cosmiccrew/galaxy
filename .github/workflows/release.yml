@@ -147,7 +147,7 @@ jobs:
         run: |
           artifact_path="galaxy-${{ env.RELEASE_VERSION }}-${{ matrix.config.name }}.deb"
           echo "ARTIFACT_PATH=$artifact_path" >> $GITHUB_ENV
-          cp target/${{ matrix.config.target }}/release/bundle/deb/$artifact_path $artifact_path
+          cp target/${{ matrix.config.target }}/release/bundle/deb/*.deb $artifact_path
 
       - name: ⏫️ Upload artifacts
         uses: actions/upload-artifact@v3
