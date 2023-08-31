@@ -1,5 +1,6 @@
-use crate::prelude::*;
 use bevy::{reflect::*, render::render_resource::*, sprite::Material2d};
+
+use crate::prelude::*;
 
 #[derive(Component, Reflect, Debug, PartialEq, Clone, Copy, ShaderType, AsBindGroup, TypeUuid)]
 #[reflect(Component)]

@@ -1,7 +1,8 @@
 // use std::fmt::Debug;
 
-use crate::prelude::*;
 use bevy::{reflect::*, render::render_resource::*, sprite::Material2d};
+
+use crate::prelude::*;
 
 #[derive(Debug, Component, Reflect, Clone, Copy, ShaderType, AsBindGroup, TypeUuid, PartialEq)]
 #[reflect(Component)]

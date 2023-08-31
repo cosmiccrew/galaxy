@@ -1,6 +1,6 @@
-use crate::prelude::*;
-
 use bevy_asset_loader::prelude::*;
+
+use crate::prelude::*;
 
 #[derive(AssetCollection, Resource, Clone)]
 pub struct MyAssets {
@@ -99,7 +99,8 @@ fn splash_setup(mut commands: Commands, asset_server: Res<AssetServer>) {
         .with_children(|parent| {
             parent.spawn(ImageBundle {
                 style: Style {
-                    // This will set the logo to be 20 percent of the screen size, auto adjusting its size accordingly
+                    // This will set the logo to be 20 percent of the screen size, auto adjusting
+                    // its size accordingly
                     width: Val::Percent(20.),
                     ..default()
                 },

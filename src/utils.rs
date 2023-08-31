@@ -1,9 +1,50 @@
-use std::any::type_name;
-use std::time::Duration;
-
-use bevy::asset::ChangeWatcher;
+use std::{any::type_name, time::Duration};
 
 use crate::prelude::*;
+
+pub struct GalaxyDefaultPlugins;
+
+impl Plugin for GalaxyDefaultPlugins {
+    fn build(&self, app: &mut App) {
+        app.insert_resource(ClearColor(Color::DARK_GRAY))
+            .add_plugins(
+                DefaultPlugins
+                    .set(WindowPlugin {
+                        primary_window: Some(Window {
+                            title: "Cosmic Crew: Galaxy".to_string(),
+                            fit_canvas_to_parent: true,
+                            prevent_default_event_handling: false,
+                            ..default()
+                        }),
+                        ..default()
+                    })
+                    .set(AssetPlugin {
+                        watch_for_changes: bevy::asset::ChangeWatcher::with_delay(
+                            Duration::from_millis(200),
+                        ),
+                        asset_folder: ASSETS_ROOT.into(),
+                    })
+                    .set({
+                        use bevy::log::LogPlugin;
+                        if cfg!(any(feature = "debug", debug_assertions)) {
+                            LogPlugin {
+                                level: bevy::log::Level::DEBUG,
+                                filter: "debug,wgpu_core=warn,wgpu_hal=warn,naga=info,bevy=info"
+                                    .into(),
+                            }
+                        } else {
+                            // this code is compiled only if debug assertions are disabled (release
+                            // mode)
+                            LogPlugin {
+                                level: bevy::log::Level::INFO,
+                                filter: "info,wgpu_core=warn,wgpu_hal=warn".into(),
+                            }
+                        }
+                    })
+                    .set(ImagePlugin::default_nearest()),
+            );
+    }
+}
 
 #[derive(Component, Reflect)]
 pub struct Persist;
@@ -41,59 +82,6 @@ pub fn add_loaded_component(
 ) {
     for entity in &query {
         commands.entity(entity).insert(Loaded);
-    }
-}
-
-pub struct GalaxyDefaultPlugins;
-
-impl Plugin for GalaxyDefaultPlugins {
-    fn build(&self, app: &mut App) {
-        app.insert_resource(ClearColor(Color::DARK_GRAY))
-            .add_plugins(
-                DefaultPlugins
-                    .set(WindowPlugin {
-                        primary_window: Some(Window {
-                            title: "Cosmic Crew: Galaxy".to_string(),
-                            fit_canvas_to_parent: true,
-                            prevent_default_event_handling: false,
-                            ..default()
-                        }),
-                        ..default()
-                    })
-                    .set(AssetPlugin {
-                        watch_for_changes: ChangeWatcher::with_delay(Duration::from_millis(200)),
-                        asset_folder: {
-                            if cfg!(all(
-                                target_os = "macos",
-                                not(feature = "debug"),
-                                not(debug_assertions),
-                                not(feature = "fast_compile"),
-                            )) {
-                                "../Resources/assets".to_string()
-                            } else {
-                                "assets".to_string()
-                            }
-                        },
-                    })
-                    .set({
-                        use bevy::log::LogPlugin;
-                        if cfg!(any(feature = "debug", debug_assertions)) {
-                            LogPlugin {
-                                level: bevy::log::Level::DEBUG,
-                                filter: "debug,wgpu_core=warn,wgpu_hal=warn,naga=info,bevy=info"
-                                    .into(),
-                            }
-                        } else {
-                            // this code is compiled only if debug assertions are disabled (release
-                            // mode)
-                            LogPlugin {
-                                level: bevy::log::Level::INFO,
-                                filter: "info,wgpu_core=warn,wgpu_hal=warn".into(),
-                            }
-                        }
-                    })
-                    .set(ImagePlugin::default_nearest()),
-            );
     }
 }
 

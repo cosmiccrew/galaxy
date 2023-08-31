@@ -5,6 +5,7 @@ pub struct GalaxyGamePlugin;
 impl Plugin for GalaxyGamePlugin {
     fn build(&self, app: &mut App) {
         app.add_state::<GameState>()
+            .add_plugins(bevy_xpbd_2d::prelude::PhysicsPlugins::default())
             .insert_resource(WinitSettings::default())
             .add_systems(OnEnter(EngineState::InGame), setup)
             .add_systems(

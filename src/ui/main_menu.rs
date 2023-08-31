@@ -186,9 +186,8 @@ fn main_menu_button_system(
 #[cfg(test)]
 mod tests {
 
-    use crate::prelude::*;
-
     use super::{main_menu_button_system, ButtonState, MainMenuButton};
+    use crate::prelude::*;
 
     #[test]
     fn test_main_menu_button_system() {
