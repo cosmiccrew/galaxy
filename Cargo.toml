@@ -1,6 +1,6 @@
 [package]
 name = "galaxy"
-version = "0.1.0"
+version = "0.2.0"
 edition = "2021"
 license = "MIT OR Apache-2.0"
 repository = "https://github.com/cosmiccrew/galaxy"
@@ -21,15 +21,13 @@ resources = ["assets"]
 [dependencies]
 #the bevy game engine itself
 bevy = { version = "0.11.2", default-features = false, features = [ "android_shared_stdcxx", "animation", "bevy_animation", "bevy_asset", "bevy_audio", "bevy_core_pipeline", "bevy_gilrs", "bevy_gizmos", "bevy_gltf", "bevy_pbr", "bevy_render", "bevy_scene", "bevy_sprite", "bevy_text", "bevy_ui", "bevy_winit", "default_font", "filesystem_watcher", "hdr", "ktx2", "png", "serialize", "tonemapping_luts", "vorbis", "zstd", "multi-threaded"] } #the removal of default-features is needed to enable webgpu wasm backend.
-#full on basic editor/debug engine for bevy.
-bevy_editor_pls = { git = "https://github.com/jakobhellermann/bevy_editor_pls.git", optional = true }
 #resource and asset inspection in bevy
-bevy-inspector-egui = "0.19.0"
+bevy-inspector-egui = { version = "0.19.0", optional = true }
 #2d physics engine in bevy
 bevy_xpbd_2d = { git = "https://github.com/Jondolf/bevy_xpbd", features = ["enhanced-determinism"] }
 #bevu "rollback" ggrs networking library
-bevy_ggrs = { version = "0.13.0", features = ["wasm-bindgen"] }
-bevy_matchbox = { version = "0.7.0", features = ["ggrs"] }
+bevy_ggrs = { version = "0.13.0", features = ["wasm-bindgen"], optional = true }
+bevy_matchbox = { version = "0.7.0", features = ["ggrs"], optional = true }
 
 #helps with loading assets in a logical, dynamic format.
 bevy_asset_loader = { version = "0.17.0", features = ["2d", "standard_dynamic_assets"] }
@@ -47,12 +45,17 @@ clap = { version = "4.4.0", features = ["derive"] }
 
 
 [features]
-default = ["debug"]
+default = []
 
 fast_compile = ["bevy/dynamic_linking"]
-ci_testing = ["bevy/bevy_ci_testing"]
 
-debug = ["bevy_editor_pls", "bevy_xpbd_2d/debug-plugin"]
+debug = ["bevy-inspector-egui", "bevy_xpbd_2d/debug-plugin"]
+
+#to reduce the number of dependencies until networking is a feature
+networking = ["bevy_ggrs", "bevy_matchbox"]
+
+#used to set the correct asset paths for bundling
+bundle = []
 
 # long_description
 

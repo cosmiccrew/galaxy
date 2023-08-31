@@ -26,12 +26,12 @@ To run and play Cosmic Crew: Galaxy, there are a few options:
 1. Install rust at [rustup.rs](https://rustup.rs)
 2. Clone the repo `git clone https://github.com/cosmiccrew/galaxy.git`
 3. `cd galaxy`
-4. `cargo run` (faster compiles, slower performance) or `cargo run --release --no-default-features` (increased runtime performance, but longer compile times)
+4. `cargo run` (faster compiles, slower performance) or `cargo run --release` (increased runtime performance, but longer compile times)
 
 #### Using WASM
 1. follow the from source instructions, skipping step 4
-2. `cargo run --profile wasm --no-default-features --target wasm32-unknown-unknown`, running with bevy's webgpu backend
-NOTE: (this uses will not work without additional config if .cargo/config.toml is removed)
+2. `cargo run --profile wasm --target wasm32-unknown-unknown`, running with bevy's webgpu backend
+NOTE: (this uses `RUSTFLAGS="--cfg=web_sys_unstable_apis"` and `wasm-server-runner` to enable webgpu support - take a look at the wasm section of `.cargo/recommended-config.toml` for details)
 -------
 
 ## Contributing
@@ -40,7 +40,7 @@ Any and all contributions are welcome! Pull requests are checked for `cargo test
 
 Before submitting a PR or issue, please run the following commands and follow their instructions:
 1. `cargo clippy`
-2. `cargo +nightly fmt`
+2. `cargo +nightly fmt` (requires install the "nightly" toolchain via `rustup install nightly`)
 
 #### Dev builds
 
@@ -48,8 +48,14 @@ The development build by default has some **runtime performance** improvements e
 ```bash
 cargo run --features fast_compile
 ```
-You may want to create a `Makefile`, shell alias, or other similar script runner (e.g. [Just](https://just.systems/)) for this.
 NOTE: this will decrease runtime performance somewhat.
+
+there is also option debug features and plugins to help with development that are enabled with the "debug" feature:
+```bash
+cargo run --features debug
+```
+
+You may want to create a cargo alias (like those found in `.cargo/recommended-config.toml`) to have a shorthand for these commands.
 
 -------
 

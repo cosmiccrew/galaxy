@@ -1,12 +1,9 @@
-use std::str::FromStr;
-use std::{collections::BTreeMap, fs, path::PathBuf};
+use std::{collections::BTreeMap, fs, path::PathBuf, str::FromStr};
 
+use clap::{Parser, Subcommand};
+use serde::{Deserialize, Serialize};
 use show_image::create_window;
 use text_io::read;
-
-use clap::Parser;
-use clap::Subcommand;
-use serde::{Deserialize, Serialize};
 
 #[derive(Serialize, Deserialize, Default)]
 #[serde(rename_all = "snake_case")]

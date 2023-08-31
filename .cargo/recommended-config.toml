@@ -14,8 +14,8 @@ rd = "run --features debug"
 bd = "build --features debug"
 rf = "run --features fast_compile"
 bf = "build --features fast_compile"
-w = "r --target wasm32-unknown-unknown --profile wasm --no-default-features"
-bw = "b --target wasm32-unknown-unknown --profile wasm --no-default-features"
+w = "run --target wasm32-unknown-unknown --profile wasm --no-default-features"
+bw = "build --target wasm32-unknown-unknown --profile wasm --no-default-features"
 
 [target.x86_64-unknown-linux-gnu]
 linker = "clang"
