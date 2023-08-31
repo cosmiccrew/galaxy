@@ -43,7 +43,7 @@ jobs:
       - name: Cache rust dependencies
         uses: Swatinem/rust-cache@v2
         with:
-          shared-key: ci-test-${{ matrix.config.name }}
+          shared-key: test-${{ matrix.config.name }}
           prefix-key: v0 #increment this to bust the cache if needed
           save-if: ${{ github.event_name == 'push' }}
 
@@ -72,7 +72,7 @@ jobs:
       - name: Cache rust dependencies
         uses: Swatinem/rust-cache@v2
         with:
-          shared-key: ci-clippy-${{ matrix.config.name }}
+          shared-key: clippy-${{ matrix.config.name }}
           prefix-key: v0 #increment this to bust the cache if needed
           save-if: ${{ github.event_name == 'push' }}
 
@@ -91,7 +91,7 @@ jobs:
 
       - name: Run cargo clippy [WASM]
         if: matrix.config.target == 'wasm32-unknown-unknown'
-        run: cargo clippy --profile wasm --no-default-features --target ${{ matrix.config.target }} -- -W clippy::correctness -D warnings
+        run: cargo clippy --profile wasm --target ${{ matrix.config.target }} -- -W clippy::correctness -D warnings
         env:
           RUSTFLAGS: --cfg=web_sys_unstable_apis
 
