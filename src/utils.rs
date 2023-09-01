@@ -27,14 +27,14 @@ impl Plugin for GalaxyDefaultPlugins {
                     .set({
                         use bevy::log::LogPlugin;
                         if cfg!(any(feature = "debug", debug_assertions)) {
+                            // this code is compiled only if debug assertions are enabled (release
+                            // mode)
                             LogPlugin {
                                 level: bevy::log::Level::DEBUG,
                                 filter: "debug,wgpu_core=warn,wgpu_hal=warn,naga=info,bevy=info"
                                     .into(),
                             }
                         } else {
-                            // this code is compiled only if debug assertions are disabled (release
-                            // mode)
                             LogPlugin {
                                 level: bevy::log::Level::INFO,
                                 filter: "info,wgpu_core=warn,wgpu_hal=warn".into(),
