@@ -115,8 +115,7 @@ jobs:
       - name: 🛠 Build + Bundle [Macos]
         if: matrix.config.os == 'macos-latest'
         run: |
-          cargo build --release --locked --features bundle --target ${{ matrix.config.target }}
-          CARGO_BUNDLE_SKIP_BUILD=1 cargo bundle --release --features bundle --target ${{ matrix.config.target }}
+          cargo bundle --release --features bundle --target ${{ matrix.config.target }}
 
       - name: Prepare artifacts [Windows]
         shell: bash
