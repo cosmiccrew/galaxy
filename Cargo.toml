@@ -41,7 +41,7 @@ anyhow = "1"
 #pseudo random number generation
 rand = "0.8.5"
 #cli parsing for startup asset config's
-clap = { version = "4.4.0", features = ["derive"] }
+clap = { version = "4.4.2", features = ["derive"] }
 
 
 [features]
