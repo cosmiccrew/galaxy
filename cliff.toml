@@ -1,0 +1,43 @@
+# git-cliff ~ default configuration file
+# https://git-cliff.org/docs/configuration
+#
+# Lines starting with "#" are comments.
+# Configuration options are organized into tables and keys.
+# See documentation for more information on available options.
+
+[changelog]
+# changelog header
+header = """
+# Changelog\n
+"""
+# changelog footer
+footer = ""
+
+# filter out the commits that are not conventional
+filter_unconventional = false
+# process each line of a commit as an individual commit
+split_commits = false
+
+# regex for parsing and grouping commits
+commit_parsers = [
+  { message = "^feat", group = "Features" },
+  { message = "^fix", group = "Bug Fixes" },
+  { message = "^doc", group = "Documentation" },
+  { message = "^perf", group = "Performance" },
+  { message = "^refactor", group = "Refactor" },
+  { message = "^style", group = "Styling" },
+  { message = "^test", group = "Testing" },
+  { message = "^chore\\(release\\): prepare for", skip = true },
+  { message = "^chore\\(deps\\)", skip = true },
+  { message = "^chore\\(pr\\)", skip = true },
+  { message = "^chore\\(pull\\)", skip = true },
+  { body = ".*security", group = "Security" },
+  { message = "^revert", group = "Revert" },
+
+  { message = "^config", group = "Config" },  
+  { message = "^ci", skip = true },
+  { message = "^deps", group = "Dependencies" },
+  { message = "^dependabot", skip = true },
+
+  { message = ".*", group = "Miscellaneous" },
+]
