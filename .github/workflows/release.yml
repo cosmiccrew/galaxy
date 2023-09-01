@@ -38,7 +38,7 @@ jobs:
         uses: orhun/git-cliff-action@v2
         id: git-cliff
         with:
-          args: -vv ${{ steps.cliff-args.outputs.args }} --config cliff.toml
+          args: -vv ${{ steps.cliff-args.outputs.args }}
 
       - name: 📝 Set Job Summary
         run: |
