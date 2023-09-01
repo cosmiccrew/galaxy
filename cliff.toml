@@ -10,13 +10,33 @@
 header = """
 # Changelog\n
 """
+# template for the changelog body
+# https://tera.netlifyx.app/docs/#introduction
+body = """
+{% if version %}\
+    ## [{{ version | trim_start_matches(pat="v") }}] - {{ timestamp | date(format="%Y-%m-%d") }}
+{% else %}\
+    ## [unreleased]
+{% endif %}\
+{% for group, commits in commits | group_by(attribute="group") %}
+    ### {{ group | upper_first }}
+    {% for commit in commits %}
+        - {{ commit.message | upper_first | trim_end }} - [{{ commit.author.name }}]({{ commit.author.email }}) ([{{ commit.id | truncate(length=7, end="") }}]($REPO/commit/{{ commit.id }})) {% if not commit.conventional %}❌{% endif %}
+    {% endfor %}
+{% endfor %}\n
+"""
+
 # changelog footer
 footer = ""
 
+# postprocessors
+postprocessors = [
+    { pattern = '\$REPO', replace = "https://github.com/cosmiccrew/galaxy" }, # replace repository URL
+]
+
+[git]
 # filter out the commits that are not conventional
 filter_unconventional = false
-# process each line of a commit as an individual commit
-split_commits = false
 
 # regex for parsing and grouping commits
 commit_parsers = [
@@ -27,15 +47,16 @@ commit_parsers = [
   { message = "^refactor", group = "Refactor" },
   { message = "^style", group = "Styling" },
   { message = "^test", group = "Testing" },
-  { message = "^chore\\(release\\): prepare for", skip = true },
-  { message = "^chore\\(deps\\)", skip = true },
-  { message = "^chore\\(pr\\)", skip = true },
-  { message = "^chore\\(pull\\)", skip = true },
+  { message = "^chore", skip = true },
+  # { message = "^chore\\(release\\): prepare for", skip = true },
+  # { message = "^chore\\(deps\\)", skip = true },
+  # { message = "^chore\\(pr\\)", skip = true },
+  # { message = "^chore\\(pull\\)", skip = true },
   { body = ".*security", group = "Security" },
   { message = "^revert", group = "Revert" },
 
   { message = "^config", group = "Config" },  
-  { message = "^ci", skip = true },
+  { message = "^ci", group = "CI", skip = true },
   { message = "^deps", group = "Dependencies" },
   { message = "^dependabot", skip = true },
 
