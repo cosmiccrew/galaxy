@@ -1545,7 +1545,7 @@ dependencies = [
 [[package]]
 name = "bevy_xpbd_2d"
 version = "0.2.0"
-source = "git+https://github.com/Jondolf/bevy_xpbd#b71328eb93068027173532059045dee7ac2c44b9"
+source = "git+https://github.com/Jondolf/bevy_xpbd#b93f58f7f06dd4c92408e6a1daeb1dab648b7545"
 dependencies = [
  "bevy",
  "bevy_xpbd_derive",
@@ -1560,7 +1560,7 @@ dependencies = [
 [[package]]
 name = "bevy_xpbd_derive"
 version = "0.1.0"
-source = "git+https://github.com/Jondolf/bevy_xpbd#b71328eb93068027173532059045dee7ac2c44b9"
+source = "git+https://github.com/Jondolf/bevy_xpbd#b93f58f7f06dd4c92408e6a1daeb1dab648b7545"
 dependencies = [
  "quote",
  "syn 2.0.29",
@@ -6222,7 +6222,7 @@ version = "1.6.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "97fee6b57c6a41524a810daee9286c02d7752c4253064d0b05472833a438f675"
 dependencies = [
- "cfg-if 1.0.0",
+ "cfg-if 0.1.10",
  "static_assertions",
 ]
 
@@ -6803,7 +6803,7 @@ dependencies = [
  "js-sys",
  "log",
  "naga 0.9.0",
- "parking_lot 0.12.1",
+ "parking_lot 0.11.2",
  "raw-window-handle 0.4.3",
  "smallvec",
  "wasm-bindgen",
@@ -6825,7 +6825,7 @@ dependencies = [
  "js-sys",
  "log",
  "naga 0.12.3",
- "parking_lot 0.12.1",
+ "parking_lot 0.11.2",
  "profiling",
  "raw-window-handle 0.5.2",
  "smallvec",
@@ -6853,7 +6853,7 @@ dependencies = [
  "fxhash",
  "log",
  "naga 0.9.0",
- "parking_lot 0.12.1",
+ "parking_lot 0.11.2",
  "profiling",
  "raw-window-handle 0.4.3",
  "smallvec",
@@ -6875,7 +6875,7 @@ dependencies = [
  "codespan-reporting",
  "log",
  "naga 0.12.3",
- "parking_lot 0.12.1",
+ "parking_lot 0.11.2",
  "profiling",
  "raw-window-handle 0.5.2",
  "rustc-hash",
@@ -6913,7 +6913,7 @@ dependencies = [
  "metal",
  "naga 0.9.0",
  "objc",
- "parking_lot 0.12.1",
+ "parking_lot 0.11.2",
  "profiling",
  "range-alloc",
  "raw-window-handle 0.4.3",
@@ -6953,7 +6953,7 @@ dependencies = [
  "metal",
  "naga 0.12.3",
  "objc",
- "parking_lot 0.12.1",
+ "parking_lot 0.11.2",
  "profiling",
  "range-alloc",
  "raw-window-handle 0.5.2",
