@@ -1,6 +1,7 @@
 #cargo
 /target
-crates/*/target
+crates/**/target
+tools/**/target
 .cargo/config.toml
 
 #trunk
