@@ -42,14 +42,14 @@ fn setup(
                     time_speed: 10.,
                 },
                 land_colours: [
-                    Color::rgb(0.388235, 0.670588, 0.247059),
-                    Color::rgb(0.231373, 0.490196, 0.309804),
-                    Color::rgb(0.184314, 0.341176, 0.32549),
-                    Color::rgb(0.156863, 0.207843, 0.25098),
+                    Color::PINK,
+                    Color::BLUE,
+                    Color::GREEN,
+                    Color::GRAY,
                 ],
                 river_colours: [
-                    Color::rgb(0.184314, 0.341176, 0.32549),
-                    Color::rgb(0.156863, 0.207843, 0.25098),
+                    Color::RED,
+                    Color::ORANGE,
                 ],
                 ..default()
             }),
