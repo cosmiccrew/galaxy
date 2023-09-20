@@ -11,14 +11,6 @@ var<uniform> land_colours: array<Colour, 4>;
 @group(1) @binding(2)
 var<uniform> river_colours: array<Colour, 2>;
 
-// @group(1) @binding(0)
-// var<uniform> settings.pixels: f32;
-// @group(1) @binding(1)
-// var<uniform> settings.seed: f32;
-// @group(1) @binding(2)
-// var<uniform> settings.rotation: f32;
-// @group(1) @binding(3)
-// var<uniform> colours: array<Colour, 4>;
 
 const OCTAVES = 6; // 0 -> 20
 const size: f32 = 4.6;
@@ -28,12 +20,6 @@ const light_border_1: f32 = 0.287; // 0. -> 1.
 const light_border_2: f32 = 0.476; // 0. -> 1.
 const should_dither: bool = true; // bool
 const light_origin: vec2<f32> = vec2<f32>(0.5, 0.5); // 0. -> 1.
-// const settings.rotation: f32 = 0.; // 0. -> PI*2
-// const settings.time_speed = 0.5;
-// const colours_length = 4;
-
-// const river_colour = Colour(vec4<f32>(0.309804, 0.643137, 0.721569, 1.));
-// const river_colour_dark = Colour(vec4<f32>(0.25098, 0.286275, 0.45098, 1.));
 
 fn random2D(coord: vec2<f32>) -> f32 {
 	// land has to be tiled (or the contintents on this planet have to be changing very fast)
@@ -94,9 +80,7 @@ fn spherify(uv: vec2<f32>) -> vec2<f32> {
 @fragment
 fn fragment(
     mesh: MeshVertexOutput,
-) -> @location(0) vec4<f32> {
-
-	
+) -> @location(0) vec4<f32> {	
 
     var uv = floor(mesh.uv * settings.pixels) / settings.pixels;
 
