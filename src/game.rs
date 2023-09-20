@@ -41,16 +41,8 @@ fn setup(
                     radius: 100.,
                     time_speed: 10.,
                 },
-                land_colours: [
-                    Color::PINK,
-                    Color::BLUE,
-                    Color::GREEN,
-                    Color::GRAY,
-                ],
-                river_colours: [
-                    Color::RED,
-                    Color::ORANGE,
-                ],
+                land_colours: [Color::PINK, Color::BLUE, Color::GREEN, Color::GRAY],
+                river_colours: [Color::RED, Color::ORANGE],
                 ..default()
             }),
             ..default()
