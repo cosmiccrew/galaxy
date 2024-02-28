@@ -10,38 +10,37 @@ description = "Cosmic Crew: Galaxy is a 2d, class based gravity oriented fightin
 resolver = "2"
 members = ["tools/*"]
 
-[package.metadata.bundle]
-# name = "Cosmic Crew: Galaxy"
-identifier = "dev.sycro.comsiccrew.galaxy"
-# icon = ["build/icons"]
-resources = ["assets"]
-
 #See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
 #the bevy game engine itself
-bevy = { version = "0.11.2", default-features = false, features = [ "android_shared_stdcxx", "animation", "bevy_animation", "bevy_asset", "bevy_audio", "bevy_core_pipeline", "bevy_gilrs", "bevy_gizmos", "bevy_gltf", "bevy_pbr", "bevy_render", "bevy_scene", "bevy_sprite", "bevy_text", "bevy_ui", "bevy_winit", "default_font", "filesystem_watcher", "hdr", "ktx2", "png", "serialize", "tonemapping_luts", "vorbis", "zstd", "multi-threaded", "x11"] } #the removal of default-features is needed to enable webgpu wasm backend.
+bevy = { version = "0.13.0", features = ["serialize"] } #the removal of default-features is needed to enable webgpu wasm backend.
 #resource and asset inspection in bevy
-bevy-inspector-egui = { version = "0.19.0", optional = true }
+bevy-inspector-egui = { version = "0.23.2", optional = true }
 #2d physics engine in bevy
-bevy_xpbd_2d = { git = "https://github.com/Jondolf/bevy_xpbd", features = ["enhanced-determinism"] }
-#bevu "rollback" ggrs networking library
-bevy_ggrs = { version = "0.13.0", features = ["wasm-bindgen"], optional = true }
-bevy_matchbox = { git = "https://github.com/johanhelsing/matchbox", version = "0.7.0", features = ["ggrs"], optional = true }
+# bevy_xpbd_2d = { git = "https://github.com/Jondolf/bevy_xpbd", features = ["enhanced-determinism"] }
+bevy_xpbd_2d = { version = "0.4.2", features = ["enhanced-determinism"] }
 
-#helps with loading assets in a logical, dynamic format.
-bevy_asset_loader = { version = "0.17.0", features = ["2d", "standard_dynamic_assets"] }
+#bevu "rollback" ggrs networking library
+bevy_ggrs = { version = "0.15.0", features = ["wasm-bindgen"], optional = true }
+
+# bevy_matchbox = { git = "https://github.com/johanhelsing/matchbox", version = "0.7.0", features = ["ggrs"], optional = true }
+bevy_matchbox = { version = "0.8.0", features = ["ggrs"], optional = true }
+
 #handling inputs in a logical, extensible way with options for command combinations or aliases.
-leafwing-input-manager = "0.10.0"
+leafwing-input-manager = "0.13.3"
 
 #(ser)ialising/(de)serialising library
 serde = "1"
-#dynamic error handler and logger
-anyhow = "1"
+#dynamic error handler
+miette = { version = "7.1.0" }
+#logging
+log = "0.4.20"
+
 #pseudo random number generation
 rand = "0.8.5"
 #cli parsing for startup asset config's
-clap = { version = "4.4.0", features = ["derive"] }
+clap = { version = "4.5.1", features = ["derive"] }
 
 
 [features]
@@ -49,15 +48,15 @@ default = []
 
 fast_compile = ["bevy/dynamic_linking"]
 
-debug = ["bevy-inspector-egui", "bevy_xpbd_2d/debug-plugin"]
+debug = ["dep:bevy-inspector-egui", "bevy_xpbd_2d/debug-plugin", "watcher", "miette/fancy"]
+
+watcher = ["bevy/file_watcher", "bevy/embedded_watcher"]
 
 #to reduce the number of dependencies until networking is a feature
-networking = ["bevy_ggrs", "bevy_matchbox"]
+networking = ["dep:bevy_ggrs", "dep:bevy_matchbox"]
 
 #used to set the correct asset paths for bundling
 bundle = []
-
-# long_description
 
 [profile.dev]
 opt-level = 1

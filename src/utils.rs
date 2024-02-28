@@ -2,7 +2,9 @@ use std::{any::type_name, time::Duration};
 
 use crate::prelude::*;
 
-pub struct GalaxyDefaultPlugins;
+pub struct GalaxyDefaultPlugins {
+    pub log_level: bevy::log::Level,
+}
 
 impl Plugin for GalaxyDefaultPlugins {
     fn build(&self, app: &mut App) {
@@ -12,33 +14,28 @@ impl Plugin for GalaxyDefaultPlugins {
                     .set(WindowPlugin {
                         primary_window: Some(Window {
                             title: "Cosmic Crew: Galaxy".to_string(),
-                            fit_canvas_to_parent: true,
                             prevent_default_event_handling: false,
                             ..default()
                         }),
                         ..default()
                     })
-                    .set(AssetPlugin {
-                        watch_for_changes: bevy::asset::ChangeWatcher::with_delay(
-                            Duration::from_millis(200),
-                        ),
-                        asset_folder: ASSETS_ROOT.into(),
-                    })
                     .set({
-                        use bevy::log::LogPlugin;
-                        if cfg!(any(feature = "debug", debug_assertions)) {
-                            // this code is compiled only if debug assertions are enabled (release
-                            // mode)
-                            LogPlugin {
-                                level: bevy::log::Level::DEBUG,
-                                filter: "debug,wgpu_core=warn,wgpu_hal=warn,naga=info,bevy=info"
-                                    .into(),
-                            }
-                        } else {
-                            LogPlugin {
-                                level: bevy::log::Level::INFO,
-                                filter: "info,wgpu_core=warn,wgpu_hal=warn".into(),
-                            }
+                        use bevy::log::{Level, LogPlugin};
+
+                        let filter = match self.log_level {
+                            Level::ERROR => "error",
+                            Level::WARN => "warn",
+                            Level::INFO => "info",
+                            Level::DEBUG => "debug",
+                            Level::TRACE => "trace,bevy_xpbd_2d=info",
+                        }
+                        .to_string()
+                            + ",wgpu_core=warn,wgpu_hal=warn,wgpu=error,naga=warn";
+
+                        LogPlugin {
+                            filter,
+                            level: self.log_level,
+                            ..default()
                         }
                     })
                     .set(ImagePlugin::default_nearest()),

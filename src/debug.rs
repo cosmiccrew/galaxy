@@ -1,5 +1,5 @@
 use bevy::{
-    diagnostic::{EntityCountDiagnosticsPlugin, FrameTimeDiagnosticsPlugin},
+    diagnostic::{EntityCountDiagnosticsPlugin, FrameTimeDiagnosticsPlugin, LogDiagnosticsPlugin},
     window::close_on_esc,
 };
 
@@ -12,20 +12,19 @@ pub struct GalaxyDebugPlugin;
 
 impl Plugin for GalaxyDebugPlugin {
     fn build(&self, app: &mut App) {
-        // use bevy_editor_pls::prelude::*;
-        // use bevy_inspector_egui::prelude::*;
-
-        app.register_type::<CelestialBundle<Earthlike>>()
-            .register_type::<CloudCover>();
-
         app.add_plugins((
             // EditorPlugin::default(),
+            LogDiagnosticsPlugin::default(),
             FrameTimeDiagnosticsPlugin,
-            EntityCountDiagnosticsPlugin,
+            // EntityCountDiagnosticsPlugin,
         ))
         .add_systems(Update, close_on_esc);
 
         #[cfg(not(target_family = "wasm"))]
-        app.add_plugins(bevy_inspector_egui::quick::WorldInspectorPlugin::default());
+        app.add_plugins((
+            bevy_inspector_egui::quick::WorldInspectorPlugin::default(),
+            bevy_inspector_egui::quick::StateInspectorPlugin::<GameState>::default(),
+            bevy_inspector_egui::quick::StateInspectorPlugin::<EngineState>::default(),
+        ));
     }
 }

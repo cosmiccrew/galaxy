@@ -1,151 +1,131 @@
+use bevy::sprite::MaterialMesh2dBundle;
+
 use crate::prelude::*;
 
+/// This plugin should control the rendering of the entire world.
 pub struct GalaxyGamePlugin;
 
 impl Plugin for GalaxyGamePlugin {
     fn build(&self, app: &mut App) {
-        app.add_state::<GameState>()
-            .add_plugins(bevy_xpbd_2d::prelude::PhysicsPlugins::default())
+        app.init_state::<GameState>()
             .insert_resource(WinitSettings::default())
-            .add_systems(OnEnter(EngineState::InGame), setup)
-            .add_systems(
-                Update,
-                (planet_rotation, planet_randomise, planet_change_pixels)
-                    .run_if(in_state(EngineState::InGame)),
-            )
+            .add_systems(OnEnter(EngineState::InGame), Self::setup)
+            .add_systems(Update, accelerate_towards_planets)
+            //     (planet_rotation, planet_randomise, planet_change_pixels)
+            //         .run_if(in_state(EngineState::InGame)),
+            // )
             .add_systems(OnExit(EngineState::InGame), teardown::<Loaded>);
     }
 }
 
-fn setup(
-    mut commands: Commands,
-    mut meshes: ResMut<Assets<Mesh>>,
-    _assets: Res<MyAssets>,
-    mut earthlike_materials: ResMut<Assets<Earthlike>>,
-    _cloud_cover_materials: ResMut<Assets<CloudCover>>,
-) {
-    commands.spawn((
-        CelestialBundle {
-            transform: Transform {
-                translation: Vec3::new(350., 200., 0.),
+#[derive(Component, Debug)]
+struct Planet;
+
+impl GalaxyGamePlugin {
+    fn setup(
+        mut commands: Commands,
+        assets: Res<AssetServer>,
+        mut meshes: ResMut<Assets<Mesh>>,
+        mut materials: ResMut<Assets<ColorMaterial>>,
+    ) {
+        commands.spawn((
+            MaterialMesh2dBundle {
+                mesh: meshes.add(Circle { radius: 100.0 }).into(),
+                material: materials.add(Color::GREEN),
+                transform: Transform::from_xyz(0., 0., 0.),
                 ..default()
             },
-            mesh: meshes
-                .add(shape::Quad::new(Vec2::new(200., 200.)).into())
-                .into(),
-            celestial_shader: earthlike_materials.add(Earthlike {
-                celestial: CelestialSettings {
-                    seed: 87_654.68,
-                    pixels: 100.,
-                    rotation: 90f32.to_radians(),
-                    radius: 100.,
-                    time_speed: 10.,
-                },
-                land_colours: [Color::PINK, Color::BLUE, Color::GREEN, Color::GRAY],
-                river_colours: [Color::RED, Color::ORANGE],
+            Name::new("Planet"),
+            Collider::circle(100.),
+            RigidBody::Static,
+            Planet,
+        ));
+
+        commands.spawn((
+            MaterialMesh2dBundle {
+                mesh: meshes.add(Circle { radius: 100.0 }).into(),
+                material: materials.add(Color::GREEN),
+                transform: Transform::from_xyz(400., 150., 0.),
                 ..default()
-            }),
-            ..default()
-        },
-        Loaded,
-    ));
-
-    commands.spawn((
-        CelestialBundle {
-            transform: Transform::from_xyz(-450., -100., 0.),
-            mesh: meshes
-                .add(shape::Quad::new(Vec2::new(300., 300.)).into())
-                .into(),
-            celestial_shader: earthlike_materials.add(Earthlike::default()),
-            ..default()
-        },
-        Loaded,
-    ));
-
-    commands.spawn((
-        CelestialBundle {
-            mesh: meshes
-                .add(shape::Quad::new(Vec2::new(500., 500.)).into())
-                .into(),
-            celestial_shader: earthlike_materials.add(Earthlike {
-                celestial: CelestialSettings {
-                    seed: 4.68,
-                    ..default()
-                },
-
-                ..default()
-            }),
-            ..default()
-        },
-        // cloud_cover_materials.add(CloudCover {
-        //     cloud_cover: 0.2,
-        //     ..default()
-        // }),
-        Loaded,
-    ));
+            },
+            Name::new("Planet"),
+            Collider::circle(100.),
+            RigidBody::Static,
+            Planet,
+        ));
+    }
 }
 
-fn planet_rotation(
-    _commands: Commands,
-    // mut query: Query<&mut Transform, With<Planet>>,
-    query: Query<&mut Handle<Earthlike>, With<Celestial>>,
-    mut materials: ResMut<Assets<Earthlike>>,
-    keyboard_input: Res<Input<KeyCode>>,
+fn accelerate_towards_planets(
+    mut commands: Commands,
+    mut player_query: Query<(&Transform, &mut LinearVelocity, &Mass), With<Player>>,
+    mut planet_query: Query<(&Transform, &Mass), With<Planet>>,
     time: Res<Time>,
 ) {
-    for earthlike_handle in query.iter() {
-        let earthlike_material = materials.get_mut(earthlike_handle).unwrap();
+    for (player_transform, mut linear_velocity, player_mass) in &mut player_query {
+        // let mut direction = Vec2::ZERO;
 
-        let mut direction = 0f32;
+        let player_pos = player_transform.translation.truncate();
 
-        if keyboard_input.pressed(KeyCode::Left) {
-            direction += 1.;
-        }
+        for planet in &planet_query {
+            //  direction += planet.translation;
 
-        if keyboard_input.pressed(KeyCode::Right) {
-            direction -= 1.;
-        }
+            let planet_translation = planet.0.translation.truncate();
 
-        earthlike_material.celestial.rotation += time.delta_seconds() * FRAC_PI_2 * direction;
-    }
-}
+            let distance = player_pos.distance(planet_translation);
 
-fn planet_randomise(
-    _commands: Commands,
-    query: Query<&mut Handle<Earthlike>, With<Celestial>>,
-    keyboard_input: Res<Input<KeyCode>>,
-    mut materials: ResMut<Assets<Earthlike>>,
-) {
-    for earthlike_handle in query.iter() {
-        let earthlike_material = materials.get_mut(earthlike_handle).unwrap();
+            if distance <= 1000. {
+                let direction_vector = planet_translation - player_pos;
 
-        if keyboard_input.just_pressed(KeyCode::Space) {
-            earthlike_material.randomise();
+                let normalised_direction_vector = direction_vector.normalize_or_zero();
+
+                **linear_velocity += normalised_direction_vector
+                    * Vec2::splat(
+                        (**player_mass * **planet.1 / distance.powi(2))
+                            * 0.1
+                            * time.delta_seconds(),
+                    );
+            }
+
+            // info!("{direction:?}");
         }
     }
 }
 
-fn planet_change_pixels(
-    _commands: Commands,
-    // mut query: Query<&mut Transform, With<Planet>>,
-    query: Query<&mut Handle<Earthlike>, With<Celestial>>,
-    mut materials: ResMut<Assets<Earthlike>>,
-    keyboard_input: Res<Input<KeyCode>>,
-    _time: Res<Time>,
-) {
-    for earthlike_handle in query.iter() {
-        let earthlike_material = materials.get_mut(earthlike_handle).unwrap();
+// fn distance_to_planets(
+//     mut commands: Commands,
+//     mut player_query: Query<(&Transform, &LinearVelocity, &mut Entity),
+// With<Player>>,     mut planet_query: Query<(&Transform), With<Planet>>,
+//     time: Res<Time>,
+// ) {
+//     let planet_distance = PlanetDistance(vec![]);
 
-        let mut direction = 0f32;
+//     for (player_transform, linear_velocity, mut entity) in &mut player_query
+// {         let player_pos = player_transform.translation.truncate();
 
-        if keyboard_input.pressed(KeyCode::Up) {
-            direction += 1.;
-        }
+//         for planet_transform in &planet_query {
+//             //  direction += planet.translation;
 
-        if keyboard_input.pressed(KeyCode::Down) {
-            direction -= 1.;
-        }
+//             let planet_translation = planet_transform.translation.truncate();
 
-        earthlike_material.celestial.pixels += direction;
-    }
-}
+//             let distance = player_pos.distance(planet_translation);
+
+//             if distance <= 1000. {
+//                 let direction_vector = planet_translation - player_pos;
+
+//                 let normalised_direction_vector =
+// direction_vector.normalize_or_zero();
+
+//                 planet_distance * *linear_velocity +=
+// normalised_direction_vector
+//                     * Vec2::splat( (**player_mass * **planet.1 /
+//                       distance.powi(2))
+//                             * 0.1
+//                             * time.delta_seconds(),
+//                     );
+//             }
+//         }
+//     }
+// }
+
+// struct PlanetDistance(Vec<(Vec2, Entity)>);
