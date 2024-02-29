@@ -13,7 +13,7 @@ impl Plugin for GalaxyPlanetPlugin {
 }
 
 #[derive(Component, Debug)]
-struct Planet;
+pub struct Planet;
 
 impl GalaxyPlanetPlugin {
     fn setup(
@@ -131,14 +131,14 @@ fn player_adoption(
             }
         }
 
-        if closest_planet.is_some() {
+        if let Some(closest_planet) = closest_planet {
             if !player
                 .3
-                .is_some_and(|x| x.get() == closest_planet.unwrap().0)
+                .is_some_and(|x| x.get() == closest_planet.0)
             {
                 commands
                     .entity(player.2)
-                    .set_parent_in_place(closest_planet.unwrap().0);
+                    .set_parent_in_place(closest_planet.0);
             }
         } else {
             commands.entity(player.2).remove_parent_in_place();

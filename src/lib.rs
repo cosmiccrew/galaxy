@@ -1,4 +1,4 @@
-// #![allow(unused)]
+#![allow(unused)]
 #![allow(clippy::type_complexity)]
 // #![warn(dead_code)]
 #![allow(unused_variables)]

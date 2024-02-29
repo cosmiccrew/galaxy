@@ -124,7 +124,6 @@ impl GalaxyMainMenuPlugin {
                                                     font: font.clone(),
                                                     font_size: 40.0,
                                                     color: Color::rgb(0.4, 0.4, 0.4),
-                                                    ..default()
                                                 },
                                             ),
                                         ));
