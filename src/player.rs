@@ -87,20 +87,20 @@ impl GalaxyPlayerPlugin {
         }
     }
 
-    // fn player_jump_sender(
-    //     mut commands: Commands,
-    //     mut actions: Query<&ActionState<Action>, With<Player>>,
-    //     mut event_writer: EventWriter<PlayerMovement>,
-    // ) {
-    //     let action_state = actions.single();
+    fn player_jump_sender(
+        mut commands: Commands,
+        mut actions: Query<&ActionState<Action>, With<Player>>,
+        mut event_writer: EventWriter<PlayerJump>,
+    ) {
+        let action_state = actions.single();
 
-    //     if action_state.pressed(&Action::Jump) {
-    //         event_writer.send(PlayerJump);
-    //     };
-    // }
+        if action_state.pressed(&Action::Jump) {
+            event_writer.send(PlayerJump);
+        }
+    }
 }
 
-#[derive(Component)]
+#[derive(Event, Debug)]
 struct PlayerJump;
 
 fn player_movement_reciever(
@@ -109,7 +109,7 @@ fn player_movement_reciever(
     time: Res<Time>,
 ) {
     for movement in events.read() {
-        info!("{movement:?}");
+        // diagnostic!("{movement:?}");
 
         for (mut linear_velocity, is_grounded) in &mut query {
             **linear_velocity += *movement.direction * Vec2::splat(1000. * time.delta_seconds());
@@ -117,22 +117,22 @@ fn player_movement_reciever(
     }
 }
 
-// fn player_jump_reciever(
-//     mut commands: Commands,
-//     mut events: EventReader<PlayerJump>,
-//     mut query: Query<(Has<Grounded>, &Rotation, Entity), With<Player>>,
-//     time: Res<Time>,
-// ) {
-//     for jump in events.read() {
-//         info!("{jump:?}");
+fn player_jump_reciever(
+    mut commands: Commands,
+    mut events: EventReader<PlayerJump>,
+    mut query: Query<(Has<Grounded>, &Rotation, Entity), With<Player>>,
+    time: Res<Time>,
+) {
+    for jump in events.read() {
+        info!("{jump:?}");
 
-//         for (is_grounded, rotation, player) in &mut query {
-//             if is_grounded {
-//                 commands.entity(player).insert(ExternalImpulse::new());
-//             }
-//         }
-//     }
-// }
+        for (is_grounded, rotation, player) in &mut query {
+            if is_grounded {
+                // commands.entity(player).insert(ExternalImpulse::new());
+            }
+        }
+    }
+}
 
 #[derive(Component, Debug)]
 pub struct Player;

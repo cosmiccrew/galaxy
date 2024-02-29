@@ -1,5 +1,8 @@
 use bevy::{
-    diagnostic::{EntityCountDiagnosticsPlugin, FrameTimeDiagnosticsPlugin, LogDiagnosticsPlugin},
+    diagnostic::{
+        EntityCountDiagnosticsPlugin, FrameTimeDiagnosticsPlugin, LogDiagnosticsPlugin,
+        SystemInformationDiagnosticsPlugin,
+    },
     window::close_on_esc,
 };
 
@@ -16,7 +19,8 @@ impl Plugin for GalaxyDebugPlugin {
             // EditorPlugin::default(),
             LogDiagnosticsPlugin::default(),
             FrameTimeDiagnosticsPlugin,
-            // EntityCountDiagnosticsPlugin,
+            SystemInformationDiagnosticsPlugin::default(),
+            EntityCountDiagnosticsPlugin,
         ))
         .add_systems(Update, close_on_esc);
 
