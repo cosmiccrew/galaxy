@@ -6,7 +6,6 @@ impl Plugin for GalaxySettingsMenuPlugin {
     fn build(&self, app: &mut App) {
         app
             .add_systems(OnEnter(MainMenuState::Settings), setup)
-            // .add_systems(Update, main_menu_button_system)
         ;
     }
 }

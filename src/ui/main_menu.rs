@@ -1,6 +1,6 @@
 use crate::prelude::*;
 
-///
+/// Controls the rendering and functionality of the main menu.
 pub struct GalaxyMainMenuPlugin;
 
 impl Plugin for GalaxyMainMenuPlugin {
@@ -160,16 +160,15 @@ impl GalaxyMainMenuPlugin {
                     Interaction::Pressed => {
                         match *main_button_type {
                             MainMenuButton::Local => {
-                                //in future, this should go to another main menu section, where
+                                //in future, this should go to another main menu section, where, a
+                                // stage, level, player or ect are chosen.
                                 engine_state.set(EngineState::InGame);
                             }
                             MainMenuButton::Online => {
                                 todo!();
-                                // engine_state.set(EngineState::InGame);
                             }
                             MainMenuButton::Settings => {
                                 todo!();
-                                // engine_state.set(EngineState::InGame);
                             }
                         }
                     }
@@ -280,43 +279,4 @@ mod tests {
             &EngineState::default()
         );
     }
-
-    // #[test]
-    // fn test_main_button_system() {
-    //     // Setup app
-    //     let mut app = App::new();
-
-    //     // let clickable = app
-    //     //     .world
-    //     //     .spawn(NodeBundle::default())
-    //     //     .with_children(|parent| {
-
-    //     //         main_menu_button(parent, "test_button", true)
-    //     //     });
-
-    //     // let unclickable = app
-    //     //     .world
-    //     //     .spawn(NodeBundle::default())
-    //     //     .with_children(|parent| {
-
-    //     //         main_menu_button(parent, "test_button", true)
-    //     //     });
-
-    //     // Add our systems
-    //     app.add_plugins(MinimalPlugins)
-    //         .add_systems(Startup, setup)
-    //         .add_systems(Update, main_button_system);
-
-    //     // app.world.query();
-
-    //     // Run systems
-    //     app.update();
-
-    //     // assert_eq!(app.world.query::<&Enemy>().iter(&app.world).len(), 1);
-
-    //     // Run systems
-    //     app.update();
-
-    //     // assert_eq!(app.world.query::<&Enemy>().iter(&app.world).len(), 1);
-    // }
 }

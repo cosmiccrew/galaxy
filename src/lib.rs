@@ -33,7 +33,6 @@ pub mod prelude {
     pub use crate::debug::*;
     pub use crate::{
         cli::*,
-        consts::*,
         game::*,
         loading::*,
         physics::*,
@@ -45,5 +44,3 @@ pub mod prelude {
         utils::*,
     };
 }
-
-pub mod consts {}

@@ -1,7 +1,5 @@
 use bevy::log::Level;
 
-use crate::prelude::*;
-
 #[derive(clap::Parser)]
 #[command(author, version, about, long_about = None)]
 pub struct Cli {

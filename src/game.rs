@@ -1,7 +1,5 @@
 pub mod planet;
 
-use bevy::sprite::MaterialMesh2dBundle;
-
 use self::planet::GalaxyPlanetPlugin;
 use crate::prelude::*;
 

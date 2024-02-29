@@ -1,4 +1,4 @@
-use bevy::sprite::{MaterialMesh2dBundle, Mesh2dHandle};
+use bevy::sprite::MaterialMesh2dBundle;
 use leafwing_input_manager::action_state;
 
 use self::input::GalaxyInputPlugin;
@@ -9,7 +9,7 @@ mod input;
 use self::input::*;
 
 /// This should hold all the information required for players. How they move,
-/// interact with the world, are controlled, ect
+/// interact with the world, are controlled, ect.
 pub struct GalaxyPlayerPlugin;
 
 impl Plugin for GalaxyPlayerPlugin {
@@ -71,9 +71,6 @@ impl GalaxyPlayerPlugin {
 
         Action::DIRECTIONS.into_iter().for_each(|direction_action| {
             if action_state.pressed(&direction_action) {
-                //SAFETY - as this must be an action that is part of `DIRECTIONS`, this cannot
-                // error.
-
                 if let Some(direction) = direction_action.direction() {
                     overall_direction += *direction;
                 }
@@ -109,8 +106,6 @@ fn player_movement_reciever(
     time: Res<Time>,
 ) {
     for movement in events.read() {
-        // diagnostic!("{movement:?}");
-
         for (mut linear_velocity, is_grounded) in &mut query {
             **linear_velocity += *movement.direction * Vec2::splat(1000. * time.delta_seconds());
         }

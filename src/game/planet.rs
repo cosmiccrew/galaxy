@@ -79,9 +79,6 @@ fn accelerate_towards_planets(
     }
 }
 
-// #[derive(Component, Deref)]
-// struct PlanetPlayerVector(Vec2);
-
 #[derive(Component, Deref)]
 struct PlanetInfluence(f32);
 
@@ -113,6 +110,7 @@ fn player_adoption(
             let planet_pos = planet.0.translation().truncate();
 
             //render the planet's influence
+            #[cfg(feature = "debug")]
             gizmos.circle_2d(
                 planet_pos,
                 **planet.3.unwrap_or_default(),
@@ -133,7 +131,6 @@ fn player_adoption(
             }
         }
 
-
         if closest_planet.is_some() {
             if !player
                 .3
@@ -144,46 +141,7 @@ fn player_adoption(
                     .set_parent_in_place(closest_planet.unwrap().0);
             }
         } else {
-            commands
-                .entity(player.2)
-                // .remove::<PlanetPlayerVector>()
-                .remove_parent_in_place();
+            commands.entity(player.2).remove_parent_in_place();
         }
     }
 }
-
-// fn distance_to_planets(
-//     mut commands: Commands,
-//     mut player_query: Query<(&Transform, &LinearVelocity, &mut Entity),
-// With<Player>>,     mut planet_query: Query<(&Transform), With<Planet>>,
-//     time: Res<Time>,
-// ) {
-//     let planet_distance = PlanetDistance(vec![]);
-
-//     for (player_transform, linear_velocity, mut entity) in &mut player_query
-// {         let player_pos = player_transform.translation.truncate();
-
-//         for planet_transform in &planet_query {
-//             //  direction += planet.translation;
-
-//             let planet_translation = planet_transform.translation.truncate();
-
-//             let distance = player_pos.distance(planet_translation);
-
-//             if distance <= 1000. {
-//                 let direction_vector = planet_translation - player_pos;
-
-//                 let normalised_direction_vector =
-// direction_vector.normalize_or_zero();
-
-//                 planet_distance * *linear_velocity +=
-// normalised_direction_vector
-//                     * Vec2::splat( (**player_mass * **planet.1 /
-//                       distance.powi(2))
-//                             * 0.1
-//                             * time.delta_seconds(),
-//                     );
-//             }
-//         }
-//     }
-// }
