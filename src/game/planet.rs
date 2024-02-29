@@ -132,10 +132,7 @@ fn player_adoption(
         }
 
         if let Some(closest_planet) = closest_planet {
-            if !player
-                .3
-                .is_some_and(|x| x.get() == closest_planet.0)
-            {
+            if !player.3.is_some_and(|x| x.get() == closest_planet.0) {
                 commands
                     .entity(player.2)
                     .set_parent_in_place(closest_planet.0);
