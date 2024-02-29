@@ -36,7 +36,3 @@ github = [
     "cosmiccrew",
     "Sycrosity"
 ]
-
-[advisories]
-# a relatively unimportant and irrelevant (for our use case) CPU DOS
-ignore = ["RUSTSEC-2023-0052"]

@@ -1,9 +1,13 @@
 use galaxy::prelude::*;
 
 fn main() {
+    let cli = Cli::parse();
+
     App::new()
-        .add_state::<EngineState>()
-        .add_plugins(GalaxyDefaultPlugins)
+        .init_state::<EngineState>()
+        .add_plugins(GalaxyDefaultPlugins {
+            log_level: cli.log_level,
+        })
         .add_plugins((
             #[cfg(feature = "debug")]
             GalaxyDebugPlugin,
@@ -12,7 +16,8 @@ fn main() {
             GalaxyUIPlugin,
             GalaxyPolarPlugin,
             GalaxyGamePlugin,
-            GalaxyShaderPlugin,
+            GalaxyPhysicsPlugin,
+            // GalaxyShaderPlugin,
         ))
         .run();
 }

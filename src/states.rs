@@ -10,6 +10,7 @@ pub enum EngineState {
 
 #[derive(Debug, Clone, Copy, Default, Eq, PartialEq, Hash, States, Reflect)]
 pub enum GameState {
+    Loading,
     #[default]
     Playing,
     Paused,

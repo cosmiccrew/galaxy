@@ -17,8 +17,5 @@ dist
 #macos
 *.DS_Store
 
-#just
-justfile
-
 #bacon
 bacon.toml

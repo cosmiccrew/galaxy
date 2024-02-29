@@ -16,7 +16,7 @@ pub struct GalaxyShaderPlugin;
 
 impl Plugin for GalaxyShaderPlugin {
     fn build(&self, app: &mut App) {
-        load_internal_asset!(app, SHADER_TYPES, "shaders/types.wgsl", Shader::from_wgsl);
+        // load_internal_asset!(app, SHADER_TYPES, "shaders/types.wgsl", Shader::from_wgsl);
 
         app.add_plugins((
             Material2dPlugin::<Earthlike>::default(),
