@@ -23,9 +23,12 @@ impl Plugin for GalaxyPlayerPlugin {
             .add_systems(OnEnter(EngineState::InGame), Self::setup)
             .add_systems(
                 FixedUpdate,
-                ((player_movement_reciever, player_jump_reciever)
-                    .after(input::GalaxyInputPlugin::player_input_sender))
-                .run_if(in_state(EngineState::InGame)),
+                (
+                    (player_movement_reciever, player_jump_reciever)
+                        .after(input::GalaxyInputPlugin::player_input_sender),
+                    camera_follow_player,
+                )
+                    .run_if(in_state(EngineState::InGame)),
             )
             .add_systems(OnExit(EngineState::InGame), teardown::<Loaded>);
     }
@@ -86,12 +89,17 @@ pub struct PlayerMovement {
 
 fn player_movement_reciever(
     mut events: EventReader<PlayerMovement>,
-    mut query: Query<(&mut LinearVelocity, Has<Grounded>), With<Player>>,
+    mut query: Query<(&mut LinearVelocity, Option<&PlanetNormal>, Has<Grounded>), With<Player>>,
     time: Res<Time>,
 ) {
     for movement in events.read() {
-        for (mut linear_velocity, is_grounded) in &mut query {
-            **linear_velocity += *movement.direction * Vec2::splat(500. * time.delta_seconds());
+        for (mut linear_velocity, planet_normal, is_grounded) in &mut query {
+            **linear_velocity += planet_normal
+                .map(|vec| vec.perp().normalize_or_zero())
+                .unwrap_or(Vec2::ONE)
+                * *movement.direction
+                * 500.
+                * time.delta_seconds();
         }
     }
 }
@@ -108,7 +116,37 @@ fn player_jump_reciever(
 ) {
     for jump in events.read() {
         for (rotation, mut linear_velocity, local_down) in &mut query {
-            **linear_velocity -= ***local_down * 25.;
+            **linear_velocity -= ***local_down * 5000. * time.delta_seconds();
         }
     }
+}
+
+fn camera_follow_player(
+    mut camera_query: Query<&mut Transform, (With<Camera>, Without<Player>)>,
+    player_query: Query<(&GlobalTransform, Option<&PlanetNormal>, Option<&Rotation>), With<Player>>,
+    time: Res<Time>,
+) {
+    let mut camera = camera_query.single_mut();
+
+    let (transform, planet_normal, rotation) = player_query.single();
+
+    let rotation = if let Some(planet_normal) = planet_normal {
+        Quat::from_rotation_z(planet_normal.perp().to_angle())
+    } else if let Some(player_rotation) = rotation {
+        Quat::from_rotation_z(player_rotation.as_radians())
+    } else {
+        // camera.rotation
+        Quat::IDENTITY
+    };
+
+    let translation_lerp = camera
+        .translation
+        .lerp(transform.translation(), time.delta_seconds());
+
+    let rotation_lerp = camera.rotation.lerp(rotation, time.delta_seconds());
+
+    camera.rotation = rotation_lerp;
+
+    camera.translation.x = translation_lerp.x;
+    camera.translation.y = translation_lerp.y;
 }

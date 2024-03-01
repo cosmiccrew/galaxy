@@ -197,14 +197,11 @@ fn self_right(
 
         /// SAFETY - this query is `Has<Planet>`, so is a bool guarenteed.
         if let Ok(planet_rotation) = planet_query.get(parent) {
-            let planet_normal = -(**planet_normal);
+            let planet_tangent = planet_normal.perp();
 
-            let planet_tangent = Vec2::new(planet_normal.y, -planet_normal.x);
-
-            let planet_tangent_angle = Vec2::new(planet_normal.y, -planet_normal.x).to_angle();
+            let planet_tangent_angle = planet_tangent.to_angle();
 
             let player_rotation = rotation.as_radians();
-            // let player_rotation = transform.rotation.to_euler(EulerRot::ZYX).0;
 
             let mut diff_rotation = planet_tangent_angle - player_rotation;
 
@@ -215,7 +212,7 @@ fn self_right(
             }
 
             if !(diff_rotation < FRAC_PI_8 / 2f32 && diff_rotation > -FRAC_PI_8 / 2f32) {
-                angular_velocity.0 += diff_rotation / TAU;
+                angular_velocity.0 += diff_rotation / PI;
             }
 
             // if let Some(&floor_vector) = hits.iter().next().filter(|ray|
