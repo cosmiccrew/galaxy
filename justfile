@@ -11,7 +11,7 @@ debug:
 # bench:
 #     cargo bench -q > benchmarks.txt
 flamegraph:
-    cargo flamegraph --profile flamegraph --root
+    cargo flamegraph --profile flamegraph --root --bin galaxy
 dhat:
     cargo run --profile dhat --features dhat-heap
 run:
