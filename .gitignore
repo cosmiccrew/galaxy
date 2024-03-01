@@ -2,7 +2,7 @@
 /target
 crates/**/target
 tools/**/target
-.cargo/config.toml
+# .cargo/config.toml
 
 #trunk
 dist
