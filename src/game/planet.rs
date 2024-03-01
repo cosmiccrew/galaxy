@@ -1,4 +1,5 @@
 use bevy::sprite::MaterialMesh2dBundle;
+use leafwing_input_manager::orientation::Orientation;
 
 use crate::prelude::*;
 
@@ -8,7 +9,10 @@ pub struct GalaxyPlanetPlugin;
 impl Plugin for GalaxyPlanetPlugin {
     fn build(&self, app: &mut App) {
         app.add_systems(OnEnter(EngineState::InGame), Self::setup)
-            .add_systems(Update, (accelerate_towards_planets, player_adoption));
+            .add_systems(
+                Update,
+                (accelerate_towards_planets, player_adoption, self_right),
+            );
     }
 }
 
@@ -79,7 +83,7 @@ fn accelerate_towards_planets(
     }
 }
 
-#[derive(Component, Deref)]
+#[derive(Component, Deref, DerefMut)]
 struct PlanetInfluence(f32);
 
 impl Default for &PlanetInfluence {
@@ -88,9 +92,25 @@ impl Default for &PlanetInfluence {
     }
 }
 
+#[derive(Component, Debug, Deref, DerefMut, Reflect)]
+#[reflect(Component)]
+pub struct PlanetNormal(Direction2d);
+
+#[derive(Component, Debug)]
+pub struct InSpace;
+
 fn player_adoption(
     mut commands: Commands,
-    mut player_query: Query<(&GlobalTransform, &Mass, Entity, Option<&Parent>), With<Player>>,
+    mut player_query: Query<
+        (
+            &GlobalTransform,
+            &Mass,
+            Entity,
+            Option<&Parent>,
+            &mut ShapeCaster,
+        ),
+        With<Player>,
+    >,
     mut planet_query: Query<
         (&GlobalTransform, &Mass, Entity, Option<&PlanetInfluence>),
         With<Planet>,
@@ -121,24 +141,90 @@ fn player_adoption(
 
             let new_force = G * (**player.1 * **planet.1) / distance.powi(2);
 
+            let direction_vector = planet_pos - player_pos;
+
             if distance <= **planet.3.unwrap_or_default()
                 && new_force
                     > closest_planet
                         .map(|(_, force, _)| force)
                         .unwrap_or(f32::MIN)
             {
-                closest_planet = Some((planet_entity, new_force, (planet_pos - player_pos)));
+                closest_planet = Some((planet_entity, new_force, direction_vector));
             }
         }
 
         if let Some(closest_planet) = closest_planet {
+            // This won't possibly cause issues...
+            let direction2d = Direction2d::new(closest_planet.2).unwrap_or(Direction2d::X);
+
+            commands.entity(player.2).insert(PlanetNormal(direction2d));
+
             if !player.3.is_some_and(|x| x.get() == closest_planet.0) {
                 commands
                     .entity(player.2)
-                    .set_parent_in_place(closest_planet.0);
+                    .set_parent_in_place(closest_planet.0)
+                    .remove::<InSpace>();
             }
         } else {
-            commands.entity(player.2).remove_parent_in_place();
+            commands
+                .entity(player.2)
+                .remove_parent_in_place()
+                .remove::<PlanetNormal>()
+                .insert(InSpace);
+        }
+    }
+}
+
+fn self_right(
+    mut commands: Commands,
+    mut player_query: Query<
+        (
+            &Rotation,
+            &mut AngularVelocity,
+            // &RayHits,
+            &Parent,
+            &PlanetNormal,
+            &Transform,
+        ),
+        (With<Player>, With<Parent>),
+    >,
+    mut planet_query: Query<&Rotation, With<Planet>>,
+    time: Res<Time>,
+    mut gizmos: Gizmos,
+) {
+    for (rotation, mut angular_velocity, parent, planet_normal, transform) in &mut player_query {
+        let parent = parent.get();
+
+        /// SAFETY - this query is `Has<Planet>`, so is a bool guarenteed.
+        if let Ok(planet_rotation) = planet_query.get(parent) {
+            let planet_normal = -(**planet_normal);
+
+            let planet_tangent = Vec2::new(planet_normal.y, -planet_normal.x);
+
+            let planet_tangent_angle = Vec2::new(planet_normal.y, -planet_normal.x).to_angle();
+
+            let player_rotation = rotation.as_radians();
+            // let player_rotation = transform.rotation.to_euler(EulerRot::ZYX).0;
+
+            let mut diff_rotation = planet_tangent_angle - player_rotation;
+
+            if diff_rotation > PI {
+                diff_rotation -= TAU
+            } else if diff_rotation < -PI {
+                diff_rotation += TAU
+            }
+
+            if !(diff_rotation < FRAC_PI_8 / 2f32 && diff_rotation > -FRAC_PI_8 / 2f32) {
+                angular_velocity.0 += diff_rotation / TAU;
+            }
+
+            // if let Some(&floor_vector) = hits.iter().next().filter(|ray|
+            // ray.entity == parent ) {     let normal_angle =
+            // (-**local_down).angle_between(floor_vector.normal);
+            //     if normal_angle <= FRAC_PI_8 && normal_angle >= -FRAC_PI_8 {
+            //     angular_velocity.0 += (normal_angle/FRAC_PI_2);
+            //     }
+            // }
         }
     }
 }

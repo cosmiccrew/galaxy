@@ -6,6 +6,7 @@ use bevy::{
     window::close_on_esc,
 };
 
+use self::planet::PlanetNormal;
 use crate::prelude::*;
 
 // /// Adds helpful features for debugging, like a [WorldInspectorPlugin] and
@@ -22,7 +23,9 @@ impl Plugin for GalaxyDebugPlugin {
             SystemInformationDiagnosticsPlugin::default(),
             EntityCountDiagnosticsPlugin,
         ))
-        .add_systems(Update, close_on_esc);
+        .add_systems(Update, close_on_esc)
+        .register_type::<PlanetNormal>()
+        .register_type::<Direction2d>();
 
         #[cfg(not(target_family = "wasm"))]
         app.add_plugins((
