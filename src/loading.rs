@@ -26,6 +26,8 @@ impl GalaxyLoadingPlugin {
         ));
 
         let _ = asset_server.load_folder("fonts");
+        // let _ = asset_server.load_folder("shaders");
+        // let _ = asset_server.load_folder("ui");
 
         state.set(EngineState::MainMenu);
 
