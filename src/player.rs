@@ -109,7 +109,7 @@ fn player_movement_reciever(
 
             gizmos.arrow_2d(
                 transform.translation.xy(),
-                transform.translation.xy() + force_dir * 10,
+                transform.translation.xy() + force_dir * 10.,
                 Color::GREEN,
             );
 
