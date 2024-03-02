@@ -89,17 +89,31 @@ pub struct PlayerMovement {
 
 fn player_movement_reciever(
     mut events: EventReader<PlayerMovement>,
-    mut query: Query<(&mut LinearVelocity, Option<&PlanetNormal>, Has<Grounded>), With<Player>>,
+    mut query: Query<
+        (
+            &Transform,
+            &mut LinearVelocity,
+            Option<&PlanetNormal>,
+            Has<Grounded>,
+        ),
+        With<Player>,
+    >,
     time: Res<Time>,
+    mut gizmos: Gizmos,
 ) {
     for movement in events.read() {
-        for (mut linear_velocity, planet_normal, is_grounded) in &mut query {
-            **linear_velocity += planet_normal
+        for (transform, mut linear_velocity, planet_normal, is_grounded) in &mut query {
+            let force_dir = planet_normal
                 .map(|vec| vec.perp().normalize_or_zero())
-                .unwrap_or(Vec2::ONE)
-                * *movement.direction
-                * 500.
-                * time.delta_seconds();
+                .unwrap_or(Vec2::ONE);
+
+            gizmos.arrow_2d(
+                transform.translation.xy(),
+                transform.translation.xy() + force_dir * 10,
+                Color::GREEN,
+            );
+
+            **linear_velocity += force_dir * *movement.direction * 500. * time.delta_seconds();
         }
     }
 }
@@ -130,22 +144,22 @@ fn camera_follow_player(
 
     let (transform, planet_normal, rotation) = player_query.single();
 
-    let rotation = if let Some(planet_normal) = planet_normal {
-        Quat::from_rotation_z(planet_normal.perp().to_angle())
-    } else if let Some(player_rotation) = rotation {
-        Quat::from_rotation_z(player_rotation.as_radians())
-    } else {
-        // camera.rotation
-        Quat::IDENTITY
-    };
+    // let rotation = if let Some(planet_normal) = planet_normal {
+    //     Quat::from_rotation_z(planet_normal.perp().to_angle())
+    // } else if let Some(player_rotation) = rotation {
+    //     Quat::from_rotation_z(player_rotation.as_radians())
+    // } else {
+    //     // camera.rotation
+    //     Quat::IDENTITY
+    // };
 
     let translation_lerp = camera
         .translation
         .lerp(transform.translation(), time.delta_seconds());
 
-    let rotation_lerp = camera.rotation.lerp(rotation, time.delta_seconds());
+    // let rotation_lerp = camera.rotation.lerp(rotation, time.delta_seconds());
 
-    camera.rotation = rotation_lerp;
+    // camera.rotation = rotation_lerp;
 
     camera.translation.x = translation_lerp.x;
     camera.translation.y = translation_lerp.y;
