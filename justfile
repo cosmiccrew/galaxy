@@ -17,5 +17,5 @@ dhat:
 run:
     cargo run
 fmt:
-    cargo +nightly fmt
+    cargo +nightly fmt; taplo fmt
 prepare: fmt clippy test

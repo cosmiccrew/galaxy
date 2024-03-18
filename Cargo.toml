@@ -45,7 +45,12 @@ default = []
 
 fast_compile = ["bevy/dynamic_linking"]
 
-debug = ["dep:bevy-inspector-egui", "bevy_xpbd_2d/debug-plugin", "watcher", "miette/fancy"]
+debug = [
+  "dep:bevy-inspector-egui",
+  "bevy_xpbd_2d/debug-plugin",
+  "watcher",
+  "miette/fancy",
+]
 
 watcher = ["bevy/file_watcher", "bevy/embedded_watcher"]
 
@@ -88,7 +93,6 @@ opt-level = "z"
 # # When building crates, optimize larger chunks at a time
 # # Slows compile times, marginal improvements
 # codegen-units = 1
-
 
 
 [profile.wasm-release]
