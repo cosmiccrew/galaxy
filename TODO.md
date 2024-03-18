@@ -1,0 +1,21 @@
+A list of tasks to be completed in the game.
+
+- [ ] Replace current gravity with gravity fields like in MG
+    - [ ] Lines
+    - [ ] circles
+    - [ ] rectangles ect
+    - [ ] parallel (flat)
+    - [ ] rounded wedge edge
+    - [ ] ovals
+- [ ] make space travel better
+- [ ] fix jumping confusion/complexity
+    - [ ] standardise falling speed
+    - [ ] don't use mass?
+    - [ ] replace bevy_xpbd? hmmmm
+- [ ] rly simple local multiplayer
+    - [ ] multi camera
+    - [ ] multiple inputs
+- [ ] shadows?
+- [ ] planet systems, with planets moving
+- [ ] make the camera following better
+- [ ] proper asset/sprite handling
