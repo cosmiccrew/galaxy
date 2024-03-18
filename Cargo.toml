@@ -18,14 +18,11 @@ bevy = { version = "0.13.0", features = ["serialize"] }
 #resource and asset inspection in bevy
 bevy-inspector-egui = { version = "0.23.2", optional = true }
 #2d physics engine in bevy
-# bevy_xpbd_2d = { git = "https://github.com/Jondolf/bevy_xpbd", features = ["enhanced-determinism"] }
 bevy_xpbd_2d = { version = "0.4.2", features = ["enhanced-determinism"] }
 
-#bevu "rollback" ggrs networking library
-bevy_ggrs = { version = "0.15.0", features = ["wasm-bindgen"], optional = true }
+# a networking library with good support for bevy, leafwing-input-manager, 
+lightyear = { version = "0.12.0", features = ["webtransport"], optional = true }
 
-# bevy_matchbox = { git = "https://github.com/johanhelsing/matchbox", version = "0.7.0", features = ["ggrs"], optional = true }
-bevy_matchbox = { version = "0.8.0", features = ["ggrs"], optional = true }
 
 #handling inputs in a logical, extensible way with options for command combinations or aliases.
 leafwing-input-manager = "0.13.3"
@@ -33,14 +30,14 @@ leafwing-input-manager = "0.13.3"
 #(ser)ialising/(de)serialising library
 serde = "1"
 #dynamic error handler
-miette = { version = "7.1.0" }
+miette = { version = "7.2.0" }
 #logging
-log = "0.4.20"
+log = "0.4.21"
 
 #pseudo random number generation
 rand = "0.8.5"
 #cli parsing for startup asset config's
-clap = { version = "4.5.1", features = ["derive"] }
+clap = { version = "4.5.3", features = ["derive"] }
 
 
 [features]
@@ -53,7 +50,7 @@ debug = ["dep:bevy-inspector-egui", "bevy_xpbd_2d/debug-plugin", "watcher", "mie
 watcher = ["bevy/file_watcher", "bevy/embedded_watcher"]
 
 #to reduce the number of dependencies until networking is a feature
-networking = ["dep:bevy_ggrs", "dep:bevy_matchbox"]
+networking = ["dep:lightyear"]
 
 #used to set the correct asset paths for bundling
 bundle = []
@@ -109,3 +106,6 @@ lto = "fat"
 # # When building crates, optimize larger chunks at a time
 # # Slows compile times, marginal improvements
 # codegen-units = 1
+
+[patch.crates-io]
+lightyear = { git = "https://github.com/cBournhonesque/lightyear" }
