@@ -14,7 +14,7 @@ members = ["tools/*"]
 
 [dependencies]
 #the bevy game engine itself
-bevy = { version = "0.13.0", features = ["serialize"] }
+bevy = { version = "0.13.2", features = ["serialize"] }
 #resource and asset inspection in bevy
 bevy-inspector-egui = { version = "0.23.2", optional = true }
 #2d physics engine in bevy
