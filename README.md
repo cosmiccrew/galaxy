@@ -3,7 +3,6 @@
 ![CI](https://github.com/cosmiccrew/galaxy/actions/workflows/ci.yml/badge.svg)
 [![Pages](https://github.com/cosmiccrew/galaxy/actions/workflows/pages.yml/badge.svg)](https://cosmiccrew.github.io/galaxy)
 ![Release](https://github.com/cosmiccrew/galaxy/actions/workflows/release.yml/badge.svg)
-<!-- [![Coverage](https://codecov.io/gh/cosmiccrew/galaxy/branch/main/graph/badge.svg?token=5OAH8CQSIL)](https://codecov.io/gh/cosmiccrew/galaxy) -->
 
 Cosmic Crew: Galaxy ~~is~~ will be a 2d, class based gravity oriented fighting game inspired by the likes of Stick Fight: The Game, Super Mario Galaxy and Brawlhalla. **NOTE: This project is in an early stage, and the gameplay or any other related content is subject to change, modification and overhaul.**
 
@@ -12,7 +11,6 @@ Cosmic Crew: Galaxy ~~is~~ will be a 2d, class based gravity oriented fighting g
 ## Download & play
 
 To run and play Cosmic Crew: Galaxy, there are a few options:
-
 
 #### Releases
 
