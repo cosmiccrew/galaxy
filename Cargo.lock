@@ -1024,7 +1024,7 @@ version = "0.13.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "f06daa26ffb82d90ba772256c0ba286f6c305c392f6976c9822717974805837c"
 dependencies = [
- "glam 0.25.0",
+ "glam",
  "serde",
 ]
 
@@ -1034,7 +1034,7 @@ version = "0.13.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "a0d7ef7f2a826d0b19f059035831ce00a5e930435cc53c61e045773d0483f67a"
 dependencies = [
- "glam 0.25.0",
+ "glam",
 ]
 
 [[package]]
@@ -1080,7 +1080,7 @@ dependencies = [
  "bevy_utils",
  "downcast-rs",
  "erased-serde",
- "glam 0.25.0",
+ "glam",
  "serde",
  "smol_str",
  "thiserror",
@@ -2318,7 +2318,7 @@ checksum = "95ed933078d2e659745df651f4c180511cd582e5b9414ff896e7d50d207e3103"
 dependencies = [
  "const_panic",
  "encase_derive",
- "glam 0.25.0",
+ "glam",
  "thiserror",
 ]
 
@@ -2888,12 +2888,6 @@ dependencies = [
 
 [[package]]
 name = "glam"
-version = "0.21.3"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "518faa5064866338b013ff9b2350dc318e14cc4fcd6cb8206d7e7c9886c98815"
-
-[[package]]
-name = "glam"
 version = "0.25.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "151665d9be52f9bb40fc7966565d39666f2d1e69233571b71b87791c7e0528b3"
@@ -3166,7 +3160,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "f33ddb7f7143d9e703c072e88b98cd8b9719f174137a671429351bd2ee43c02a"
 dependencies = [
  "constgebra",
- "glam 0.25.0",
+ "glam",
 ]
 
 [[package]]
@@ -3987,7 +3981,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "4541eb06dce09c0241ebbaab7102f0a01a0c8994afed2e5d0d66775016e25ac2"
 dependencies = [
  "approx",
- "glam 0.25.0",
+ "glam",
  "matrixmultiply",
  "nalgebra-macros",
  "num-complex",
@@ -5532,12 +5526,12 @@ checksum = "0fda2ff0d084019ba4d7c6f371c95d8fd75ce3524c3cb8fb653a3023f6323e64"
 
 [[package]]
 name = "show-image"
-version = "0.14.0"
+version = "0.14.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e2d6d4263fd19c1fbd0f4bbc0e0128de55dce8beb8f7d9052e09ee7f104c9eeb"
+checksum = "9867cbb8c3ae72f4d23ba01a17f96c639a10ca73a6cc750542bc8487642ddf38"
 dependencies = [
  "futures",
- "glam 0.21.3",
+ "glam",
  "image 0.25.4",
  "indexmap 2.12.1",
  "rustc_version",
@@ -5548,9 +5542,9 @@ dependencies = [
 
 [[package]]
 name = "show-image-macros"
-version = "0.12.3"
+version = "0.12.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "61837ba1e28bb121c95460d867ff3466d368c4f029abe42aaf0fd33f00e0dea5"
+checksum = "dcc70c0d64419601cee5ef5977947d01e4f3b85ccc14eca959f5405392dae747"
 dependencies = [
  "proc-macro2",
  "quote",
