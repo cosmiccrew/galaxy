@@ -3683,6 +3683,7 @@ dependencies = [
  "governor",
  "hashbrown 0.14.3",
  "instant",
+ "leafwing-input-manager",
  "lightyear_macros",
  "nonzero_ext",
  "object-pool",

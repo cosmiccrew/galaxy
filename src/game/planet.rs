@@ -1,4 +1,4 @@
-use bevy::sprite::MaterialMesh2dBundle;
+use bevy::sprite::{MaterialMesh2dBundle, Mesh2dHandle};
 use leafwing_input_manager::orientation::Orientation;
 
 use crate::prelude::*;
@@ -16,8 +16,38 @@ impl Plugin for GalaxyPlanetPlugin {
     }
 }
 
+#[derive(Component, Deref, DerefMut)]
+struct Radius(f32);
+
+#[derive(Bundle, Clone)]
+pub struct PlanetBundle {
+    pub material_mesh_bundle: MaterialMesh2dBundle<ColorMaterial>,
+    pub collider: Collider,
+    pub rigid_body: RigidBody,
+    pub influence: PlanetInfluence,
+}
+
+impl PlanetBundle {
+    pub fn new(
+        material_mesh_bundle: MaterialMesh2dBundle<ColorMaterial>,
+        collider: Collider,
+        rigid_body: RigidBody,
+        influence: PlanetInfluence,
+    ) -> Self {
+        Self {
+            material_mesh_bundle,
+            collider,
+            rigid_body,
+            influence,
+        }
+    }
+}
+
 #[derive(Component, Debug)]
 pub struct Planet;
+
+// #[derive(Asset)]
+// struct PlanetMesh;
 
 impl GalaxyPlanetPlugin {
     fn setup(
@@ -26,32 +56,54 @@ impl GalaxyPlanetPlugin {
         mut meshes: ResMut<Assets<Mesh>>,
         mut materials: ResMut<Assets<ColorMaterial>>,
     ) {
+        let planet_texture = assets.load("sprites/planets/planets/planet00.png");
+
         commands.spawn((
-            MaterialMesh2dBundle {
-                mesh: meshes.add(Circle { radius: 100.0 }).into(),
-                material: materials.add(Color::GREEN),
+            // MaterialMesh2dBundle {
+            //     mesh: meshes.add(Circle { radius: 1000.0 }).into(),
+            //     material: materials.add(Color::GREEN),
+            //     transform: Transform::from_xyz(0., 0., 0.),
+            //     ..default()
+            // },
+            SpriteBundle {
+                sprite: Sprite {
+                    custom_size: Some(Vec2::new(2500., 2500.)),
+                    ..default()
+                },
+                texture: planet_texture.clone(),
                 transform: Transform::from_xyz(0., 0., 0.),
+
                 ..default()
             },
             Name::new("Planet"),
-            Collider::circle(100.),
+            Collider::circle(1000.),
             RigidBody::Static,
             Planet,
-            PlanetInfluence(500.),
+            PlanetInfluence(5000.), // PlanetBundle { influence: PlanetInfluence(500.) },
         ));
 
         commands.spawn((
-            MaterialMesh2dBundle {
-                mesh: meshes.add(Circle { radius: 100.0 }).into(),
-                material: materials.add(Color::GREEN),
-                transform: Transform::from_xyz(400., 150., 0.),
+            // MaterialMesh2dBundle {
+            //     mesh: meshes.add(Circle { radius: 1000.0 }).into(),
+            //     material: materials.add(Color::GREEN),
+            //     transform: Transform::from_xyz(2000., 2500., 0.),
+            //     ..default()
+            // },
+            SpriteBundle {
+                sprite: Sprite {
+                    custom_size: Some(Vec2::new(2000., 2000.)),
+                    ..default()
+                },
+                texture: planet_texture.clone(),
+                transform: Transform::from_xyz(2000., 2500., 0.),
+
                 ..default()
             },
             Name::new("Planet"),
-            Collider::circle(100.),
+            Collider::circle(1000.),
             RigidBody::Static,
-            Planet,
-            PlanetInfluence(500.),
+            PlanetInfluence(5000.),
+            Planet, // PlanetBundle { influence: PlanetInfluence(500.) },
         ));
     }
 }
@@ -83,12 +135,12 @@ fn accelerate_towards_planets(
     }
 }
 
-#[derive(Component, Deref, DerefMut)]
-struct PlanetInfluence(f32);
+#[derive(Component, Deref, DerefMut, Debug, Default, Clone, Copy)]
+pub struct PlanetInfluence(f32);
 
 impl Default for &PlanetInfluence {
     fn default() -> Self {
-        &PlanetInfluence(1000.)
+        &PlanetInfluence(500.)
     }
 }
 
@@ -154,12 +206,11 @@ fn player_adoption(
         }
 
         if let Some(closest_planet) = closest_planet {
-            // This won't possibly cause issues...
-            let direction2d = Direction2d::new(closest_planet.2).unwrap_or(Direction2d::X);
+            if let Ok(direction2d) = Direction2d::new(closest_planet.2) {
+                commands.entity(player.2).insert(PlanetNormal(direction2d));
+            }
 
-            commands.entity(player.2).insert(PlanetNormal(direction2d));
-
-            if !player.3.is_some_and(|x| x.get() == closest_planet.0) {
+            if player.3.is_none_or(|x| x.get() != closest_planet.0) {
                 commands
                     .entity(player.2)
                     .set_parent_in_place(closest_planet.0)
@@ -178,50 +229,23 @@ fn player_adoption(
 fn self_right(
     mut commands: Commands,
     mut player_query: Query<
-        (
-            &Rotation,
-            &mut AngularVelocity,
-            // &RayHits,
-            &Parent,
-            &PlanetNormal,
-            &Transform,
-        ),
-        (With<Player>, With<Parent>),
+        (&mut Transform, &Parent, &PlanetNormal),
+        (With<Player>, With<Parent>, Without<Planet>),
     >,
-    mut planet_query: Query<&Rotation, With<Planet>>,
+    mut planet_query: Query<&Planet>,
     time: Res<Time>,
-    mut gizmos: Gizmos,
 ) {
-    for (rotation, mut angular_velocity, parent, planet_normal, transform) in &mut player_query {
+    for (mut player_transform, parent, planet_normal) in &mut player_query {
         let parent = parent.get();
 
-        /// SAFETY - this query is `Has<Planet>`, so is a bool guarenteed.
-        if let Ok(planet_rotation) = planet_query.get(parent) {
+        if planet_query.get(parent).is_ok() {
             let planet_tangent = planet_normal.perp();
 
-            let planet_tangent_angle = planet_tangent.to_angle();
+            let planet_tangent_angle = Quat::from_rotation_z(planet_tangent.to_angle());
 
-            let player_rotation = rotation.as_radians();
+            let rotation_lerp: Quat = player_transform.rotation.lerp(planet_tangent_angle, 0.25);
 
-            let mut diff_rotation = planet_tangent_angle - player_rotation;
-
-            if diff_rotation > PI {
-                diff_rotation -= TAU
-            } else if diff_rotation < -PI {
-                diff_rotation += TAU
-            }
-
-            if !(diff_rotation < FRAC_PI_8 / 2f32 && diff_rotation > -FRAC_PI_8 / 2f32) {
-                angular_velocity.0 += diff_rotation / PI;
-            }
-
-            // if let Some(&floor_vector) = hits.iter().next().filter(|ray|
-            // ray.entity == parent ) {     let normal_angle =
-            // (-**local_down).angle_between(floor_vector.normal);
-            //     if normal_angle <= FRAC_PI_8 && normal_angle >= -FRAC_PI_8 {
-            //     angular_velocity.0 += (normal_angle/FRAC_PI_2);
-            //     }
-            // }
+            player_transform.rotation = rotation_lerp;
         }
     }
 }
