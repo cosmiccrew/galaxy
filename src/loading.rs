@@ -25,9 +25,9 @@ impl GalaxyLoadingPlugin {
             Name::from("Main Camera"),
         ));
 
-        let _ = asset_server.load_folder("fonts");
-        // let _ = asset_server.load_folder("shaders");
-        // let _ = asset_server.load_folder("ui");
+        let _ = asset_server.load_folder("./fonts");
+        // let _ = asset_server.load_folder("./shaders");
+        // let _ = asset_server.load_folder("./ui");
 
         state.set(EngineState::MainMenu);
 
