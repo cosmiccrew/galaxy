@@ -3256,12 +3256,12 @@ dependencies = [
 
 [[package]]
 name = "image"
-version = "0.25.1"
+version = "0.25.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "fd54d660e773627692c524beaad361aca785a4f9f5730ce91f42aabe5bce3d11"
+checksum = "bc144d44a31d753b02ce64093d532f55ff8dc4ebf2ffb8a63c0dda691385acae"
 dependencies = [
  "bytemuck",
- "byteorder",
+ "byteorder-lite",
  "color_quant",
  "exr",
  "gif",
@@ -3279,9 +3279,9 @@ dependencies = [
 
 [[package]]
 name = "image-webp"
-version = "0.1.3"
+version = "0.2.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "f79afb8cbee2ef20f59ccd477a218c12a93943d075b492015ecb1bb81f8ee904"
+checksum = "525e9ff3e1a4be2fbea1fdf0e98686a6d98b4d8f937e1bf7402245af1909e8c3"
 dependencies = [
  "byteorder-lite",
  "quick-error",
@@ -5180,9 +5180,6 @@ name = "rgb"
 version = "0.8.52"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "0c6a884d2998352bb4daf0183589aec883f16a6da1f4dde84d8e2e9a5409a1ce"
-dependencies = [
- "bytemuck",
-]
 
 [[package]]
 name = "ring"
@@ -5531,7 +5528,7 @@ checksum = "e2d6d4263fd19c1fbd0f4bbc0e0128de55dce8beb8f7d9052e09ee7f104c9eeb"
 dependencies = [
  "futures",
  "glam 0.21.3",
- "image 0.25.1",
+ "image 0.25.4",
  "indexmap 2.12.1",
  "rustc_version",
  "show-image-macros",
@@ -5742,7 +5739,7 @@ version = "0.1.0"
 dependencies = [
  "anyhow",
  "clap",
- "image 0.25.1",
+ "image 0.25.4",
  "indexmap 2.12.1",
  "ron",
  "serde",
