@@ -33,7 +33,7 @@ leafwing-input-manager = "0.13.3"
 #(ser)ialising/(de)serialising library
 serde = "1"
 #dynamic error handler
-miette = { version = "7.2.0" }
+miette = { version = "7.6.0" }
 #logging
 log = "0.4.21"
 
